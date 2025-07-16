@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_leave_custom_view_form" model="ir.ui.view">
+        <field name="name">hr.leave.custom.form.view</field>
+        <field name="model">hr.leave</field>
+        <field name="inherit_id" ref="hr_holidays.hr_leave_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="required">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="contains_sandwich_leaves" string="Sandwich Leaves" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="after">
+                    <field name="tt_id" invisible="1"/>
+                    
+            </xpath>
+
+            <xpath expr="//group[@name='col_left']/div[2]/field[@name='request_date_from']" position="inside">
+                <field name="dynamic_max_date" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//group[@name='col_left']/div[2]/field[@name='request_date_from']" position="attributes">
+                <!-- 'min_date': 'today',  -->
+                <attribute name="options">{
+                    'max_date': (context_today() + relativedelta(days=60)).strftime('%Y-%m-%d'), 
+                    'end_date_field': 'request_date_to'
+                    }
+                </attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,16 @@
+<odoo>
+    <data noupdate="1">
+        <record id="ir_cron_send_device_availability_email" model="ir.cron">
+            <field name="name">Send Device Availability Email</field>
+            <field name="model_id" ref="model_device_management"/>
+            <field name="state">code</field>
+            <field name="code">model.send_device_availability_email()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">weeks</field>
+            <field name="nextcall" eval="(DateTime.now() + relativedelta(weekday=2)).replace(hour=12, minute=0, second=0).strftime('%Y-%m-%d %H:%M:%S')" />
+            <field name="numbercall">-1</field>
+            <field name="doall" eval="False"/>
+            <field name="active" eval="True"/>
+        </record>
+    </data>
+</odoo>

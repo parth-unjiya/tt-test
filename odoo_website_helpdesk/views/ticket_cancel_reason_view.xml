@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="ticket_cancel_reason_view_search" model="ir.ui.view">
+        <field name="name">ticket.cancel.reason.view.search</field>
+        <field name="model">ticket.cancel.reason</field>
+        <field name="arch" type="xml">
+            <search string="Search Opportunities">
+                <field name="name"/>
+                <filter string="Include archived" name="archived"
+                        domain="['|', ('active', '=', True), ('active', '=', False)]"/>
+                <separator/>
+                <filter string="Archived" name="inactive" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="ticket_cancel_reason_view_form" model="ir.ui.view">
+        <field name="name">ticket.cancel.reason.form</field>
+        <field name="model">ticket.cancel.reason</field>
+        <field name="arch" type="xml">
+            <form string="Cancel Reason">
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_cancel_tickets" type="object"
+                                class="oe_stat_button" icon="fa-star">
+                            <div class="o_stat_info">
+                                <field name="tickets_count" class="o_stat_value"/>
+                                <span class="o_stat_text">Tickets</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Archived" bg_color="text-bg-danger" invisible="active"/>
+                    <div class="oe_title">
+                        <div>
+                            <label for="name"/>
+                        </div>
+                        <h1 class="mb32">
+                            <field name="name" placeholder="e.g. Too expensive" class="mb16"/>
+                        </h1>
+                        <field name="active" invisible="1"/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="ticket_cancel_reason_view_tree" model="ir.ui.view">
+        <field name="name">ticket.cancel.reason.tree</field>
+        <field name="model">ticket.cancel.reason</field>
+        <field name="arch" type="xml">
+            <tree string="Channel">
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="ticket_cancel_reason_action" model="ir.actions.act_window">
+        <field name="name">Cancel Reasons</field>
+        <field name="res_model">ticket.cancel.reason</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create a Cancel Reason
+            </p>
+            <p>
+                Utilize Cancel Reasons to understand the reasons behind ticket cancellations (e.g., "Employee no longer
+                interested").
+            </p>
+        </field>
+    </record>
+
+
+</odoo>

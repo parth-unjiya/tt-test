@@ -1,0 +1,24 @@
+<odoo>
+	<data>
+
+		<record id="hr_leave_type_form_inherit" model="ir.ui.view">
+		    <field name="name">hr.leave.type.form.inherit</field>
+		    <field name="model">hr.leave.type</field>
+		    <field name="inherit_id" ref="hr_holidays.edit_holiday_status_form"/>
+		    <field name="arch" type="xml">
+		        <xpath expr="//group[@name='leave_validation']/field[@name='leave_validation_type']" position="after">
+		            
+	            	<separator string="Allocation Settings"/>
+	                <field name="allocation_type"/>
+	                <field name="allocation_frequency" invisible="allocation_type == 'manual'"/>
+		            <field name="leave_amount" invisible="allocation_type == 'manual'"/>
+	                <field name="allocation_date" invisible="allocation_type == 'manual'"/>
+	                <field name="leave_validity_period" invisible="allocation_type == 'manual'"/>
+	                <field name="leave_validity_days" invisible="leave_validity_period != 'custom_days' and allocation_type == 'manual'"/>
+	                <field name="allowed_employment_status" invisible="allocation_type == 'manual'"/>
+		        </xpath>
+		    </field>
+		</record>
+
+	</data>
+</odoo>

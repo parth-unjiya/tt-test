@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="release_note_view_form" model="ir.ui.view">
+        <field name="name">release.note.form.view</field>
+        <field name="model">release.note</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="1"/>
+                            <field name="milestone_id" domain="[('project_id', '=', project_id)]"/>
+                            <field name="tested_device"/>
+                            <field name="application_link"/>
+                        </group>
+                        <group>
+                            <field name="released_date"/>
+                            <field name="plateform"/>
+                            <field name="app_version"/>
+                            <field name="build_number"/>
+                            <field name="commit_id"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Steps &amp; Features">
+                            <group>
+                                <field name="steps_to_install"/>
+                                <field name="features_implemented"/>
+                            </group>
+                        </page>
+                        <page string="Bugs &amp; Test">
+                            <group>
+                                <field name="test_cases"/>
+                                <field name="open_bugs_status"/>
+                                <field name="fixed_bugs_status"/>
+                            </group>
+                        </page>
+                        <page string="Other Info">
+                            <group>
+                                <field name="notes"/>
+                                <field name="known_issues"/>
+                                <field name="pending_modules"/>
+                                <field name="build_remark"/>
+                                <field name="create_uid" string="Created by"/>
+                                <field name="verified_by" string="Veriﬁed by" readonly="1"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="release_note_view_tree" model="ir.ui.view">
+        <field name="name">release.note.tree.view</field>
+        <field name="model">release.note</field>
+        <field name="arch" type="xml">
+            <tree string="Release Notes">
+                <field name="project_id"/>
+                <field name="milestone_id"/>
+                <field name="released_date" optional="hide"/>
+                <field name="plateform" optional="hide"/>
+                <field name="app_version"/>
+                <field name="build_number" optional="hide"/>
+                <field name="commit_id"/>
+                <field name="build_remark"/>
+                <field name="create_uid" string="Created by" optional="hide"/>
+                <field name="verified_by" string="Veriﬁed by" readonly="1" optional="hide"/>
+                <button 
+                    name="action_verify_by_current_user" groups="custom_dashboard.group_dashboard_project_manager"
+                    type="object"
+                    string="Verify"
+                    icon="fa-check"
+                    class="btn-primary"
+                />
+                <button 
+                    name="%(custom_project.action_report_release_note)d" invisible="not verified_by"
+                    type="action"
+                    string="Print Release Note"
+                    class="btn-primary"
+                    icon="fa-print"
+                />
+
+            </tree>
+        </field>
+    </record>
+
+</odoo>

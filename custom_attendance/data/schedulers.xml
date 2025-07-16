@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    <record id="ir_cron_attendance_email" model="ir.cron">-->
+<!--        <field name="name">Attendance: Daily attendance email</field>-->
+<!--        <field name="interval_number">1</field>-->
+<!--        <field name="interval_type">days</field>-->
+<!--        <field name="numbercall">-1</field>-->
+<!--&lt;!&ndash;        <field name="nextcall" eval="(DateTime.now().replace(hour=2, minute=0) + timedelta(days=1)).strftime('%Y-%m-%d %H:%M:%S')" />&ndash;&gt;-->
+<!--        <field name="doall" eval="False"/>-->
+<!--        <field name="model_id" ref="model_hr_attendance"/>-->
+<!--        <field name="code">model._attendance_email()</field>-->
+<!--        <field name="state">code</field>-->
+<!--    </record>-->
+
+    <!-- Auto Attendance Checkout -->
+    <record id="ir_cron_auto_attendance_checkout" model="ir.cron">
+        <field name="name">Auto Attendance Checkout</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="state">code</field>
+        <field name="code">model.auto_checkout_attendances()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="doall" eval="False"/>
+        <field name="active" eval="True"/>
+        <field name="nextcall" eval="(DateTime.utcnow().replace(hour=17, minute=0) + timedelta(days=0)).strftime('%Y-%m-%d %H:%M:%S')" />
+    </record>
+
+    <!-- Fetch Biometric Attendance -->
+    <record id="ir_cron_fetch_biometric_attendance" model="ir.cron">
+        <field name="name">Biometric Attendance Sync</field>
+        <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+        <field name="state">code</field>
+        <field name="code">model.fetch_biometric_attendance()</field>
+        <field name="interval_number">5</field>
+        <field name="interval_type">minutes</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

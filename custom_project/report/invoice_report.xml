@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="report_invoice_document_inherit" inherit_id="account.report_invoice_document">
+
+			<!-- Visually hide Quantity column header (with style) -->
+			<xpath expr="//th[@name='th_quantity']" position="attributes">
+			    <attribute name="style">display: none;</attribute>
+			</xpath>
+
+			<xpath expr="//td[@name='td_quantity']" position="attributes">
+			    <attribute name="style">display: none;</attribute>
+			</xpath>
+
+			<!-- Hide taxes if empty -->
+			<xpath expr="//table[@name='invoice_line_table']" position="before">
+        		<t t-set="has_taxes" t-value="any(line.tax_ids for line in o.invoice_line_ids)"/>
+    		</xpath>
+
+			<xpath expr="//th[@name='th_taxes']" position="attributes">
+		        <attribute name="t-if">has_taxes</attribute>
+		    </xpath>
+
+		    <xpath expr="//td[@name='td_taxes']" position="replace">
+	            <t t-if="has_taxes">
+	                <t t-set="taxes" t-value="', '.join([(tax.invoice_label or tax.name) for tax in line.tax_ids])"/>
+	                <td name="td_taxes"
+	                    t-attf-class="text-start {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }} {{ 'text-nowrap' if len(taxes) &lt; 10 else '' }}">
+	                    <span t-out="taxes"/>
+	                </td>
+	            </t>
+	        </xpath>
+
+	        <!-- Add Project Column -->
+			<xpath expr="//th[@name='th_description']" position="before">
+			    <th name="th_project" class="text-start">
+			        <t t-if="o.line_ids[0].sale_line_ids and o.line_ids[0].sale_line_ids[0].project_id">
+			            Project
+			        </t>
+			    </th>
+			</xpath>
+
+			<xpath expr="//td[@name='account_invoice_line_name']" position="before">
+			    <td name="td_project">
+			        <t t-if="line.sale_line_ids and line.sale_line_ids[0].project_id">
+			        	<span t-esc="line.sale_line_ids[0].project_id.name"/>
+			        </t>
+			    </td>
+			</xpath>
+
+			<!-- Target the <span t-field="o.partner_bank_id"> -->
+			<xpath expr="//p[@name='payment_communication']/t/span[@t-field='o.partner_bank_id']" position="replace">
+			    <div class="fw-bold" name="bank_details">
+			        <div><strong>Bank Name:</strong> <t t-esc="o.partner_bank_id.bank_name"/></div>
+			        <div><strong>Account Number:</strong> <t t-esc="o.partner_bank_id.acc_number"/></div>
+			        <div><strong>Account Holder:</strong> <t t-esc="o.partner_bank_id.partner_id.name"/></div>
+			        <div><strong>BIC:</strong> <t t-esc="o.partner_bank_id.bank_bic"/></div>
+			        <!-- <div><strong>Bank:</strong> <t t-esc="o.partner_bank_id.bank_id.name"/></div> -->
+			    </div>
+			</xpath>
+
+		</template>
+
+	</data>
+</odoo>

@@ -1,0 +1,1094 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<templates xml:space="preserve">
+    <t t-name="custom_dashboard.dashboard">
+       <div class="dashboard d-flex flex-column vh-100" t-ref="root">
+
+         <!-- Main Content Area -->
+         <div class="flex-grow-1 overflow-hidden">
+            
+            <div class="h-100">
+               <div class="row h-100">
+                  <!-- Sidebar Navigation -->
+<!--                  <nav class="col-md-3 col-lg-2 d-md-block sidebar collapse h-100 overflow-auto border-end">-->
+<!--                     <div class="position-sticky pt-3">-->
+<!--                         &lt;!&ndash; Employee side navbar &ndash;&gt;-->
+<!--                         <div class="user-info text-center">-->
+<!--                            -->
+<!--                            &lt;!&ndash; User Image &ndash;&gt;-->
+<!--                            <t t-if="this.state.login_employee['image_1920']">-->
+<!--                                <img t-att-src="'data:image/png;base64,'+this.state.login_employee['image_1920']" alt="User Image" class="img-fluid rounded-circle mb-2"/>-->
+<!--                            </t>-->
+<!--                            <t t-else="">-->
+<!--                                <img src="/custom_dashboard/static/src/img/avatar.png" alt="Default Avatar" class="img-fluid rounded-circle mb-2"/>-->
+<!--                            </t>-->
+<!--                             -->
+<!--                             <hr class="my-3"/>-->
+
+<!--                             &lt;!&ndash; User Name &ndash;&gt;-->
+<!--                             <h5 class="mb-2 font-weight-bold"><t t-esc="this.state.login_employee['name']"/></h5>-->
+<!--                             -->
+<!--                             &lt;!&ndash; User Job Title &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['job_id']">-->
+<!--                                <p class="text-muted mb-2">-->
+<!--                                    <t t-esc="this.state.login_employee['job_id'][1]"/>-->
+<!--                                </p>-->
+<!--                             </t>-->
+<!--                             <t t-else="">-->
+<!--                                <p class="text-muted mb-2">Add Job Title</p>-->
+<!--                             </t>-->
+<!--                             -->
+<!--                             <hr class="my-3"/>-->
+
+<!--                             &lt;!&ndash; Gender &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['gender']">-->
+<!--                                <p class="text-muted mb-2">Gender:   -->
+<!--                                    <t t-esc="this.state.login_employee['gender'] ? this.state.login_employee['gender'][0].toUpperCase() + this.state.login_employee['gender'].slice(1).toLowerCase() : ''"/>-->
+
+<!--                                </p>-->
+<!--                             </t>-->
+<!--                             <t t-else=""> -->
+<!--                                <p class="text-muted mb-2">Gender: Set Gender</p>-->
+<!--                             </t>-->
+<!--                             -->
+<!--                             &lt;!&ndash; Mobile Phone &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['mobile_phone']">-->
+<!--                                 <p class="text-muted mb-2">Mobile: <t t-esc="this.state.login_employee['mobile_phone']"/></p>-->
+<!--                             </t>-->
+<!--                             <t t-else="">-->
+<!--                                 <p class="text-muted mb-2">Mobile: Set Mobile Number</p>-->
+<!--                             </t>-->
+
+<!--                             &lt;!&ndash; Date of Joining &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['joining_date']">-->
+<!--                                <p class="text-muted mb-2">Date of Joining: -->
+<!--                                    <t t-esc="this.state.login_employee['joining_date']"/>-->
+<!--                                </p>-->
+<!--                             </t>-->
+<!--                             <t t-else="">-->
+<!--                                <p class="text-muted mb-2">Date of Joining: Set Date of Joining</p>-->
+<!--                             </t>-->
+<!--                             -->
+<!--                             &lt;!&ndash; Date of Birth &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['birthday']">-->
+<!--                                 <p class="text-muted mb-2">DOB: <t t-esc="this.state.login_employee['birthday']"/></p>-->
+<!--                             </t>-->
+<!--                             <t t-else="">-->
+<!--                                 <p class="text-muted mb-2">DOB: Set DOB</p>-->
+<!--                             </t>-->
+
+<!--                             &lt;!&ndash; Nationality &ndash;&gt;-->
+<!--                             <t t-if="this.state.login_employee['country_id']">-->
+<!--                                 <p class="text-muted mb-2">Nationality: <t t-esc="this.state.login_employee['country_id'][1]"/></p>-->
+<!--                             </t>-->
+<!--                             <t t-else="">-->
+<!--                                 <p class="text-muted mb-2">Nationality: Set Nationality</p>-->
+<!--                             </t>-->
+
+
+<!--                         </div>-->
+<!--                     </div>-->
+
+<!--                  </nav>-->
+
+                <!-- Main Dashboard Content -->
+                <main class="ms-sm-auto col-lg-15 px-md-4 h-100 overflow-auto pb-5">
+                    <!-- User Filters -->
+                    <div class="row my-3 justify-content-end">
+                        <div class="col-md-4 mb-2">
+                            <select class="form-select" t-on-change="(ev) => this.onChangeCounts(ev.target.value)">
+                                <option value='this_day'>This Day</option>
+                                <option value='this_week'>This Week</option>
+                                <option value='this_month' selected="selected">This Month</option>
+                                <option value='this_year'>This Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <!-- Key Metrics Overview -->
+                    <div class="row mb-4">
+                        <div class="col mb-4" t-on-click="hr_timesheets">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Timesheets</h5>
+                                    <p class="card-text display-6">
+                                        <t t-esc="this.state.employee_counts['timesheet_count']"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mb-4" t-on-click="hr_leave">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Leave Request</h5>
+                                    <p class="card-text display-6">
+                                        <t t-esc="this.state.employee_counts['leave_requests_count']"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col mb-4" t-on-click="job_applications">
+                            <div class="card h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title">Job Applications</h5>
+                                    <p class="card-text display-6">
+                                        <t t-esc="this.state.employee_counts['job_application_count']"/>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Flatpickr CSS -->
+                    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"/> -->
+                    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/style.css"/> -->
+
+                    <style type="text/css">
+                        .calendar-input {
+                            background-image: url('https://cdn-icons-png.flaticon.com/512/747/747310.png') !important;
+                            background-size: 22px 20px !important
+                        }
+                    </style>
+
+                    <!-- Flatpickr JS -->
+                    <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script> -->
+                    <!-- <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/plugins/monthSelect/index.js"></script> -->
+
+                    <script type="text/javascript">
+                        setTimeout(function () {
+                            if (typeof flatpickr !== 'undefined' &amp;&amp; typeof monthSelectPlugin !== 'undefined') {
+                                flatpickr("#monthPicker", {
+                                    plugins: [
+                                        new monthSelectPlugin({
+                                            shorthand: true,
+                                            dateFormat: "Y-m",
+                                            theme: "light"
+                                        })
+                                    ]
+                                });
+                            } else {
+                                console.warn("Flatpickr or monthSelectPlugin is not loaded.");
+                            }
+                        }, 500);
+
+                        
+                        setTimeout(function () {
+                            if (typeof flatpickr !== 'undefined') {
+                                document.querySelectorAll(".datePicker").forEach(function (input) {
+                                    flatpickr(input, {
+                                        dateFormat: "d-m-Y",
+                                        allowInput: true
+                                    });
+                                });
+                            } else {
+                                console.warn("Flatpickr is not loaded.");
+                            }
+                        }, 500);
+                        
+                    </script>
+                    
+                    <t t-if="this.state.showAdminData">
+                        <t t-call="ProJectDetails"/>
+                        <t t-call="EmployeeLeaveDetails"/>
+                        <t t-call="HRDetails"/>
+                        <t t-call="AbsenteesList"/>
+                        <t t-call="ProjectMilestone"/>
+                        <t t-call="ProductiveTimeSpent"/>
+                        <t t-call="ResourceTimeSpent"/>
+                    </t>
+
+
+                    <t t-if="this.state.showEmployeeData">
+                        <t t-call="EmployeeLeaveDetails"/>
+                        <!-- <t t-call="ProJectDetails"/> -->
+                    </t>
+
+                    <t t-if="this.state.showHrData">
+                        <t t-call="HRDetails"/>
+                    </t>
+
+                    <t t-if="this.state.showResourceManagerData">
+                        <t t-call="ProjectMilestone"/>
+                        <t t-call="AbsenteesList"/>
+                        <t t-call="ProductiveTimeSpent"/>
+                    </t>
+
+                    <t t-if="this.state.showProjectData">
+                        <t t-call="ProjectMilestone"/>
+                        <t t-call="AbsenteesList"/>
+                        <t t-call="ProductiveTimeSpent"/>
+                    </t>
+
+                    <t t-if="this.state.showOperationManagerData">
+                        <t t-call="ProjectMilestone"/>
+                        <t t-call="AbsenteesList"/>
+                        <t t-call="ProductiveTimeSpent"/>
+                    </t>
+
+                  </main>
+                  
+               </div>
+            </div>
+         </div>
+
+      </div>
+   </t>
+
+    <!-- Employee Template -->
+    <t t-name="EmployeeLeaveDetails">
+        <!-- EmploueeLeave Details -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2"
+                                style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Employee Leave Request</h5>
+                       </div>
+                        <div class="row g-2 align-items-center">
+                            <div class="col-md-6 mb-2">
+                                <select class="form-select" t-on-change="(ev) => this.onChangeManagerLeaveRequest(ev.target.value)">
+                                    <option value='this_day'>This Day</option>
+                                    <option value='this_week' selected="selected">This Week</option>
+                                    <option value='this_month'>This Month</option>
+                                </select>
+                            </div>
+
+                           <!-- Month Selector -->
+                            <div class="col-md-6 mb-2">
+                                <input id="monthPicker" class="form-select calendar-input w-100"
+                                    placeholder="Select Month"
+                                    t-on-change="(ev) => this.onChangeManagerLeaveRequest(ev.target.value)"/>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Leave Type</th>
+                                        <th>Total Days</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <t t-if="!this.state.manager_leave_request || this.state.manager_leave_request.length === 0">
+                                        <tr>
+                                            <td colspan="6" class="text-center">No Result Found.</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.manager_leave_request" t-as="leave" t-key="leave.id">
+                                            <td><t t-esc="leave.name"/></td>
+                                            <td><t t-esc="leave.type"/></td>
+                                            <td><t t-esc="leave.leave_day"/></td>
+                                            <td><t t-esc="leave.from_date"/></td>
+                                            <td><t t-esc="leave.to_date"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2"
+                                style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Attendances
+                            </h5>
+                       </div>
+                        <div class="row g-2 align-items-center">
+                            <!-- Project Status Filter -->
+                            <div class="col-md-6 mb-2">
+                                <select class="form-select w-100"
+                                        t-on-change="(ev) => this.onChangeAttendances(ev.target.value)">
+                                    <option value="this_day">This Day</option>
+                                    <option value="this_week" selected="selected">This Week</option>
+                                    <option value="this_month">This Month</option>
+                                </select>
+                            </div>
+
+                            <!-- Month Selector -->
+                            <div class="col-md-6 mb-2">
+                                <input id="monthPicker" class="form-select calendar-input w-100"
+                                       placeholder="Select Month"
+                                       t-on-change="(ev) => this.onChangeAttendances(ev.target.value)"/>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Check In</th>
+                                        <th>Check Out</th>
+                                        <th>Worked Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.attendance_data || this.state.attendance_data.length === 0">
+                                        <tr>
+                                            <td colspan="6" class="text-center">No Result Found.</td>
+                                        </tr>
+                                    </t>
+                                    <tr t-foreach="this.state.attendance_data" t-as="attendance" t-key="attendance.id">
+                                        <td><t t-esc="attendance.check_in"/></td>
+                                        <td><t t-esc="attendance.check_out"/></td>
+                                        <td><t t-esc="attendance.worked_hours"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Task Details -->
+        <div class="col-md-12 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Tasks</h5>
+                    <div class="row g-2 align-items-center">
+                        <!-- Project Status Filter -->
+                        <div class="col-md-6 mb-2">
+                            <select class="form-select" t-on-change="(ev) => this.onChangeTask(ev.target.value)">
+                                <option value='this_day'>This Day</option>
+                                <option value='this_week'>This Week</option>
+                                <option value='this_month' selected="selected">This Month</option>
+                            </select>
+                        </div>
+
+                        <!-- Month Selector -->
+                        <div class="col-md-6 mb-2">
+                            <input id="monthPicker" class="form-select calendar-input w-100"
+                                placeholder="Select Month"
+                                t-on-change="(ev) => this.onChangeTask(ev.target.value)"/>                        
+                        </div>
+                    </div>
+
+                    <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                    <style>
+                        .table-responsive::-webkit-scrollbar {
+                            display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                        }
+                        /* Add sticky header style */
+                        .table thead th {
+                            position: sticky;
+                            top: 0;
+                            background: white; /* Adjust background color as needed */
+                            z-index: 10; /* Ensure header is above other content */
+                        }
+                    </style>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Project Name</th>
+                                <th>Task Name</th>
+                                <th>Date Assign</th>
+                                <th>Task Deadline</th>
+                                <th>Total Hours Spent</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-if="!this.state.task_summary || this.state.task_summary.length === 0">
+                                    <tr>
+                                        <td colspan="6" class="text-center">No Task</td>
+                                    </tr>
+                            </t>
+                            <t t-else="">
+                                <tr t-foreach="this.state.task_summary" t-as="task" t-key="task.id">
+                                    <td><t t-esc="task.project_name"/></td>
+                                    <td><t t-esc="task.task_name"/></td>
+                                    <td><t t-esc="task.date_assign"/></td>
+                                    <td><t t-esc="task.date_deadline"/></td>
+                                    <td><t t-esc="task.total_hours_spent"/></td>
+                                    <td><t t-esc="task.status"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- Project Template -->
+    <t t-name="ProJectDetails">
+        <!-- Projects and Tasks -->
+        <div class="row mb-4">
+            <div class="col-md-12 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Projects</h5>
+                            <div class="col-md-4 mb-2 text-end">
+                                <!-- Add Filter for Project Status -->
+                                <select class="form-select" t-on-change="(ev) => this.onChangeProjectStage(ev.target.value)">
+                                    <option value='all'>All</option>
+                                    <t t-foreach="this.state.project_stage" t-as="stage" t-key="stage.id">
+                                        <option t-att-value="stage.sequence">
+                                            <t t-esc="stage.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Total Tasks</th>
+                                        <th>Allocated Hours</th>
+                                        <th>Spent Hours</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.project_summary || this.state.project_summary.length === 0">
+                                        <tr>
+                                            <td colspan="4" class="text-center">No Projects</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.project_summary" t-as="project" t-key="project.id">
+                                            <td><t t-esc="project.project_name ? project.project_name : 'No Project'"/></td>
+                                            <td><t t-esc="project.total_tasks"/></td>
+                                            <td><t t-esc="project.allocated_hours"/></td>
+                                            <td><t t-esc="project.total_hours_spent"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <!-- HR Details Template -->
+    <t t-name="HRDetails">
+        
+        <!-- Candidate Interview Shedule List-->
+        <div class="row mb-4">
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2"
+                                style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Candidate Interview Schedule</h5>
+                             <div class="col-md-4 mb-2 text-end">
+                                 <!-- Add Filter for Project Status -->
+                                <!--  <select class="form-select">
+                                     <option value='this_day'>This Day</option>
+                                     <option value='this_week' selected="selected">This Week</option>
+                                     <option value='this_month'>This Month</option>
+                                 </select> -->
+                             </div>
+                         </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Availability</th>
+                                        <th>Stage</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.interview_data || this.state.interview_data.length === 0">
+                                        <tr>
+                                            <td colspan="3" class="text-center">No Result Found.</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.interview_data" t-as="interview" t-key="interview.id">
+                                            <td><t t-esc="interview.name"/></td>
+                                            <td><t t-esc="interview.email"/></td>
+                                            <td><t t-esc="interview.availability"/></td>
+                                            <td><t t-esc="interview.stage"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emplouee Leave Details -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2"
+                                style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Employees Who Have Birthday Today</h5>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <!-- <th>Email</th> -->
+                                        <th>Department</th>
+                                        <th>Date of Birth</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.birthday_list || this.state.birthday_list.length === 0">
+                                        <tr>
+                                            <td colspan="3" class="text-center">No Birthday</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.birthday_list" t-as="birthday" t-key="birthday.id">
+                                            <td><t t-esc="birthday.name"/></td>
+                                            <!-- <td><t t-esc="birthday.email"/></td> -->
+                                            <td><t t-esc="birthday.department"/></td>
+                                            <td><t t-esc="birthday.birthday"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2"
+                                style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Current Week List Of Leave</h5>
+                       </div>
+
+                         <div class="row g-2 align-items-center">
+                            <div class="mb-2 col-md-6">
+                                <!-- Add Filter for Project Status -->
+                                <select class="form-select" t-on-change="(ev) => this.onChangeLeaveRequest(ev.target.value)">
+                                    <option value='this_day'>This Day</option>
+                                    <option value='this_week' selected="selected">This Week</option>
+                                    <option value='this_month'>This Month</option>
+                                </select>
+                            </div>
+
+                           <!-- Month Selector -->
+                            <div class="col-md-6 mb-2">
+                                <input id="monthPicker" class="form-select calendar-input w-100"
+                                    placeholder="Select Month"
+                                    t-on-change="(ev) => this.onChangeLeaveRequest(ev.target.value)"/>
+                            </div>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Leave Type</th>
+                                        <th>Total Days</th>
+                                        <th>From Date</th>
+                                        <th>To Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.leave_request || this.state.leave_request.length === 0">
+                                        <tr>
+                                            <td colspan="5" class="text-center">No Leave Request</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.leave_request" t-as="leave" t-key="leave.id">
+                                            <td><t t-esc="leave.name"/></td>
+                                            <td><t t-esc="leave.type"/></td>
+                                            <td><t t-esc="leave.leave_day"/></td>
+                                            <td><t t-esc="leave.from_date"/></td>
+                                            <td><t t-esc="leave.to_date"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </t>
+
+    <t t-name="ProjectMilestone">
+        <!-- Project Milestone -->
+        <div class="row mb-4">
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Milestones</h5>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Project Manager</th>
+                                        <th>Project Amount</th>
+                                        <th>Milestone Amount</th>
+                                        <th>Milestone Start Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.project_milestone || this.state.project_milestone.length === 0">
+                                        <tr>
+                                            <td colspan="4" class="text-center">No Milestone</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.project_milestone" t-as="project" t-key="project.id">
+                                            <td><t t-esc="project.project_name ? project.project_name : 'No Project'"/></td>
+                                            <td><t t-esc="project.project_manager"/></td>
+                                            <td><t t-esc="project.project_amount"/></td>
+                                            <td><t t-esc="project.milestone_amount"/></td>
+                                            <td><t t-esc="project.milestone_start_date"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Top 10 Project Highly Consume Hours -->
+            <div class="col-md-6 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Top 10 Project Highly Consume Hours</h5>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Project Manager</th>
+                                        <th>Total Hours</th>
+                                        
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.top_projects || this.state.top_projects.length === 0">
+                                        <tr>
+                                            <td colspan="3" class="text-center">No Projects</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.top_projects" t-as="project" t-key="project.id">
+                                            <td><t t-esc="project.project_name ? project.project_name : 'No Project'"/></td>
+                                            <td><t t-esc="project.project_manager"/></td>
+                                            <td><t t-esc="project.total_hours"/></td>
+                                            
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="AbsenteesList">
+        <!-- Absentees List -->
+        <div class="row mb-4">
+            <div class="col-md-12 mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                       <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Absentees Details</h5>
+                        </div>
+                        
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th style="background-color: #EF7637 !important;">SR No.</th>
+                                        <th style="background-color: #EF7637 !important;">Emp. Code</th>
+                                        <th style="background-color: #EF7637 !important;">Name</th>
+                                        <th style="background-color: #EF7637 !important;">Department</th>
+                                        <th style="background-color: #EF7637 !important;">Company</th>
+                                        <th style="background-color: #EF7637 !important;">IS Absent</th>
+                                        <th style="background-color: #EF7637 !important;">Leave Applied</th>
+                                        <th style="background-color: #EF7637 !important;">Leave Current Month</th>
+                                        <th style="background-color: #EF7637 !important;">Attendance Recorded</th>
+                                        <th style="background-color: #EF7637 !important;">Absence Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-if="!this.state.absentees_list || this.state.absentees_list.length === 0">
+                                        <tr>
+                                            <td colspan="9" class="text-center">No results found.</td>
+                                        </tr>
+                                    </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.absentees_list" t-as="absentees" t-key="absentees.id">
+                                            <td><t t-esc="absentees.sr_no"/></td>
+                                            <td><t t-esc="absentees.emp_code"/></td>
+                                            <td><t t-esc="absentees.name"/></td>
+                                            <td><t t-esc="absentees.department"/></td>
+                                            <td><t t-esc="absentees.company"/></td>
+                                            <td><t t-esc="absentees.is_absent"/></td>
+                                            <td><t t-esc="absentees.leave_applied"/></td>
+                                            <td><t t-esc="absentees.leave_current_month"/></td>
+                                            <td><t t-esc="absentees.attendance_recorded"/></td>
+                                            <td><t t-esc="absentees.absence_date"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="ProductiveTimeSpent">
+        <!-- Productive Time Spent -->
+        <div class="row mb-4">
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Productive Time Spent</h5>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+                            <!-- Filter for Date Range -->
+                            <div class="col-md-2 mb-1">
+                                <select class="form-select" id="dateRange" t-on-change="(ev) => this.onChangeDateRange(ev.target.value)">
+                                    <option value='this_day'>This Day</option>
+                                    <option value='this_week' selected="selected">This Week</option>
+                                    <option value='this_month'>This Month</option>
+                                </select>
+                            </div>
+
+                            <!-- Department Filter -->
+                            <div class="col-md-3 mb-1">
+                                <select class="form-select" id="department" t-on-change="(ev) => this.onDepartmentChange(ev.target.value)">
+                                    <option value=''>Select Department</option>
+                                    <t t-foreach="this.state.department_data" t-as="department" t-key="department.id">
+                                        <option t-att-value="department.id">
+                                            <t t-esc="department.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- Employee Filter -->
+                            <div class="col-md-3 mb-1">
+                                <select class="form-select" id="employee" t-on-change="(ev) => this.onEmployeeChange(ev.target.value)">
+                                    <option value=''>Select Employee</option>
+                                    <t t-foreach="this.state.employee_data" t-as="employee" t-key="employee.id">
+                                        <option t-att-value="employee.id">
+                                            <t t-esc="employee.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- Month Picker -->
+                            <div class="col-md-2 mb-1">
+                                 <input id="monthPicker" class="form-select calendar-input w-100"
+                                    placeholder="Select Month"
+                                    t-on-change="(ev) => this.onChangeDateRange(ev.target.value)"/>
+                            </div>
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>User Name</th>
+                                        <th>Date</th>
+                                        <th>Punch In Time</th>
+                                        <th>In Time</th>
+                                        <th>Out Time</th>
+                                        <th>Punch Out Time</th>
+                                        <th>Lunch Time</th>
+                                        <th>Break Time</th>
+                                        <th>Estimation Time</th>
+                                        <th>Interview Time</th>
+                                        <th>Floor Activity Time</th>
+                                        <th>General Meeting</th>
+                                        <th>No Work Time</th>
+                                        <th>R &amp; D</th>
+                                        <th>Work Time</th>
+                                        <th>Expected Time</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <t t-if="!this.state.employeeData || this.state.employeeData.length === 0">
+                                        <tr>
+                                            <td colspan="16" class="text-center">No Records</td>
+                                        </tr>
+                                     </t>
+                                    <t t-else="">
+                                        <tr t-foreach="this.state.employeeData" t-as="timesheet" t-key="timesheet.id">
+                                            <td><t t-esc="timesheet.name"/></td>
+                                            <td><t t-esc="timesheet.create_date"/></td>
+                                            <td><t t-esc="timesheet.punch_in"/></td>
+                                            <td><t t-esc="timesheet.check_in"/></td>
+                                            <td><t t-esc="timesheet.check_out"/></td>
+                                            <td><t t-esc="timesheet.punch_out"/></td>
+                                            <td><t t-esc="timesheet.lunch_time"/></td>
+                                            <td><t t-esc="timesheet.break_time"/></td>
+                                            <td><t t-esc="timesheet.estimate_time"/></td>
+                                            <td><t t-esc="timesheet.interview_time"/></td>
+                                            <td><t t-esc="timesheet.floor_active_time"/></td>
+                                            <td><t t-esc="timesheet.general_meeting_time"/></td>
+                                            <td><t t-esc="timesheet.no_work_time"/></td>
+                                            <td><t t-esc="timesheet.r_and_d_time"/></td>
+                                            <td><t t-esc="timesheet.worked_hours"/></td>
+                                            <td>08:30</td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="ResourceTimeSpent">
+        <!-- Resource Time Spent -->
+        <div class="row mb-4">
+            <div class="col mb-4">
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h5 class="card-title text-white px-3 py-2" style="font-weight: bold; background-color: #00a65a; border-radius: 5px;">Resource Time Spent</h5>
+                        <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+                            
+                            <!-- Department Filter -->
+                            <div class="col-md-3 mb-1">
+                                <select class="form-select" id="department" t-on-change="(ev) => this.onDepartmentChange(ev.target.value)">
+                                    <option value=''>Select Department</option>
+                                    <t t-foreach="this.state.department_data" t-as="department" t-key="department.id">
+                                        <option t-att-value="department.id">
+                                            <t t-esc="department.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- Employee Filter -->
+                            <div class="col-md-2 mb-1">
+                                <select class="form-select" id="employee" t-on-change="(ev) => this.onEmployeeChange(ev.target.value)">
+                                    <option value=''>Select User</option>
+                                    <t t-foreach="this.state.employee_data" t-as="employee" t-key="employee.id">
+                                        <option t-att-value="employee.id">
+                                            <t t-esc="employee.name"/>
+                                        </option>
+                                    </t>
+                                </select>
+                            </div>
+
+                            <!-- Start Date -->
+                            <div class="col-md-2 mb-1">
+                                 <input type="text" id="start_date" class="datePicker form-select calendar-input w-100"
+                                    placeholder="Start Date"
+                                   />
+                            </div>
+
+                            <!-- End Date -->
+                            <div class="col-md-2 mb-1">
+
+                                <input type="text" id="end_date"  class="datePicker form-select calendar-input w-100"
+                                    placeholder="End Date" 
+                                />
+                            </div>
+
+                            <div class="col-md-1 mb-1">
+                                <button class="btn btn-success" t-on-click="(ev) => this.onClickResourceTimeSpent(ev)"><i class="fa fa-check"/>  Click me</button>
+                            </div>
+
+                        </div>
+
+                        <div class="table-responsive" style="max-height: 300px; overflow-y: auto; border-top: 1px solid #dee2e6; scrollbar-width: none; -ms-overflow-style: none;">
+                            <style>
+                                .table-responsive::-webkit-scrollbar {
+                                    display: none; /* Hide scrollbar for Chrome, Safari, and Opera */
+                                }
+                                .table thead th {
+                                    position: sticky;
+                                    top: 0;
+                                    background: white; /* Adjust background color as needed */
+                                    z-index: 10; /* Ensure header is above other content */
+                                }
+                            </style>
+                            <table class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th>Interview Time</th>
+                                        <th>Estimation Time</th>
+                                        <th>Floor Activity Time</th>
+                                        <th>General Meeting</th>
+                                        <th>No Work Time</th>
+                                        <th>R &amp; D</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                     <t t-if="!this.state.employeeTotalActivityTime || this.state.employeeTotalActivityTime.length === 0">
+                                        <tr>
+                                            <td colspan="16" class="text-center">No Records</td>
+                                        </tr>
+                                     </t>
+                                    <t t-else="">
+                                        <tr >
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.interview_time"/></td>
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.estimate_time"/></td>
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.floor_active_time"/></td>
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.general_meeting_time"/></td>
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.no_work_time"/></td>
+                                            <td><t t-esc="this.state.employeeTotalActivityTime.r_and_d_time"/></td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </t>
+
+</templates>
+

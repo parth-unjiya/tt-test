@@ -1,0 +1,17 @@
+pymssql==2.3.4;
+boto3==1.38.32;
+pytesseract==0.3.13;           
+pdf2image==1.17.0;
+pypdf==5.6.0;                  
+python-docx==1.1.2;            
+google-generativeai==0.8.5;    
+pymssql==2.3.4;            
+PyPDF2==3.0.1;
+pygments==2.19.2;
+pdfkit==1.0.0;
+PyMuPDF==1.25.5;
+openpyxl==3.1.2;
+inflect==7.5.0;
+
+
+

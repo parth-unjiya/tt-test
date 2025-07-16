@@ -1,0 +1,45 @@
+<odoo>
+    <record id="view_sop_category_tree" model="ir.ui.view">
+        <field name="name">sop.category.tree</field>
+        <field name="model">sop.category</field>
+        <field name="arch" type="xml">
+            <tree string="Sop Category">
+                <field name='name'/>
+            </tree>
+        </field>
+    </record>
+    <record id="view_sop_category_form" model="ir.ui.view">
+        <field name="name">sop.category.form</field>
+        <field name="model">sop.category</field>
+        <field name="arch" type="xml">
+            <form string="Sop Category">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name='name'/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sop_category" model="ir.actions.act_window">
+        <field name="name">Sop Category</field>
+        <field name="res_model">sop.category</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem 
+        id="sop_category_menu" 
+        name="Configuration"
+        parent='hr_policy.hr_policy_menu' 
+        sequence='13'
+
+    />
+    <menuitem 
+        id="sop_child_category_menu" 
+        name="Sop Category" 
+        parent="sop_category_menu" 
+        action="action_sop_category"
+    />
+</odoo>

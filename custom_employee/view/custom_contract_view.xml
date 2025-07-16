@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_contract_custom_form_view" model="ir.ui.view">
+        <field name="name">hr.contract.custom.form.view</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_open_document_wizard"
+                        string="Generate Documents"
+                        type="object"
+                        class="btn-primary"
+                        context="{'default_contract_id': active_id}"/>
+            </xpath>
+            <xpath expr="//field[@name='department_id']" position="after">
+                <field name="document_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_job_custom_form_view" model="ir.ui.view">
+        <field name="name">hr.job.custom.form.view</field>
+        <field name="model">hr.job</field>
+        <field name="inherit_id" ref="hr.view_hr_job_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department_id']" position="after">
+<!--                <field name="designation_id" options="{'no_open': True, 'no_create': True}"/>-->
+<!--                <field name="sub_designation_id" options="{'no_open': True, 'no_create': True}"/>-->
+                <field name="helpdesk_support_manager_ids" widget="many2many_tags"
+                       options="{'no_open': True, 'no_create': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='interviewer_ids']" position="after">
+                <field name="current_user_id" options="{'no_open': True, 'no_create': True}"/>
+            </xpath>
+            <field name="user_id" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+            <field name="interviewer_ids" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+            <field name="contract_type_id" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+            <field name="address_id" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+            <field name="department_id" position="attributes">
+                <attribute name="options">{'no_open': True, 'no_create': True}</attribute>
+            </field>
+        </field>
+    </record>
+</odoo>

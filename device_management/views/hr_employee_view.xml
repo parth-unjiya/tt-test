@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_employee_view_form_for_qr_code" model="ir.ui.view">
+        <field name="name">hr.employee.view.form.qr</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group[@name='identification_group']//div[1]" position="after">
+                <label for="qr_code"/>
+                <div class="o_row">
+                    <field name="qr_code" widget="image" class="oe_avatar"/>
+                    <button string="Generate QR" class="btn btn-link" type="object" name="generate_qr_code_employee"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+</odoo>

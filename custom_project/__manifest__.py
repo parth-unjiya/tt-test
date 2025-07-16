@@ -1,0 +1,41 @@
+# -*- coding: utf-8 -*-
+{
+    "name": "custom_project",
+    "summary": "Advanced Project Management",
+    "description": """Advanced Project Management""",
+    "author": "Space-O Technology",
+    "category": "Services",
+    "version": "17.0.0.1",
+    "depends": ["base", "project","sale_project","account","custom_dashboard", "sale_management", "sale_timesheet"],
+    # always loaded
+    "data": [
+        'security/project_security.xml',
+        'security/ir.model.access.csv',
+        "data/milestone_email_template.xml",
+        "data/project_email_template.xml",
+        "report/release_note_report.xml",
+        "report/project_acceptance_report.xml",
+        "report/ir_action_sale_report.xml",
+        "report/invoice_report.xml",
+        "report/allocate_resource_report_views.xml",
+        "views/release_note_view.xml",
+        "views/project_view.xml",
+        "views/project_module_view.xml",
+        "views/sale_order_view.xml",
+        "views/res_users_view.xml",
+        "views/account_analytic_line_view.xml",
+        "views/issue_category.xml",
+        "views/milestone_completion_report_template.xml",
+        "views/portal_milestone_form.xml",
+        "views/project_acceptance_report.xml",
+        "views/sale_portal_template.xml",
+        "views/account_move_view.xml",
+    ],
+    "assets": {
+        "web.assets_backend": [
+            "custom_project/static/src/js/project_task_state_patch.js",
+            "custom_project/static/src/js/subtask_kanban_list.js",
+        ],
+    },
+    'license': 'LGPL-3',
+}

@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="project_project_view_form_release_note" model="ir.ui.view">
+        <field name="name">project.project.form.view</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="project.edit_project"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="user_has_group_admin" invisible="1"/>
+                <field name="design_hours" widget="timesheet_uom_no_toggle" readonly="not user_has_group_admin"/>
+                <field name="development_hours" widget="timesheet_uom_no_toggle" readonly="not user_has_group_admin"/>
+                <field name="qc_hours" widget="timesheet_uom_no_toggle" readonly="not user_has_group_admin"/>
+                <field name="management_hours" widget="timesheet_uom_no_toggle" readonly="not user_has_group_admin"/>
+                <field name="other_hours" widget="timesheet_uom_no_toggle" readonly="not user_has_group_admin"/>
+            </xpath>
+            <xpath expr="//field[@name='date_start']" position="attributes">
+                <attribute name="readonly">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//field[@name='user_id']" position="attributes">
+                <attribute name="readonly">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="readonly">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="readonly">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//field[@name='description']" position="attributes">
+                <attribute name="readonly">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//page[@name='settings']" position="attributes">
+                <attribute name="invisible">not user_has_group_admin</attribute>
+            </xpath>
+            <xpath expr="//page[@name='description']" position="after">
+                <page name="release_note" string="Project Release Notes">
+                    <field name="release_note_ids"/>
+                </page>
+                <page name="milestone_acceptance" string="Milestone Acceptance Reports">
+                    <field name="milestone_acceptance_ids">
+                        <form string="Milestone Acceptance Report">
+                            <header>
+                                <button name="action_send_to_customer"
+                                    type="object"
+                                    string="Send Email"
+                                    class="btn-primary"
+                                    invisible="stage == 'accept'"
+                                />
+
+                                <!-- <button name="action_draft"
+                                    type="object"
+                                    string="Set as Draft"
+                                    class="btn-primary"
+                                /> -->
+
+                                <field name="stage" widget="statusbar" statusbar_visible="draft,sent,reject,accept"/>
+                            </header>
+                            <sheet>
+                                <group>
+                                    <group string="Project Information" col="2">
+                                        <field name="project_id" options="{'no_open': True}"/>
+                                        <field name="partner_id" options="{'no_open': True}"/>
+                                        <field name="manager_id" options="{'no_open': True}"/>
+                                    </group>
+
+                                    <group string="Milestone Details" col="2">
+                                        <field name="milestone_ids" widget="many2many_tags" domain="[('project_id', '=', project_id)]"/>
+                                        <field name="reached_date"/>
+                                        <field name="date_of_execution_agreement"/>
+                                    </group>
+                                </group>
+
+                                <group>
+                                    <field name="deliverables" placeholder="Deliverables comments...!"/>
+                                </group>
+
+                                <group>
+                                    <field name="client_comment" readonly="1" placeholder="Client’s comments...!"/>
+                                </group>
+
+                                <group>
+                                    <!-- <group col="2"> -->
+                                        <field name="annexure_link" widget="url"/>
+                                    <!-- </group> -->
+                                </group>
+
+                                <notebook>
+                                    <page string="Client Signature" invisible="not signed_by and not signature and not signed_on">
+                                        <group>
+                                            <field name="signed_by" readonly="1"/>
+                                            <field name="signed_on" readonly="1"/>
+                                            <field name="signature" widget="image"/>
+                                        </group>
+                                    </page>
+                                </notebook>
+
+                            </sheet>
+                        </form>
+                        <tree>
+                            <field name="project_id" optional="hide"/>
+                            <field name="milestone_ids" widget="many2many_tags" domain="[('project_id', '=', project_id)]" optional="show"/>
+                            <field name="partner_id" optional="show"/>
+                            <field name="manager_id" optional="show"/>
+                            <field name="reached_date" optional="show"/>
+                            <field name="date_of_execution_agreement" optional="show"/>
+                            <field name="stage" widget="badge" decoration-info="stage == 'sent'" decoration-success="stage == 'accept'" decoration-danger="stage == 'reject'" />
+                            
+                            <button name="action_send_to_customer" type="object" string="Send Email" class="btn-primary"
+                                invisible="stage != 'draft'"
+                            />
+                            <button name="action_print_pdf" type="object" string="Print PDF" class="btn-primary"/>
+
+                            <button name="action_preview_report" type="object" string="Preview Report" class="btn-primary"/>
+
+                        </tree>
+                    </field>
+                </page>
+                <page name="project_acceptance_reports" string="Project Acceptance Reports">
+                    <field name="project_acceptance_report_ids">
+                        <form string="Project Acceptance Report">
+                            <header>
+
+                                <button name="action_send_to_client"
+                                    type="object"
+                                    string="Send Email"
+                                    class="btn-primary"
+                                    invisible="stage == 'accept'"
+                                />
+
+                                <!-- <button name="action_draft"
+                                    type="object"
+                                    string="Set as Draft"
+                                    class="btn-primary"
+                                    invisible="stage == 'draft'"
+                                /> -->
+
+                                <field name="stage" widget="statusbar" statusbar_visible="draft,sent,reject,accept"/>
+                            </header>
+                            <sheet>
+                                <group>
+                                    <group string="Project Information" col="2">
+                                        <field name="project_id" options="{'no_open': True}" readonly="1"/>
+                                        <field name="client_id" options="{'no_open': True}"/>
+                                        <field name="project_manager_id" options="{'no_open': True}"/>
+                                    </group>
+
+                                    <group string="Milestone Details" col="2">
+                                        <field name="milestone_ids" widget="many2many_tags" domain="[('project_id', '=', project_id)]" options="{'no_create': True}"/>
+                                        <field name="date_of_execution"/>
+                                        <field name="date_of_completion"/>
+                                    </group>
+                                </group>
+                                <group>
+                                    <group col="2">
+                                        <field name="agreement_files" widget="many2many_tags" options="{'no_create': True}"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page name="deliverable_line" string="Deliverable">
+                                        <field name="deliverable_line_ids">
+                                            <form string="Deliverable">
+                                                <group>
+                                                    
+                                                    <field name="deliverable"/>
+                                                    <field name="repository_link" widget="url"/>
+                                                    <field name="notes"/>
+                                                    
+                                                </group>
+                                            </form>
+                                            <tree>
+                                                <field name="deliverable" optional="show"/>
+                                                <field name="repository_link" placeholder="Past your client repository here." widget="url" optional="show"/>
+                                                <field name="notes" optional="show"/>
+                                            </tree>
+                                        </field>
+                                    </page>
+                                    <page string="Client Notes">
+                                        <group>
+                                            <field name="note" placeholder="Enter note...!" readonly="1"/>
+                                        </group>
+                                    </page>
+                                    <page string="Client Signature" invisible="not client_signed_by and not client_signature and not client_signed_on">
+                                        <group>
+                                            <field name="client_signed_by" readonly="1"/>
+                                            <field name="client_signed_on" readonly="1"/>
+                                            <field name="client_signature" widget="image"/>
+                                        </group>
+                                    </page>
+                                </notebook>
+                            </sheet>
+                        </form>
+                        <tree>
+                            <field name="project_id" optional="show"/>
+                            <field name="client_id" optional="show"/>
+                            <field name="stage" widget="badge" decoration-info="stage == 'sent'" decoration-success="stage == 'accept'" decoration-danger="stage == 'reject'" />
+
+                            <button name="action_send_to_client"
+                                type="object"
+                                string="Send Email"
+                                class="btn-primary"
+                                invisible="stage != 'draft'"
+                            />
+
+                            <button name="action_print_pdf"
+                                type="object"
+                                string="Print PDF"
+                                class="btn-primary"
+                            />
+
+                            <button name="action_preview_report"
+                                type="object"
+                                string="Preview"
+                                class="btn-primary"
+                            />
+
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_milestone_view_tree" model="ir.ui.view">
+        <field name="name">project.milestone.tree.view</field>
+        <field name="model">project.milestone</field>
+        <field name="inherit_id" ref="sale_project.project_milestone_view_tree"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='name']" position="attributes">
+                <attribute name="string">Milestone Name</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='sale_line_id']" position="after">
+                <field name="amount"/>
+            </xpath>
+
+            <xpath expr="//field[@name='is_reached']" position="before">
+                <field name="invoice_name" optional="show"/>
+                <field name="invoice_status" widget="badge" optional="show"/>
+            </xpath>
+
+            <xpath expr="//button[@name='action_view_sale_order']" position="after">
+                <button name="create_invoice_from_sale_line" type="object" string="Create Invoice"
+                    class="btn btn-primary" invisible="not sale_line_id or not is_reached or invoice_status"/>
+            </xpath>
+
+            <xpath expr="//field[@name='quantity_percentage'][1]" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='quantity_percentage'][2]" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+
+            <xpath expr="//field[@name='product_uom_qty'][1]" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='product_uom_qty'][2]" position="attributes">
+                <attribute name="column_invisible">1</attribute>
+            </xpath>
+            
+        </field>
+    </record>
+
+    <record id="project_view_task_form2_inherit" model="ir.ui.view">
+        <field name="name">project.task.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_form2"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//header" position="attributes">
+                <attribute name="invisible">task_type == 'issue'</attribute>
+            </xpath>
+
+            <xpath expr="//header" position="inside">
+                <button 
+                    name="action_issue"
+                    string="Add Bug"
+                    type="object"
+                    class="btn-primary"
+                    invisible="task_type == 'issue'"
+                />
+            </xpath>
+
+            <xpath expr="//field[@name='milestone_id']" position="after">
+                <field name="module_id"/>
+            </xpath>
+
+            <xpath expr="//field[@name='name']" position="replace">
+                <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Task Title..." invisible="task_type == 'issue'"/>
+                <field name="name" options="{'line_breaks': False}" widget="text" class="o_task_name text-truncate w-md-75 w-100 pe-2" placeholder="Bug Title..." invisible="task_type == 'task'"/>
+            </xpath>
+
+            <xpath expr="//div[@id='date_deadline_and_recurring_task']" position="after">
+                <field name="task_type" string="Task Type" readonly="1"/>
+                <field name="issue_category_id" invisible="task_type == 'task'"/>
+                <field name="reproducibility" invisible="task_type == 'task'"/>
+                <field name="summary" invisible="task_type == 'task'"/>
+            </xpath>
+
+
+            <xpath expr="//page[@name='sub_tasks_page']" position="attributes">
+                <attribute name="invisible">task_type == 'issue'</attribute>
+            </xpath>
+
+            <xpath expr="//page[@name='description_page']" position="after">
+                <page name="steps_to_reproduce_page" string="Steps to Reproduce" invisible="task_type == 'task'">
+                   <field name="steps_to_reproduce" type="html" options="{'collaborative': true, 'resizable': false}" placeholder="Add steps to reproduce about this task bug..."/>
+                </page>
+                <page nam="additional_info_page" string="Additional Info" invisible="task_type == 'task'">
+                    <field name="additional_info" placeholder="Add additional information about this task bug..."/>
+                </page>
+            </xpath>
+
+        </field>
+
+    </record>
+
+    <record id="project_task_search_view" model="ir.ui.view">
+        <field name="name">project.task.search.view.inherit</field>
+        <field name="model">project.task</field>
+        <field name="inherit_id" ref="project.view_task_search_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='milestone_id']" position="after">
+                <field name="module_id"/>
+            </xpath>
+            <xpath expr="//filter[@name='starred_tasks']" position="after">
+                <separator/>
+                <filter string="High priority" name="high_priority_kanban" domain="[('priority','=', '2')]"/>
+                <filter string="Normal priority" name="normal_priority_kanban" domain="[('priority','=', '1')]"/>
+                <filter string="Low priority" name="low_priority_kanban" domain="['|', ('priority','=', '0'), ('priority', '=', False)]"/>
+            </xpath>
+            <xpath expr="//group[1]" position="inside">
+                <filter string="Priority" name="priority" context="{'group_by':'priority'}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="project_project_view_form_invoice" model="ir.ui.view">
+        <field name="name">project.project.view.form.inherit.billing</field>
+        <field name="model">project.project</field>
+        <field name="inherit_id" ref="sale_timesheet.project_project_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='billing_employee_rate']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Auto Accept Milestone Completion -->
+    <record id="ir_cron_auto_accept_milestone" model="ir.cron">
+        <field name="name">Auto Accept Milestone Completion</field>
+        <field name="model_id" ref="model_milestone_completion_report"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_accept_pending_milestones()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+
+    <!-- Auto Accept Project Reports  -->
+    <record id="ir_cron_auto_accept_project_reports" model="ir.cron">
+        <field name="name">Auto Accept Project Reports</field>
+        <field name="model_id" ref="model_project_acceptance_report"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_accept_project_reports()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="numbercall">-1</field>
+        <field name="active">True</field>
+    </record>
+</odoo>

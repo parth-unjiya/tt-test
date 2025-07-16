@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+
+        <record model="ir.actions.client" id="dashboard_client_action">
+            <field name="name">Dashboard</field>
+            <field name="tag">custom_dashboard</field>
+        </record>
+
+        <!-- Top menu item -->
+        <menuitem name="Dashboard" id="menu_root" web_icon="custom_dashboard,static/description/icon.png"/>
+
+        <menuitem 
+            name="Dashboard" 
+            id="dashboard_child_menu"
+            parent="custom_dashboard.menu_root"
+            action="dashboard_client_action"
+            sequence="1"
+        />
+
+    </data>
+</odoo>

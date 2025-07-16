@@ -1,0 +1,11 @@
+<odoo>
+
+	<record id="action_resource_project" model="ir.actions.act_window">
+	    <field name="name">Materials</field>
+	    <field name="res_model">resource.resource</field>
+	    <field name="view_mode">tree,form</field>
+	    <field name="domain">[('resource_type','=', 'material')]</field>
+	    <field name="search_view_id" ref="resource.view_resource_resource_search"/>
+	</record>
+	
+</odoo>

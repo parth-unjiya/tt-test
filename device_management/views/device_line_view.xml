@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Device Line Tree View -->
+    <record id="view_device_line_tree" model="ir.ui.view">
+        <field name="name">device.line.tree</field>
+        <field name="model">device.line</field>
+        <field name="arch" type="xml">
+            <tree expand="1" groups_limit="10" export_xlsx="0">
+                <!-- <field name="device_id"/>
+                <field name="device_label"/>
+                <field name="device_type"/>
+                <field name="is_occupied"/> -->
+                <field name="occupied_by"/>
+                <field name="occupied_at"/>
+                <field name="released_at"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Device Line Form View -->
+    <record id="view_device_line_form" model="ir.ui.view">
+        <field name="name">device.line.form</field>
+        <field name="model">device.line</field>
+        <field name="arch" type="xml">
+            <form string="Devices">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="device_id"/>
+                            <field name="device_label"/>
+                            <field name="device_type"/>
+                        </group>
+                        <group>
+                            <field name="is_occupied"/>
+                            <field name="occupied_by"/>
+                            <field name="occupied_at"/>
+                            <field name="released_at"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_device_line" model="ir.actions.act_window">
+        <field name="name">Device History</field>
+        <field name="res_model">device.line</field>
+        <field name="view_mode">tree</field>
+        <!-- <field name="target">new</field> -->
+    </record>
+
+</odoo>

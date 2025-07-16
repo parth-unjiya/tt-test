@@ -1,0 +1,49 @@
+<odoo>
+    <record id="view_sandwich_leave_rule_form" model="ir.ui.view">
+        <field name="name">sandwich.leave.rule.form</field>
+        <field name="model">hr.sandwich.leave.rule</field>
+        <field name="arch" type="xml">
+            <form string="Sandwich Leave Rule">
+                <sheet>
+                    <group>
+                        <field name="leave_type_id"/>
+                        <field name="notice_period_days"/>
+                        <field name="include_weekends"/>
+                        <field name="include_public_holidays"/>
+                        <!-- <field name="medical_certificate_required"/> -->
+                        <!-- <field name="max_exemptions_per_year"/> -->
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sandwich_leave_rule_tree" model="ir.ui.view">
+        <field name="name">sandwich.leave.rule.tree</field>
+        <field name="model">hr.sandwich.leave.rule</field>
+        <field name="arch" type="xml">
+            <tree string="Sandwich Leave Rules">
+                <field name="leave_type_id"/>
+                <field name="notice_period_days"/>
+                <field name="include_weekends"/>
+                <!-- <field name="include_public_holidays"/> -->
+                <!-- <field name="medical_certificate_required"/> -->
+            </tree>
+        </field>
+    </record>
+
+    <record id="action_hr_sandwich_leave_rule" model="ir.actions.act_window">
+        <field name="name">Sandwich Leave Rules</field>
+        <field name="res_model">hr.sandwich.leave.rule</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem 
+        id="menu_hr_sandwich_leave_rule"
+        action="action_hr_sandwich_leave_rule" 
+        name="Sandwich Leave Rules" 
+        parent="hr_holidays.menu_hr_holidays_configuration"
+    />
+
+
+</odoo>

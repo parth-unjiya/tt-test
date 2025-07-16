@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_bd_form" model="ir.ui.view">
+            <field name="name">res.config.settings.bd.form</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Section -->
+                <div id="languages" position="before">
+                    <h2>LinkedIn Integration</h2>
+                    <div class="row mt16 o_settings_container" name="app_security_boost">
+
+                        <group>
+                            <group>
+                                <field name="bd_token"/>
+                            </group>
+                            <group>
+                                <field name="bd_dataset_id"/>
+                            </group>
+                        </group>
+                    </div>
+                    <h2>Recruitment Report Emails</h2>
+                    <div class="row mt16 o_settings_container" name="app_security_boost">
+                        <group>
+                            <field name="to_emails_recruitment"/>
+                        </group>
+                        <group>
+                            <field name="cc_emails_recruitment"/>
+                        </group>
+                        <group>
+                            <field name="to_emails_management"/>
+                        </group>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

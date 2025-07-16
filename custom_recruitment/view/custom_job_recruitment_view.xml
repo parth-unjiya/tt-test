@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_applicant_custom_view_form" model="ir.ui.view">
+        <field name="name">hr.applicant.custom.form.view</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header/button[@name='archive_applicant']" position="after">
+                <!-- Button For Send Portal Link -->
+                <button
+                        name="action_send_portal_link"
+                        string="Candidate Information Form"
+                        type="object"
+                        class="btn-primary"
+                        invisible="stage_id not in [%(hr_recruitment.stage_job0)d, %(hr_recruitment.stage_job1)d]"
+                        groups="hr_recruitment.group_hr_recruitment_user"
+                />
+            </xpath>
+
+            <!-- <xpath expr="//header" position="inside">
+                <button name="%(action_open_interview_review_wizard)d"
+                        string="Send Review Form"
+                        type="action"
+                        class="btn-primary"
+                        invisible="stage_id not in [%(hr_recruitment.stage_job2)d, %(hr_recruitment.stage_job3)d]"
+                        context="{'default_applicant_id': active_id}"
+                        groups="hr_recruitment.group_hr_recruitment_user"/>
+            </xpath> -->
+            <xpath expr="//field[@name='stage_id']" position="attributes">
+                <attribute name="widget">statusbar_duration</attribute>
+            </xpath>
+            <xpath expr="//field[@name='type_id']" position="after">
+                <field name="relevant_experience"/>
+                <field name="total_experience"/>
+                <field name="vendor_id"/>
+            </xpath>
+            <xpath expr="//field[@name='categ_ids']" position="after">
+                <field name="notice_period"/>
+            </xpath>
+            <xpath expr="//field[@name='linkedin_profile']" position="after">
+                <field name="skype"/>
+            </xpath>
+            <xpath expr="//field[@name='source_id']" position="after">
+                <field name="referral_type"/>
+                <field name="referral_emp_id" invisible="referral_type == 'ex'"/>
+                <field name="referral_ex_emp_id" invisible="referral_type == 'current'"
+                       domain="[('active', '=', False)]"/>
+                <!-- Portal -->
+                <field name="token" invisible="1"/>
+                <field name="token_expiry" invisible="1"/>
+                <field name="portal_filled" invisible="1"/>
+            </xpath>
+
+            <xpath expr="//field[@name='user_id']" position="after">
+                <field name="career_start"/>
+            </xpath>
+
+            <xpath expr="//group[@name='recruitment_contract']" position="attributes">
+                <attribute name="groups">hr_recruitment.group_hr_recruitment_user</attribute>
+            </xpath>
+
+            <xpath expr="//group[@name='recruitment_contract']/label[1]" position="before">
+                <label for="salary_current"/>
+                <div class="o_row">
+                    <field name="salary_current"/>
+                    <span invisible="not salary_current_extra">+</span>
+                    <field name="salary_current_extra" placeholder="Extra advantages..."/>
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='application_summary']" position="after">
+                <page name="personal_details" string="Personal Details">
+                    <group>
+                        <group string="Address">
+                            <label for="current_street" string="Current Address"/>
+                            <div class="o_address_format">
+                                <field name="current_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="current_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="current_city" placeholder="City" class="o_address_city"/>
+                                <field name="current_state_id" class="o_address_state" placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"
+                                       context="{'default_country_id': current_country_id}"/>
+                                <field name="current_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="current_country_id" placeholder="Country" class="o_address_country"
+                                       options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                            <field name="is_same_as_current"/>
+                            <label for="permanent_street" string="Permanent Address"/>
+                            <div class="o_address_format">
+                                <field name="permanent_street" placeholder="Street..." class="o_address_street"/>
+                                <field name="permanent_street2" placeholder="Street 2..." class="o_address_street"/>
+                                <field name="permanent_city" placeholder="City" class="o_address_city"/>
+                                <field name="permanent_state_id" class="o_address_state" placeholder="State"
+                                       options="{'no_open': True, 'no_quick_create': True}"
+                                       context="{'default_country_id': permanent_country_id}"/>
+                                <field name="permanent_zip" placeholder="ZIP" class="o_address_zip"/>
+                                <field name="permanent_country_id" placeholder="Country" class="o_address_country"
+                                       options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                        </group>
+                        <group string="Details">
+                            <field name="dob"/>
+                            <field name="marital"/>
+                            <field name="reason_for_change"/>
+                        </group>
+                    </group>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="hr_applicant_custom_view_form_two" model="ir.ui.view">
+        <field name="name">applicant.custom.form.view</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment_skills.hr_applicant_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[2]" position="after">
+                <page name="family_details" string="Family Details">
+                    <field name="family_data_ids" mode="tree">
+                        <tree editable="bottom">
+                            <field name="applicant_id"/>
+                            <field name="name"/>
+                            <field name="relation"/>
+                            <field name="occupation"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="academic_details" string="Academic Details">
+                    <field name="academic_data_ids" mode="tree">
+                        <tree editable="bottom">
+                            <field name="applicant_id"/>
+                            <field name="type_id"/>
+                            <field name="institute_name"/>
+                            <field name="pass_year"/>
+                            <field name="percentage"/>
+                        </tree>
+                    </field>
+                </page>
+                <page name="professional_detail" string="Professional Details">
+                    <field name="professional_detail_ids" mode="tree">
+                        <tree editable="bottom">
+                            <field name="applicant_id"/>
+                            <field name="company_name"/>
+                            <field name="designation"/>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                            <field name="reason"/>
+                            <field name="current_ctc"/>
+                            <field name="expected_ctc"/>
+                            <field name="notice_period"/>
+                            <field name="last_appraisal_date"/>
+                        </tree>
+                    </field>
+                </page>
+
+                <page name="candidate_evaluation" string="Candidate Evaluation">
+                    <field name="candidate_evaluation_ids" mode="tree" readonly="1"
+                           domain="[('applicant_id', '=', parent.id)]">
+                        <tree>
+                            <field name="applicant_id" options="{'no_open': True, 'no_create': True}"/>
+                            <field name="interviewer_id" options="{'no_open': True, 'no_create': True}"/>
+
+                            <field name="recommendation"/>
+                            <field name="is_filled"/>
+
+                            <field name="understanding_position" optional="hide"/>
+                            <field name="technical_skill" optional="hide"/>
+                            <field name="logical_skill" optional="hide"/>
+                            <field name="communication_skill" optional="hide"/>
+                            <field name="organizational_fit" optional="hide"/>
+                            <field name="attitude" optional="hide"/>
+                            <field name="work_culture_fit" optional="hide"/>
+                            <field name="new_learning" optional="hide"/>
+
+                            <field name="tech_1" string="Technology 1" optional="hide"/>
+                            <field name="tech_1_rating" string="Rating 1" optional="hide"/>
+                            <field name="tech_2" string="Technology 2" optional="hide"/>
+                            <field name="tech_2_rating" string="Rating 2" optional="hide"/>
+                            <field name="tech_3" string="Technology 3" optional="hide"/>
+                            <field name="tech_3_rating" string="Rating 3" optional="hide"/>
+
+                            <field name="good_points"/>
+                            <field name="improvement_points"/>
+
+                        </tree>
+
+                        <form string="Candidate Evaluation">
+                            <sheet>
+                                <group>
+                                    <field name="applicant_id" options="{'no_open': True, 'no_create': True}"/>
+                                    <field name="interviewer_id" options="{'no_open': True, 'no_create': True}"/>
+
+                                    <field name="recommendation"/>
+                                </group>
+
+                                <group>
+                                    <group>
+                                        <field name="understanding_position" optional="hide"/>
+                                        <field name="technical_skill" optional="hide"/>
+                                        <field name="logical_skill" optional="hide"/>
+                                        <field name="communication_skill" optional="hide"/>
+                                        <field name="organizational_fit" optional="hide"/>
+                                        <field name="attitude" optional="hide"/>
+                                        <field name="work_culture_fit" optional="hide"/>
+                                        <field name="new_learning" optional="hide"/>
+                                    </group>
+                                    <group>
+                                        <field name="tech_1" string="Technology 1" optional="hide"/>
+                                        <field name="tech_1_rating" string="Rating 1" optional="hide"/>
+                                        <field name="tech_2" string="Technology 2" optional="hide"/>
+                                        <field name="tech_2_rating" string="Rating 2" optional="hide"/>
+                                        <field name="tech_3" string="Technology 3" optional="hide"/>
+                                        <field name="tech_3_rating" string="Rating 3" optional="hide"/>
+
+                                        <field name="is_filled"/>
+                                        <field name="is_not_prectical"/>
+                                        <field name="practical_completed"/>
+                                    </group>
+                                </group>
+                                <notebook>
+                                    <page string="Details">
+                                        <group>
+                                            <field name="good_points"/>
+                                            <field name="improvement_points"/>
+                                        </group>
+                                    </page>
+                                </notebook>
+
+                            </sheet>
+                        </form>
+
+                    </field>
+                </page>
+
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_applicant_custom_view_search" model="ir.ui.view">
+        <field name="name">hr.applicant.custom.search.view</field>
+        <field name="model">hr.applicant</field>
+        <field name="inherit_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="arch" type="xml">
+            <xpath expr="//filter[@name='ongoing']" position="before">
+                <separator string="Today Report"/>
+                <filter name="current_day" string="Today"
+                        domain="[('create_date', '=', context_today().strftime('%Y-%m-%d'))]"/>
+            </xpath>
+        </field>
+    </record>
+
+
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--    Employee Designation master views and action-->
+
+    <record id="hr_employee_designation_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.designation.form.view</field>
+        <field name="model">hr.employee.designation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="tt_id" invisible="1"/>
+                        <field name="name"/>
+                        <field name="department_id"/>
+                        <field name="short_name"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_designation_tree_view" model="ir.ui.view">
+        <field name="name">hr.employee.designation.tree.view</field>
+        <field name="model">hr.employee.designation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="tt_id" invisible="1"/>
+                <field name="name"/>
+                <field name="department_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_employee_designation_action">
+      <field name="name">Employee Designation</field>
+      <field name="res_model">hr.employee.designation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<!--    <menuitem id="hr_employee_designation_menu" name="Employee Designation" parent="hr.menu_config_employee" action="hr_employee_designation_action" sequence="5"/>-->
+
+<!--    Employee Sub Designation master views and action-->
+
+    <record id="hr_employee_sub_designation_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.sub.designation.form.view</field>
+        <field name="model">hr.employee.sub.designation</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="tt_id" invisible="1"/>
+                        <field name="name"/>
+<!--                        <field name="designation_id"/>-->
+                        <field name="department_id"/>
+                        <field name="active" invisible="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_employee_sub_designation_tree_view" model="ir.ui.view">
+        <field name="name">hr.employee.sub.designation.tree.view</field>
+        <field name="model">hr.employee.sub.designation</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="tt_id" invisible="1"/>
+                <field name="name"/>
+<!--                <field name="designation_id"/>-->
+                <field name="department_id"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_employee_sub_designation_action">
+      <field name="name">Employee Sub Designation</field>
+      <field name="res_model">hr.employee.sub.designation</field>
+      <field name="view_mode">tree,form</field>
+    </record>
+
+<!--    <menuitem id="hr_employee_sub_designation_menu" name="Employee Sub Designation" parent="hr.menu_config_employee" action="hr_employee_sub_designation_action" sequence="6"/>-->
+
+
+</odoo>

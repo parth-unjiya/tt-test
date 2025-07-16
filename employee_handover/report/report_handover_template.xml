@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_employee_exit_form">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: sans-serif; padding: 20px;">
+                        <h2 style="text-align:center; font-weight: bold;">Employee Exit Form</h2>
+                        <br/>
+                        <table style="width: 100%; font-size: 14px; border-collapse: collapse; margin-bottom: 15px;">
+                            <tr>
+                                <td style="padding: 5px; vertical-align: top;">
+                                    <strong>Employee Name:</strong>
+                                    <span t-esc="doc.employee_id.name"/>
+                                </td>
+                                <td style="padding: 5px; vertical-align: top;">
+                                    <strong>Employee Code:</strong>
+                                    <span t-esc="doc.employee_id.emp_code"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 5px; vertical-align: top;">
+                                    <strong>Department:</strong>
+                                    <span t-esc="doc.employee_id.department_id.name"/>
+                                </td>
+                                <td style="padding: 5px; vertical-align: top;">
+                                    <strong>Employment Period:</strong>
+                                    <span t-esc="doc.employee_id.joining_date"/>
+                                    to
+                                    <span t-esc="doc.releaving_date"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+                        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+                            <thead>
+                                <tr>
+                                    <th style="border: 1px solid black; padding: 5px;">Handover Task</th>
+                                    <th style="border: 1px solid black; padding: 5px;">Project To Employee</th>
+                                    <th style="border: 1px solid black; padding: 5px;">Completed (Yes / No)</th>
+                                    <th style="border: 1px solid black; padding: 5px;">Comment</th>
+                                </tr>
+                            </thead>
+                            <tbody t-if="doc.hr_task_ids">
+                                <t t-foreach="doc.hr_task_ids" t-as="task_h">
+                                    <tr>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_h.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_h.project_id.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_h.state == '1_done' and 'Yes' or 'No'"/>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_h.description"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tbody t-if="doc.admin_task_ids">
+                                <t t-foreach="doc.admin_task_ids" t-as="task_a">
+                                    <tr>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_a.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_a.project_id.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_a.state == '1_done' and 'Yes' or 'No'"/>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_a.description"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tbody t-if="doc.project_task_ids">
+                                <t t-foreach="doc.project_task_ids" t-as="task_p">
+                                    <tr>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_p.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_p.project_id.name"/>
+                                        <td style="border: 1px solid black; padding: 5px;"
+                                            t-esc="task_p.state == '1_done' and 'Yes' or 'No'"/>
+                                        <td style="border: 1px solid black; padding: 5px;" t-esc="task_p.description"/>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+                        <p>
+                            <strong>Notes:</strong>
+                            <span t-esc="doc.description"/>
+                        </p>
+
+                        <br/>
+                        <p>
+                            <strong>Date:</strong>
+                            <span t-esc="doc.releaving_date"/>
+                        </p>
+
+                        <br/>
+                        <br/>
+                        <table style="width: 100%; font-size: 14px;">
+                            <tr>
+                                <td>
+                                    <strong>Employee Signature:</strong>
+                                    ________________________
+                                </td>
+                                <td style="text-align: right;">
+                                    <strong>HR Signature:</strong>
+                                    ________________________
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

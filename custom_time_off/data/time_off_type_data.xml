@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Auto Leave Assign to Employee Base on Configure -->
+        <record id="ir_cron_auto_allocate_leaves" model="ir.cron">
+            <field name="name">Auto Allocate Leaves</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave_type"/>
+            <field name="state">code</field>
+            <field name="code">model._auto_allocate_leaves()</field>
+            <field name="interval_number">1</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active" eval="True"/>
+            <field name="nextcall" eval="(DateTime.utcnow().replace(hour=17, minute=0) + timedelta(days=0)).strftime('%Y-%m-%d %H:%M:%S')" />
+        </record>
+
+<!--        <record id="holiday_status_festival" model="mail.message.subtype">-->
+<!--            <field name="name">Festival Leave</field>-->
+<!--            <field name="res_model">hr.leave</field>-->
+<!--            <field name="description">Festival Leave</field>-->
+<!--        </record>-->
+
+<!--        <record id="holiday_status_birthday" model="mail.message.subtype">-->
+<!--            <field name="name">Birthday/Anniversary Leave</field>-->
+<!--            <field name="res_model">hr.leave</field>-->
+<!--            <field name="description">Birthday/Anniversary Leave</field>-->
+<!--        </record>-->
+
+        <!-- <record id="holiday_status_festival" model="hr.leave.type">
+            <field name="name">Festival Leave</field>
+            <field name="requires_allocation">yes</field>
+            <field name="employee_requests">no</field>
+            <field name="leave_validation_type">both</field>
+            <field name="allocation_validation_type">officer</field>
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="icon_id" ref="hr_holidays.icon_14"/>
+            <field name="color">3</field>
+            <field name="has_valid_allocation">True</field>
+        </record>
+
+        <record id="holiday_status_birthday" model="hr.leave.type">
+            <field name="name">Birthday/Anniversary Leave</field>
+            <field name="requires_allocation">yes</field>
+            <field name="employee_requests">no</field>
+            <field name="leave_validation_type">both</field>
+            <field name="allocation_validation_type">officer</field>
+            <field name="responsible_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="icon_id" ref="hr_holidays.icon_14"/>
+            <field name="color">4</field>
+            <field name="has_valid_allocation">True</field>
+        </record>
+ -->
+
+        <!-- File: your_module_name/data/ir_cron_data.xml -->
+        <!-- <record id="cron_quarterly_leave_allocation" model="ir.cron">
+            <field name="name">Quarterly Leave Allocation</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+            <field name="state">code</field>
+            <field name="code">model.quarterly_leave_allocation()</field>
+            <field name="interval_number">90</field>
+            <field name="interval_type">days</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record> -->
+
+        <!-- Yearly Leave Allocation Cron Job -->
+        <!-- <record id="ir_cron_yearly_leave_allocation" model="ir.cron">
+            <field name="name">Yearly Leave Allocation</field>
+            <field name="model_id" ref="hr_holidays.model_hr_leave_allocation"/>
+            <field name="state">code</field>
+            <field name="code">model.yearly_leave_allocation()</field>
+            <field name="interval_number">12</field>
+            <field name="interval_type">months</field>
+            <field name="numbercall">-1</field>
+            <field name="active">True</field>
+        </record>
+ -->
+    </data>
+</odoo>

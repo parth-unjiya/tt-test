@@ -1,0 +1,23 @@
+.custom-month-picker {
+    text-align: center;
+    cursor: pointer;
+
+    /* Hide the day field in WebKit browsers (Chrome, Edge, Safari, Opera) */
+    &::-webkit-datetime-edit-day-field,
+    &::-webkit-datetime-edit-day,
+    &::-webkit-datetime-edit-text {
+        display: none;
+    }
+
+    /* Firefox does not support the above properties, so we use this hack */
+    &::-moz-placeholder {
+        font-size: 0; // Makes the day part invisible in Firefox
+    }
+
+    /* Remove up/down arrows in Firefox */
+    &::-webkit-inner-spin-button,
+    &::-webkit-calendar-picker-indicator {
+        display: none;
+        -webkit-appearance: none;
+    }
+}

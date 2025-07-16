@@ -1,0 +1,36 @@
+<odoo>
+    <data>
+
+        <template id="report_saleorder_inherit" inherit_id="sale.report_saleorder_document">
+            
+            <!-- ✅ Visually hide Quantity column header (with style) -->
+            <xpath expr="//th[@name='th_quantity']" position="attributes">
+                <attribute name="style">display: none;</attribute>
+            </xpath>
+
+            <xpath expr="//th[@name='th_description']" position="before">
+                <th name="th_project" class="text-start">
+                    <t t-set="project" t-value="request.env['project.project'].search([('sale_order_id', '=', doc.id)], limit=1)"/>
+                    <t t-if="project">
+                        Project
+                    </t>
+                </th>
+            </xpath>
+
+            <xpath expr="//td[@name='td_quantity']" position="attributes">
+                <attribute name="style">display: none;</attribute>
+            </xpath>
+
+            <xpath expr="//td[@name='td_name']" position="before">
+                <td name="td_project">
+                    <t t-set="project" t-value="request.env['project.project'].search([('sale_order_id', '=', line.order_id.id)], limit=1)"/>
+                    <t t-if="project">
+                        <span t-esc="project.name"/>
+                    </t>
+                </td>
+            </xpath>
+
+        </template>
+        
+    </data>
+</odoo>

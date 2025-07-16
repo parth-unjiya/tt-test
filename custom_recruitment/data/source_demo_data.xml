@@ -1,0 +1,52 @@
+<odoo>
+
+    <record model="utm.source" id="utm_source_naukri">
+        <field name="name">Naukri</field>
+    </record>
+    <record model="utm.source" id="utm_source_employee_referral">
+        <field name="name">Employee Referral</field>
+    </record>
+    <record model="utm.source" id="utm_source_social_network">
+        <field name="name">Social Network</field>
+    </record>
+    <record model="utm.source" id="utm_source_email">
+        <field name="name">Email</field>
+    </record>
+    <record model="utm.source" id="utm_source_consultancy">
+        <field name="name">Consultancy</field>
+    </record>
+    <record model="utm.source" id="utm_source_sister_company">
+        <field name="name">SisterCompany</field>
+    </record>
+
+    <!-- hr.recruitment.stage -->
+
+    <record model="hr.recruitment.stage" id="hr_recruitment_stage_candidate_process">
+        <field name="name">Candidate Process</field>
+    </record>
+
+    <record model="hr.recruitment.stage" id="hr_recruitment_stage_hold">
+        <field name="name">Hold</field>
+    </record>
+
+    <!-- <record model="hr.recruitment.stage" id="hr_recruitment_stage_review_process">
+        <field name="name">Review Process</field>
+    </record> -->
+
+    <!-- <record model="hr.recruitment.stage" id="hr_recruitment_stage_hire">
+        <field name="name">Hire</field>
+    </record> -->
+
+    <record model="hr.recruitment.stage" id="hr_recruitment_stage_rejected">
+        <field name="name">Rejected</field>
+    </record>
+
+    <!-- <record model="hr.recruitment.stage" id="hr_recruitment_stage_not_appeared">
+        <field name="name">Not Appeared</field>
+    </record> -->
+
+    <record model="hr.recruitment.stage" id="hr_recruitment_stage_backout">
+        <field name="name">Backout</field>
+    </record>
+
+</odoo>

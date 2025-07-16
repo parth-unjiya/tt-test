@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Main appraisal menu see in app list-->
+    <menuitem name="Appraisal"
+              id="hr_appraisal_menu_root"
+              web_icon="hr_appraisal,static/description/clipboard.png"
+              groups="hr_appraisal.oh_appraisal_group_employee"/>
+
+    <menuitem name="Configuration" sequence="3"
+              id="hr_appraisal_configuration_menu_root"
+              parent="hr_appraisal_menu_root"
+              groups="hr_appraisal.oh_appraisal_group_manager"/>
+
+    <menuitem name="Stages" sequence="1"
+              id="hr_appraisal_configuration_stages_menu_root"
+              parent="hr_appraisal_configuration_menu_root"
+              action="hr_appraisal_stage_action" groups="hr_appraisal.oh_appraisal_group_manager"/>
+
+    <!--    Appraisal menu see inside oh appraisal module-->
+    <menuitem name="Appraisal"
+              id="hr_appraisal_menu" sequence="1"
+              parent="hr_appraisal_menu_root"
+              action="hr_appraisal_action"
+              groups="hr_appraisal.oh_appraisal_group_employee"/>
+    <!--    Answer see inside oh appraisal module-->
+<!--    <menuitem name="Answers"-->
+<!--              id="hr_appraisal_menu_answers" sequence="2"-->
+<!--              parent="hr_appraisal_menu_root"-->
+<!--              action="survey.action_survey_user_input"-->
+<!--              groups="hr_appraisal.oh_appraisal_group_employee"/>-->
+
+    <menuitem id="attribute_attribute_menu" parent="hr_appraisal_configuration_menu_root" name="Attributes"
+              action="action_attribute_attribute"/>
+
+</odoo>

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Inherit Website Menu Form View -->
+    <record id="website_menu_view_form_inherit" model="ir.ui.view">
+        <field name="name">website.menu.view.form.inherit</field>
+        <field name="model">website.menu</field>
+        <field name="inherit_id" ref="website.menu_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='sequence']" position="after">
+                <field name="user_group_ids" widget="many2many_tags"/>
+            </xpath>
+        </field>
+    </record>
+</odoo> 

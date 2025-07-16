@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="fetchmail_server_form_company" model="ir.ui.view">
+        <field name="name">fetchmail.server.form</field>
+        <field name="model">fetchmail.server</field>
+        <field name="inherit_id" ref="mail.view_email_server_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='date']" position="after">
+                <field name="company_id"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

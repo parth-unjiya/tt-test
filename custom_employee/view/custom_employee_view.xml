@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="hr_employee_custom_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.custom.form.view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_accept" string="Accept" type="object" class="oe_inline" invisible="is_done == False or status == 'permanent'"/>
+                <button name="action_hold" string="Hold" type="object" class="oe_inline" invisible="is_done == False or status == 'hold'"/>
+                <button name="action_relieve" string="Relieve" type="object" class="oe_inline" invisible="status == 'relieve'"/>
+                <button name="action_extend_probation" string="Probation Extend" type="object" class="oe_inline" invisible="status != 'probation'"/>
+                <field name="status" widget="statusbar" statusbar_visible="probation,permanent"/>
+                <field name="is_done" invisible="1"/>
+                <field name="is_probation_extended" invisible="1"/>
+            </xpath>
+            <xpath expr="//field[@name='emergency_phone']" position="after">
+                <field name="emergency_contact_relation"/>
+                <field name="emergency_contact_2"/>
+                <field name="emergency_phone_2"/>
+                <field name="emergency_contact_relation_2"/>
+            </xpath>
+
+            <xpath expr="//field[@name='department_id']" position="after">
+<!--                <field name="designation_id"/>-->
+<!--                <field name="sub_desination_id"/>-->
+                <field name="svn_user_id"/>
+                <field name="emp_code"/>
+            </xpath>
+
+            <xpath expr="//field[@name='private_email']" position="before">
+                <label for="permanent_street" string="Permanent Address"/>
+                <div class="o_address_format">
+                    <field name="permanent_street" placeholder="Street..." class="o_address_street"/>
+                    <field name="permanent_street2" placeholder="Street 2..." class="o_address_street"/>
+                    <field name="permanent_city" placeholder="City" class="o_address_city"/>
+                    <field name="permanent_state_id" class="o_address_state" placeholder="State"
+                           options="{'no_open': True, 'no_quick_create': True}"
+                           context="{'default_country_id': private_country_id}"/>
+                    <field name="permanent_zip" placeholder="ZIP" class="o_address_zip"/>
+                    <field name="permanent_country_id" placeholder="Country" class="o_address_country"
+                           options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                </div>
+            </xpath>
+            <xpath expr="//page[@name='public']" position="before">
+                <page name="probation_review" string="Probation Review">
+                <field name="review_ids" mode="tree" readonly="status != 'probation'">
+                    <tree string="Probation Review" editable="bottom">
+                        <field name="employee_id" readonly="1" optional="hide" />
+                        <field name="reviewer_id" invisible="1" optional="hide"/>
+                        <field name="reviewer_ids" widget="many2many_tags" required="1"/>
+                        <field name="survey_id" column_invisible="1"/>
+                        <!-- <field name="tot_comp_survey" optional="hide"/> -->
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                        <field name="review_type"/>
+                        <field name="review_status"/>
+                        <button name="action_send_portal_link" string="Send" type="object" class="oe_inline"/>
+                    </tree>
+                </field>
+
+
+                </page>
+            </xpath>
+<!--            <xpath expr="//page[@name='personal_information']" position="after">-->
+<!--                <page name="employee_promotion" string="Promotion History" invisible="status == 'probation'">-->
+<!--                <field name="promotion_history_ids" mode="tree">-->
+<!--                    <tree string="Promotion History" editable="bottom">-->
+<!--                        <field name="employee_id"/>-->
+<!--                        <field name="department_id"/>-->
+<!--                        <field name="job_id"/>-->
+<!--                        <field name="start_date"/>-->
+<!--                        <field name="end_date"/>-->
+<!--                    </tree>-->
+<!--                </field>-->
+<!--                </page>-->
+<!--            </xpath>-->
+<!--            <xpath expr="//page[@name='hr_settings']" position="before">-->
+<!--                <page name="employee_tour" string="Tour History" invisible="status == 'probation'">-->
+<!--                <field name="employee_tour_ids" mode="tree">-->
+<!--                    <tree string="Tour History" editable="bottom">-->
+<!--                        <field name="employee_id"/>-->
+<!--                        <field name="description"/>-->
+<!--                        <field name="start_date"/>-->
+<!--                        <field name="end_date"/>-->
+<!--                        <field name="tour_status"/>-->
+<!--                    </tree>-->
+<!--                </field>-->
+<!--                </page>-->
+<!--            </xpath>-->
+            <!-- Probation Reviwe button -->
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_open_probation_reviews" 
+                        class="oe_stat_button" 
+                        icon="fa-plus" 
+                        type="object"
+                        string="Probation Reviews"
+                    >
+                    <!-- <field name="probation_review_count" widget="statinfo" string="Probation Reviews"/> -->
+                </button>
+
+<!--                <button name="action_open_appraisal" -->
+<!--                        class="oe_stat_button" -->
+<!--                        icon="fa-gift" -->
+<!--                        type="object" -->
+<!--                        string="Appraisal" groups="hr_appraisal.oh_appraisal_group_employee">-->
+<!--                </button>-->
+
+                
+            </xpath>
+        </field>
+    </record>
+
+    <record id="hr_hourly_cost_custom_form_view" model="ir.ui.view">
+        <field name="name">hr.employee.custom.form.view.cost</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr_hourly_cost.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//label[@for='hourly_cost']" position="before">
+                <field name="carrier_start_date"/>
+            </xpath>
+            <xpath expr="//group[@name='application_group']" position="after">
+                <group name="dates" string="Dates">
+                    <field name="joining_date"/>
+                    <field name="permanent_employee_date"/>
+                    <field name="last_appraisal_date"/>
+                    <field name="relieve_date"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="open_view_employee_list_custom" model="ir.actions.act_window">
+            <field name="name">Probation Employees</field>
+            <field name="res_model">hr.employee</field>
+            <field name="view_mode">kanban,tree,form,activity,graph,pivot</field>
+            <field name="domain">[('status','=','probation')]</field>
+            <field name="context">{'chat_icon': True}</field>
+            <field name="view_id" eval="False"/>
+            <field name="search_view_id" ref="hr.view_employee_filter"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Add a new employee
+                </p><p>
+                    With just a quick glance on the Odoo employee screen, you
+                    can easily find all the information you need for each person;
+                    contact data, job position, availability, etc.
+                </p>
+            </field>
+        </record>
+
+    <menuitem
+            id="menu_hr_employee_probation"
+            name="Probation Employees"
+            action="open_view_employee_list_custom"
+            parent="hr.menu_hr_employee_payroll"
+            sequence="1"
+    />
+
+    <menuitem
+            id="menu_hr_employee_probation_review"
+            name="Probation Reviews"
+            action="custom_employee.action_employee_probation_review_line"
+            parent="hr.menu_hr_employee_payroll"
+            sequence="1"
+    />
+
+</odoo>

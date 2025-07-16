@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="timesheet_edit_form_view" model="ir.ui.view">
+        <field name="name">account.analytic.line.form</field>
+        <field name="model">account.analytic.line</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="id" readonly="1"/>
+                        <field name="actual_start_time"/>
+                        <field name="actual_end_time"/>
+                        <field name="reason" placeholder="Write a Proper Reason"/>
+                    </group>
+                    <footer>
+                        <button name="action_submit_timesheet" type="object" string="Submit" class="oe_highlight"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_edit_timesheet" model="ir.actions.act_window">
+        <field name="name">Edit Timesheet</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="custom_project.timesheet_edit_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+    <record id="timesheet_tree_view_validation" model="ir.ui.view">
+        <field name="name">account.analytic.line.tree</field>
+        <field name="model">account.analytic.line</field>
+        <field name="inherit_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree//field[@name='unit_amount']" position="after">
+                <field name="need_validation" column_invisible="1"/>
+                <button name="action_validate_timesheet" type="object" icon="fa-check" invisible="need_validation == False" title="Validate Timesheet"/>
+                <button name="action_cancel_timesheet" type="object" icon="fa-close" invisible="need_validation == False" title="Cancel Timesheet"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_validate_timesheet" model="ir.actions.act_window">
+        <field name="name">Timesheet Validation</field>
+        <field name="res_model">account.analytic.line</field>
+        <field name="view_mode">tree</field>
+        <field name="view_id" ref="hr_timesheet.hr_timesheet_line_tree"/>
+        <field name="domain">[('need_validation', '=', True)]</field>
+    </record>
+
+    <menuitem id="timesheet_menu_activity_validate"
+        name="Validation Timesheets"
+        groups="hr_timesheet.group_hr_timesheet_user"
+        action="action_validate_timesheet"
+        parent="hr_timesheet.timesheet_menu_root"
+    />
+
+</odoo>

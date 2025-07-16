@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<!-- Website Dynamic Title -->
+	<template id="app_layout" inherit_id="web.layout" name="app Web layout">
+	    <xpath expr="//title" position="replace">
+	        <title t-esc="title or 'Space-O'"/>
+	    </xpath>
+	</template>
+
+	<!-- Hide login Powered by Odoo -->
+	<template id="hide_login_powered_by_odoo" inherit_id="web.login_layout" name="Hide login Powered by Odoo">
+	    <xpath expr="//div[hasclass('card-body')]//div[last()]" position="replace">
+	    </xpath>
+	</template>
+
+	<!-- Replace With Your Company -->
+ 	<!-- <template id="replace_login" name="Login Layout" inherit_id="web.login_layout">
+	    <xpath expr="//a[@target='_blank']" position="replace">
+	        <a href="https://www.odooai.cn" target="_blank">Powered by
+	            <span>odooai.cn</span>
+	        </a>
+	    </xpath>
+	</template> -->
+
+	<!-- Copyright Name -->
+    <template id="replace_copyright_name" name="Copyright Name" inherit_id="web.frontend_layout">
+        
+        <!-- Hide Footer Using config_parameter -->
+        <xpath expr="//div[@id='footer']" position="before">
+        	<t t-set="show_footer" t-value="request.env['ir.config_parameter'].sudo().get_param('app_show_footer')"/>
+        	<t t-if="not show_footer">
+        		<style>
+        		    .hide_footer {
+        		    	display: none !important;
+        		    }
+        		</style>
+        	</t>
+        </xpath>
+        <!-- Pass hide_footer class -->
+        <xpath expr="//div[@id='footer']" position="attributes">
+        	<attribute name="class" add="hide_footer" separator=" "/>
+        </xpath>
+        
+        <xpath expr="//span[hasclass('o_footer_copyright_name')]" position="replace">
+            <span class="o_footer_copyright_name me-2">Copyright &amp;copy;
+                <span t-field="res_company.name" itemprop="name"/>
+	            <span class="copyright_name_after" contenteditable="true"></span>
+            </span>
+        </xpath>
+
+    </template>
+
+    <!-- Remove Website Footer Brand Promotion -->
+    <template id="new_brand_promotion"  inherit_id="web.brand_promotion" name="Brand Promotion">
+        <xpath expr="//div[hasclass('o_brand_promotion')]" position="replace">
+        </xpath>
+    </template>
+ 
+</odoo>

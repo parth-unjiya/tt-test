@@ -1,0 +1,32 @@
+ <!-- <?xml version="1.0" encoding="UTF-8" ?> -->
+<odoo>
+
+    <menuitem 
+        id="menu_planning_root" 
+        name="Resource Planning"
+        parent="project.menu_main_pm"
+        sequence="3"
+        groups="project.group_project_manager"
+    />
+<!--    <menuitem -->
+<!--        id="project_resource_menu"-->
+<!--        name="Materials"-->
+<!--        parent="project.menu_project_config"-->
+<!--        action="action_resource_project"-->
+<!--        sequence="15"-->
+<!--    />-->
+     <menuitem 
+        id="menu_project_resource_action" 
+        name="All Resource Planning"
+        parent="resource_allocation.menu_planning_root" 
+        action="resource_allocation.action_resource_allocation"
+    />
+
+    <menuitem 
+        id="menu_resource_my_allocation" 
+        name="My Planning" 
+        parent="resource_allocation.menu_planning_root" 
+        action="resource_allocation.action_resource_my_planning"
+    />
+
+</odoo> 

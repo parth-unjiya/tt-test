@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_appraisal_employee,access.hr.appraisal.employee,model_hr_appraisal,oh_appraisal_group_employee,1,0,0,0
+access_hr_appraisal_user,access.hr.appraisal.user,model_hr_appraisal,oh_appraisal_group_user,1,1,1,1
+access_hr_appraisal_stages_user,access.hr.appraisal.stages.user,model_hr_appraisal_stages,,1,1,1,1
+access_attribute_attribute,access_attribute_attribute,model_attribute_attribute,,1,1,1,1
+access_attribute_data,access_attribute_data,model_attribute_data,,1,1,1,1
+access_hr_appraisal_data,access_hr_appraisal_data,model_hr_appraisal_data,,1,1,1,1
+access_future_evaluation_goal,access_future_evaluation_goal,model_future_evaluation_goal,,1,1,1,1
+access_last_evaluation_goal,access_last_evaluation_goal,model_last_evaluation_goal,,1,1,1,1
+access_attribute_manager_rating,access_attribute_manager_rating,model_attribute_manager_rating,,1,1,1,1
+hr_appraisal.access_goals_notes_evalutor,access_goals_notes_evalutor,hr_appraisal.model_goals_notes_evalutor,base.group_user,1,1,1,1

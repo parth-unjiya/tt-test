@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Device Category Tree View -->
+    <record id="view_device_category_tree" model="ir.ui.view">
+        <field name="name">device.category.tree</field>
+        <field name="model">device.category</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="device_type"/>
+            </tree>
+        </field>
+    </record>
+
+    <!-- Device Category Form View -->
+    <record id="view_device_category_form" model="ir.ui.view">
+        <field name="name">device.category.form</field>
+        <field name="model">device.category</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="toggle_active" type="object" class="oe_stat_button" icon="fa-archive">
+                            <field name="active" widget="boolean_button"/>
+                        </button>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="device_type"/>
+                        </group>
+                        <group>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Device Category Search View -->
+    <record id="view_device_category_search" model="ir.ui.view">
+        <field name="name">device.category.search</field>
+        <field name="model">device.category</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="device_type"/>
+                <separator/>
+                <group expand="0" string="Group By">
+                    <filter string="Device Type" name="group_by_type" context="{'group_by': 'device_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_device_category" model="ir.actions.act_window">
+        <field name="name">Device Categories</field>
+        <field name="res_model">device.category</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Create your first device category!
+            </p>
+        </field>
+    </record>
+
+    <!-- Menu Items -->
+<!--    <menuitem id="menu_device_category"-->
+<!--              name="Device Categories"-->
+<!--              parent="menu_device_management_root"-->
+<!--              action="action_device_category"-->
+<!--              sequence="2"/>-->
+</odoo> 

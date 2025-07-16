@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="view_interview_schedule_wizard_form" model="ir.ui.view">
+        <field name="name">interview.schedule.wizard.form</field>
+        <field name="model">interview.schedule.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Schedule Interview">
+                <group>
+                    <field name="interview_datetime"/>
+                    <field name="interview_type"/>
+                    <field name="interview_location" invisible="interview_type != 'offline'"/>
+                    <field name="interview_link" invisible="interview_type != 'online'"/>
+                    <field name="interviewer_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button string="Schedule &amp; Send Email" type="object" name="action_schedule_interview"
+                            class="btn-success"/>
+                    <button string="Cancel" special="cancel" class="btn-danger"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_open_interview_wizard" model="ir.actions.act_window">
+        <field name="name">Schedule Interview</field>
+        <field name="res_model">interview.schedule.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="context">{'default_applicant_id': active_id}</field>
+    </record>
+</odoo>

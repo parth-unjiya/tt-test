@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Mobile Categories -->
+        <record id="device_category_iphone" model="device.category">
+            <field name="name">iPhone</field>
+            <field name="device_type">mobile</field>
+            <field name="description">Apple iPhone devices</field>
+        </record>
+
+        <record id="device_category_android_phone" model="device.category">
+            <field name="name">Android Phone</field>
+            <field name="device_type">mobile</field>
+            <field name="description">Android-based mobile phones</field>
+        </record>
+
+        <!-- Tablet Categories -->
+        <record id="device_category_ipad" model="device.category">
+            <field name="name">iPad</field>
+            <field name="device_type">tablet</field>
+            <field name="description">Apple iPad devices</field>
+        </record>
+
+        <record id="device_category_android_tablet" model="device.category">
+            <field name="name">Android Tablet</field>
+            <field name="device_type">tablet</field>
+            <field name="description">Android-based tablets</field>
+        </record>
+
+        <!-- Smart Watch Categories -->
+        <record id="device_category_apple_watch" model="device.category">
+            <field name="name">Apple Watch</field>
+            <field name="device_type">watch</field>
+            <field name="description">Apple Watch devices</field>
+        </record>
+
+        <record id="device_category_galaxy_watch" model="device.category">
+            <field name="name">Galaxy Watch</field>
+            <field name="device_type">watch</field>
+            <field name="description">Samsung Galaxy Watch devices</field>
+        </record>
+    </data>
+</odoo> 

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="device_management_group_user" model="res.groups">
+            <field name="name">Device Users</field>
+            <field name="users">[('id','=',uid)]</field>
+            <field name="groups_id">[('id','=',2)]</field>
+        </record>
+
+        <record id="device_management_group_manager" model="res.groups">
+            <field name="name">Device Users</field>
+            <field name="users">[('id','=',uid)]</field>
+            <field name="groups_id">[('id','=',2)]</field>
+        </record>
+    </data>
+</odoo>

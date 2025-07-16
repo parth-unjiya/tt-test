@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Website Menu -->
+        <record id="menu_hr_policy_1" model="website.menu">
+            <field name="name">Policy</field>
+            <field name="url">/hr_policy</field>
+            <!-- <field name="parent_id" ref="website.main_menu"/> -->
+            <field name="sequence" type="int">70</field>
+            <field name="user_group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,116 @@
+<odoo>
+	<data>
+
+		<record id="appraisal_template_employee" model="mail.template">
+			<field name="name">Quarterly Performance Evaluation to Employee Notification</field>
+			<field name="model_id" ref="hr_appraisal.model_hr_appraisal"/>
+			<field name="subject">Quarterly Performance Evaluation Form - {{ object.employee_id.name }}</field>
+			<field name="email_from">{{ ctx.get('sender_email', 'no-reply@example.com')}}</field>
+			<field name="email_to">{{ object.employee_id.work_email }}</field>
+			<field name="auto_delete" eval="True"/>
+			<field name="body_html" type="html">
+				    
+			    <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse: separate; padding-bottom: 10px;">
+			        <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+
+			            <!-- Logo and Heading -->
+			            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+			                <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+			            </div>
+
+			            <hr/>
+
+			            <!-- Title -->
+			            <div style="text-align: center; padding-top: 4px;">
+			                <h2 style="margin: 0; color: #333333;">Quarterly Performance Evaluation Form</h2>
+			            </div>
+
+			            <!-- Content -->
+			            <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+			                <p>Dear <t t-esc="object.employee_id.name"/>,</p>
+
+			                <p><strong>Congratulations!</strong> Your appraisal review is scheduled after <strong><t t-esc="ctx.get('review_date')"/></strong>.</p>
+
+			                <p>The form includes sections about your goals, achievements, training needs, and future plans.</p>
+
+			                <p>Please fill out the form by clicking the link below:</p>
+
+			                <p style="text-align: center;">
+			                    <a t-att-href="ctx.get('token_url')" style="display: inline-block; background-color: #6AA84F; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Open Evaluation Form</a>
+			                </p>
+
+			                <p><strong>Note:</strong> This link will expire on <strong><t t-esc="ctx.get('token_expiry')"/></strong>.</p>
+
+			                <p>If you have any questions or need assistance, please contact your manager or the HR team at 
+			                    <a href="#" style="color: #007BFF;">
+			                        <t t-esc="ctx.get('sender_email')"/>
+			                    </a>.
+			                </p>
+
+			                <p>Thank you for your time and cooperation.</p>
+			                <p>Best regards,<br/><strong><t t-esc="ctx.get('sender_name')"/></strong></p>
+			            </div>
+
+			        </div>
+			    </div>
+				    
+			</field>
+		</record>
+
+
+		<record id="appraisal_template_reviewer" model="mail.template">
+			<field name="name">Quarterly Performance Evaluation Email to Reviewer Notification</field>
+			<field name="model_id" ref="hr_appraisal.model_hr_appraisal"/>
+			<field name="subject">Review Request: Quarterly Performance Evaluation {{ object.employee_id.name }}</field>
+			<field name="email_from">{{ ctx.get('sender_email', 'no-reply@example.com') }}</field>
+			<field name="email_to">{{ctx.get('recipient_name')}}</field>
+			<field name="auto_delete" eval="True"/>
+			<field name="body_html" type="html">
+				<div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse: separate; padding-bottom: 10px;">
+				    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+
+				        <!-- Logo and Heading -->
+				        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+				            <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+				        </div>
+
+				        <hr/>
+
+				        <!-- Title -->
+				        <div style="text-align: center; padding-top: 4px;">
+				            <h2 style="margin: 0; color: #333333;">Quarterly Performance Evaluation Form for <t t-esc="object.employee_id.name"/></h2>
+				        </div>
+
+				        <!-- Content -->
+				        <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+				            <p>Dear <t t-esc="ctx.get('recipient_name')"/>,</p>
+
+				            <p>You have been requested to review the appraisal for <strong><t t-esc="object.employee_id.name"/></strong>.</p>
+
+				            <p>Please fill out the review form by clicking the link below:</p>
+
+				            <p style="text-align: center;">
+				                <a t-att-href="ctx.get('token_url')" style="display: inline-block; background-color: #6AA84F; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Open Evaluation Form</a>
+				            </p>
+
+				            <p><strong>Note:</strong> This link will expire on <strong><t t-esc="ctx.get('token_expiry')"/></strong>.</p>
+
+				            <p>If you have any questions or need assistance, please contact the HR team at 
+				                <a href="#" style="color: #007BFF;">
+				                    <t t-esc="ctx.get('sender_email')"/>
+				                </a>.
+				            </p>
+
+				            <p>Thank you for your time and cooperation.</p>
+				            <p>Best regards,<br/><strong><t t-esc="ctx.get('sender_name')"/></strong></p>
+				        </div>
+
+				    </div>
+				</div>
+			</field>
+		</record>
+
+	</data>
+</odoo>

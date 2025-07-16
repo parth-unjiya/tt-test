@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_milestone_completion_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <t t-set="doc" t-value="doc.with_context(lang=lang)"/>
+                    <div class="page">
+                        <h2 class="text-center">Milestone Delivery Confirmation</h2>
+
+                        <table class="table table-sm"
+                               style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Client Name:</strong>
+                                    <br/>
+                                    <t t-esc="doc.partner_id.name"/>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Client’s Company Name:</strong>
+                                    <br/>
+                                    <t t-esc="doc.partner_id.contact_address"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Project Name:</strong>
+                                    <br/>
+                                    <t t-esc="doc.project_id.name"/>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Project Manager:</strong>
+                                    <br/>
+                                    <t t-esc="doc.manager_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Agreement / Contract / WBS reference:</strong>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Date of execution of the agreement:</strong>
+                                    <br/>
+                                    <t t-esc="doc.date_of_execution_agreement"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Milestone Name:</strong>
+                                    <br/>
+                                    <t t-foreach="doc.milestone_ids" t-as="milestone">
+                                        <t t-esc="milestone.name"/>
+                                        <br/>
+                                    </t>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Date of milestone completion:</strong>
+                                    <br/>
+                                    <t t-esc="doc.reached_date"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Payment Received In Bank:</strong>
+                                    <br/>Stripe A/c
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Functionality agreed to be delivered in this milestone:</strong>
+                                    <br/>
+                                    <t t-raw="doc.deliverables"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Client’s comments:</strong>
+                                    <br/>
+                                    <t t-esc="doc.client_comment"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <table style="width: 100%; border: 1px solid black; border-collapse: collapse; text-align: left;">
+                            <tr>
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    <p>By signing this document, I acknowledge that I have delivered the features and
+                                        functionality for the milestone.
+                                    </p>
+                                </td>
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    <p>By signing this document, I acknowledge that I have received all the stated
+                                        deliverables as agreed for this milestone.
+                                    </p>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <!-- Company Side -->
+                                <td style="border: 1px solid black; padding: 10px; width: 50%;">
+                                    <strong>Company Signature:</strong>
+                                    <br/>
+                                    <p>
+                                        <t t-esc="doc.project_id.company_id.partner_id.name"/><br/>
+                                        <t t-esc="doc.project_id.company_id.partner_id.contact_address"/>
+                                    </p>
+                                    <p>
+                                        <strong>Date:</strong>
+                                        <t t-esc="doc.create_date.strftime('%d %B %Y')"/>
+                                    </p>
+                                </td>
+
+                                <!-- Client Side -->
+                                <td style="border: 1px solid black; padding: 10px; width: 50%;">
+                                    <strong>Client Signature:</strong>
+                                    <br/>
+                                    <p>
+                                        <t t-esc="doc.partner_id.name"/><br/>
+                                        <t t-esc="doc.partner_id.contact_address"/>
+                                    </p>
+                                    <p>
+                                        <strong>Signed on:</strong>
+                                        <t t-esc="doc.signed_on.strftime('%d %B %Y') if doc.signed_on else ''"/>
+                                    </p>
+                                    <t t-if="doc.signature">
+                                        <img t-att-src="image_data_uri(doc.signature)" style="max-height: 4cm; max-width: 8cm;"/>
+                                        <!-- <img t-att-src="'data:image/png;base64,%s' % doc.signature.decode('utf-8')" 
+                                             style="max-height: 3cm; max-width: 6cm; margin-top: 8px;"/> -->
+                                        <p><strong>Signed by:</strong> <t t-esc="doc.signed_by"/></p>
+                                    </t>
+                                    <t t-else="">
+                                        <p class="text-muted"><em>No signature provided</em></p>
+                                    </t>
+                                </td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+
+    <record id="action_milestone_report_pdf" model="ir.actions.report">
+        <field name="name">Milestone Delivery Confirmation</field>
+        <field name="model">milestone.completion.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_project.report_milestone_completion_template</field>
+        <field name="report_file">custom_project.report_milestone_completion_template</field>
+        <field name="print_report_name">'Milestone_Delivery_Confirmation_%s' % (object.project_id.name or '')</field>
+        <field name="binding_model_id" ref="custom_project.model_milestone_completion_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_milestone_report_html" model="ir.actions.report">
+        <field name="name">Milestone Delivery Confirmation (Preview)</field>
+        <field name="model">milestone.completion.report</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">custom_project.report_milestone_completion_template</field>
+        <field name="report_file">custom_project.report_milestone_completion_template</field>
+        <field name="print_report_name">'Milestone_Delivery_Confirmation_%s' % (object.project_id.name or '')</field>
+    </record>
+
+</odoo>

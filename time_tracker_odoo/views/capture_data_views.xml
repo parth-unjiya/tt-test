@@ -1,0 +1,37 @@
+<odoo>
+    <data>
+
+        <record id="view_capture_data_tree" model="ir.ui.view">
+            <field name="name">capture.data.tree</field>
+            <field name="model">capture.data</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="user_id"/>
+                    <field name="capture_type"/>
+                    <field name="machinedetail"/>
+                    <field name="creation_time"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_capture_data_form" model="ir.ui.view">
+            <field name="name">capture.data.form</field>
+            <field name="model">capture.data</field>
+            <field name="arch" type="xml">
+                <form>
+                    <group>
+                        <group>
+                            <field name="user_id" readonly="1"/>
+                            <field name="capture_type" readonly="1"/>
+                            <field name="capture_data" readonly="1"/>
+                            <field name="machinedetail" readonly="1"/>
+                            <field name="time_tracking_application_id" readonly="1"/>
+                            <field name="creation_time" readonly="1"/>
+                        </group>
+                    </group>
+                </form>
+            </field>
+        </record>
+        
+    </data>
+</odoo>

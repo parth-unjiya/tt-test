@@ -1,0 +1,120 @@
+<odoo>
+    <data>
+        <!-- Tree View -->
+        <record id="view_resource_allocation_tree" model="ir.ui.view">
+            <field name="name">resource.allocation.tree</field>
+            <field name="model">resource.allocation</field>
+            <field name="arch" type="xml">
+                <tree>
+                    <field name="project_id"/>
+                    <field name="resource_id"/>
+                    <field name="allocation_hours"/>
+                    <field name="hours_per_day"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- Search View -->
+        <record id="view_resource_allocation_search" model="ir.ui.view">
+            <field name="name">resource.allocation.search</field>
+            <field name="model">resource.allocation</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="project_id"/>
+                    <field name="task_id"/>
+                    <field name="resource_id"/>
+                    <field name="start_date"/>
+                    <field name="end_date"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Form View -->
+        <record id="view_resource_allocation_form" model="ir.ui.view">
+            <field name="name">resource.allocation.form</field>
+            <field name="model">resource.allocation</field>
+            <field name="arch" type="xml">
+                <form>
+                    <header>
+                        <button type="object" name="action_draft" string="Set To Draft" invisible="state in ['draft','confirmed','approve']"/>
+                        <button type="object" name="action_confirm" string="Confirm" class="oe_stat_button btn-primary" invisible="state in ['confirmed', 'reject', 'approve']"/>
+                        <button type="object" name="action_approve" string="Approve" class="oe_stat_button btn-primary" invisible="state in ['approve', 'reject']"/>
+                        <button type="object" name="action_reject" string="Reject" class="oe_stat_button btn-secondary" invisible="state in ['reject']"/>
+
+                        <button
+                            string="Check Availability"
+                            name="%(resource_allocation.action_resource_availability_wizard)d"
+                            type="action"
+                            class="btn-secondary"
+                            invisible="not resource_id or not end_date"
+                            context="{
+                                'default_resource_id': resource_id,
+                                'default_date_from': start_date,
+                                'default_date_to': end_date
+                            }"
+                        />
+
+                        <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,approve" />
+                    </header>
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="project_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                                <field name="task_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" invisible="1"/>
+                                <field name="resource_type" invisible="1"/>
+                                <field name="resource_id" options="{'no_create_edit': True, 'no_create': True, 'no_open': True}" />
+                            </group>
+                            <group>
+                                <field name="allocation_hours"/>
+                                <field name="hours_per_day"/>
+                                <field name="start_date"/>
+                                <field name="end_date"/>
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Notes">
+                                <field name="notes" options="{'collaborative': True}" placeholder="Notes for this resource...."/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" groups="base.group_user"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- Calendar view -->
+        <record id="view_resource_allocation_calendar" model="ir.ui.view">
+            <field name="name">resource.allocation.calendar</field>
+            <field name="model">resource.allocation</field>
+            <field name="arch" type="xml">
+                <calendar string="Resource Allocation" date_start="start_date" date_stop="end_date" color="color"
+                    event_open_popup="true" quick_create="0" js_class="allocation_calendar" mode="month">
+                    <field name="task_id"/>
+                    <field name="resource_id" avatar_field="avatar_128"/>
+                    <field name="resource_type" invisible="1"/>
+                    <field name="allocation_hours" invisible="1"/>
+                </calendar>
+            </field>
+        </record>
+
+        <!-- Actions -->
+        <record id="action_resource_allocation" model="ir.actions.act_window">
+            <field name="name">All Resource Planning</field>
+            <field name="res_model">resource.allocation</field>
+            <field name="view_mode">tree,form,calendar</field>
+        </record>
+
+        <record id="action_resource_my_planning" model="ir.actions.act_window">
+            <field name="name">My Planning</field>
+            <field name="res_model">resource.allocation</field>
+            <field name="view_mode">tree,form,calendar</field>
+            <field name="domain">[('resource_id.user_id', '=', uid)]</field>
+        </record>
+
+    </data>
+</odoo>

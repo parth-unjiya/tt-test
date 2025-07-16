@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <record id="view_free_resource_pivot" model="ir.ui.view">
+        <field name="name">free.resource.report.pivot</field>
+        <field name="model">free.resource.report</field>
+        <field name="arch" type="xml">
+            <pivot string="Free Resource Pivot">
+                <field name="department_id" type="row"/>
+                <field name="resource_id" type="row"/>
+                <field name="allocated_hours" type="measure" widget="float_time"/>
+                <field name="available_hours" type="measure" widget="float_time"/>
+                <field name="date" type="col"/>
+            </pivot>
+        </field>
+    </record>
+
+    <record id="view_free_resource_graph" model="ir.ui.view">
+        <field name="name">free.resource.report.graph</field>
+        <field name="model">free.resource.report</field>
+        <field name="arch" type="xml">
+            <graph string="Free Resource Graph" type="bar">
+                <field name="resource_id"/>
+                <field name="allocated_hours" widget="float_time"/>
+                <field name="available_hours" widget="float_time"/>
+            </graph>
+        </field>
+    </record>
+
+    <record id="view_free_resource_report_search" model="ir.ui.view">
+        <field name="name">free.resource.report.search</field>
+        <field name="model">free.resource.report</field>
+        <field name="arch" type="xml">
+            <search string="Free Resource Search">
+                <field name="resource_id"/>
+                <field name="date"/>
+                <filter name="date" string="Date" date="date"/>
+                <filter name="filter_today" string="Today"
+                        domain="[('date', '=', context_today())]" context="{'default_filter_today': 1}"/>
+
+                <filter name="filter_this_week" string="This Week"
+                        domain="[
+                        ('date', '>=', (datetime.datetime.combine(context_today() + relativedelta(weeks=-1,days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S')),
+                        ('date', '&lt;', (datetime.datetime.combine(context_today() + relativedelta(days=1,weekday=0), datetime.time(0,0,0)).to_utc()).strftime('%Y-%m-%d %H:%M:%S'))]"/>
+                <filter name="filter_this_month" string="This Month"
+                        domain="[
+                            ('date', '&gt;=', (context_today() - datetime.timedelta(days=(context_today().day - 1))).strftime('%Y-%m-%d')),
+                            ('date', '&lt;=', (context_today() + datetime.timedelta(days=31 - context_today().day)).strftime('%Y-%m-%d'))
+                        ]"/>
+
+            </search>
+        </field>
+    </record>
+
+
+    <record id="action_free_resource_report" model="ir.actions.act_window">
+        <field name="name">Resource Report</field>
+        <field name="res_model">free.resource.report</field>
+        <field name="view_mode">pivot,graph</field>
+        <field name="context">{'search_default_filter_today': 1}</field>
+        <field name="search_view_id" ref="view_free_resource_report_search"/>
+    </record>
+
+    <menuitem id="menu_free_resource_report"
+              name="Daily/Weekly Free Resource Report"
+              parent="project.menu_project_report"
+              action="action_free_resource_report"
+              sequence="30"/>
+</odoo>

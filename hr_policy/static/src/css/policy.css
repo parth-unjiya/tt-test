@@ -1,0 +1,512 @@
+/* Modern Sidebar Styling */
+.toc-sidebar {
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    border: none !important;
+    background: #ffffff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border-radius: 12px !important;
+}
+
+/* Custom Scrollbar */
+.toc-sidebar::-webkit-scrollbar {
+    width: 6px;
+}
+
+.toc-sidebar::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.toc-sidebar::-webkit-scrollbar-thumb {
+    background: #a4c23b;
+    border-radius: 10px;
+}
+
+/* Header Styling */
+.toc-sidebar .card-body {
+    padding: 1.5rem !important;
+}
+
+.toc-sidebar h6 {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #333;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 3px solid #a4c23b;
+}
+
+/* Navigation List Styling */
+.toc-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.toc-nav .toc-nav {
+    position: relative;
+    padding-left: 1.25rem;
+    margin-left: 0.5rem;
+    border-left: 2px solid rgba(164, 194, 59, 0.2);
+}
+
+/* Link Styling */
+.toc-link {
+    display: flex;
+    align-items: center;
+    padding: 0.8rem 1rem;
+    color: #555;
+    font-size: 0.95rem;
+    line-height: 1.4;
+    text-decoration: none;
+    border-radius: 8px;
+    margin: 0.25rem 0;
+    transition: all 0.3s ease;
+    position: relative;
+    background: transparent;
+}
+
+.toc-link:hover {
+    color: #a4c23b;
+    background: rgba(164, 194, 59, 0.08);
+    padding-left: 1.5rem;
+}
+
+.toc-link.active {
+    color: #333;
+    font-weight: 600;
+    background: rgba(164, 194, 59, 0.12);
+    border-left: solid 5px #a4c23b;
+    padding-left: 1.5rem;
+}
+
+/* Nested levels styling */
+.toc-nav .toc-nav .toc-link {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+}
+
+/* Animation for active state */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.toc-link.active {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* Content Header Highlighting */
+.policy-content h1, 
+.policy-content h2, 
+.policy-content h3, 
+.policy-content h4, 
+.policy-content h5, 
+.policy-content h6 {
+    padding: 1rem;
+    margin: 1rem 0;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.policy-content h1.highlight,
+.policy-content h2.highlight,
+.policy-content h3.highlight,
+.policy-content h4.highlight,
+.policy-content h5.highlight,
+.policy-content h6.highlight {
+    background: rgba(164, 194, 59, 0.1);
+    border-left: solid 5px #a4c23b;
+    padding-left: 1.5rem;
+}
+
+/* Sticky Header Effect */
+.policy-content h1:target,
+.policy-content h2:target,
+.policy-content h3:target,
+.policy-content h4:target,
+.policy-content h5:target,
+.policy-content h6:target {
+    scroll-margin-top: 2rem;
+    background: rgba(164, 194, 59, 0.1);
+    border-left: solid 5px #a4c23b;
+    padding-left: 1.5rem;
+}
+
+/* Hover effect for the entire sidebar */
+.toc-sidebar:hover {
+    box-shadow: 0 6px 30px rgba(164, 194, 59, 0.15);
+}
+
+/* Responsive Design */
+@media (max-width: 992px) {
+    .toc-sidebar {
+        position: relative !important;
+        top: 0 !important;
+        margin-bottom: 2rem;
+        max-height: none;
+    }
+}
+
+/* Active section indicator */
+.toc-link.active::before {
+    content: '';
+    position: absolute;
+    left: -2px;
+    top: 0;
+    height: 100%;
+    width: 5px;
+    background: #a4c23b;
+    border-radius: 0 4px 4px 0;
+}
+
+.policy-card {
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+    position: relative;
+}
+
+.policy-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(164, 194, 59, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.policy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+.policy-card:hover::before {
+    opacity: 1;
+}
+
+.glow-effect {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(45deg, transparent, rgba(164, 194, 59, 0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.policy-card:hover .glow-effect {
+    opacity: 1;
+}
+
+.version-chip {
+    transition: all 0.3s ease;
+}
+
+.policy-card:hover .version-chip {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(164, 194, 59, 0.3);
+}
+
+.category-tag {
+    transition: all 0.3s ease;
+}
+
+.policy-card:hover .category-tag {
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.accent-bar {
+    transition: height 0.3s ease;
+}
+
+.policy-card:hover .accent-bar {
+    height: 120%;
+}
+
+.view-policy-btn {
+    transition: all 0.3s ease;
+}
+
+.view-policy-btn::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: transform 0.6s ease;
+}
+
+.view-policy-btn:hover {
+    background: #95af35;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(164, 194, 59, 0.3);
+}
+
+.view-policy-btn:hover::after {
+    transform: translateX(200%);
+}
+
+.btn-icon {
+    transition: transform 0.3s ease;
+}
+
+.view-policy-btn:hover .btn-icon {
+    transform: translateX(4px);
+}
+
+.date-info {
+    transition: all 0.3s ease;
+}
+
+.policy-card:hover .date-info {
+    border-bottom-color: rgba(164, 194, 59, 0.4);
+}
+
+/* Add these to your existing CSS */
+.s_policy_cards {
+    background-color: #ffffff;
+}
+
+.s_policy_cards .policy-grid {
+    transition: all 0.3s ease;
+}
+
+.s_policy_cards .policy-grid.grid-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+.s_policy_cards .policy-grid.grid-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.s_policy_cards .policy-grid.grid-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .s_policy_cards .policy-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
+
+@media (max-width: 576px) {
+    .s_policy_cards .policy-grid {
+        grid-template-columns: 1fr !important;
+    }
+}
+
+/* Policy Cards Snippet Styles */
+.s_policy_cards .policy-card {
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.s_policy_cards .policy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.s_policy_cards .card-content {
+    padding: 2rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.s_policy_cards .version-chip,
+.s_policy_cards .category-tag {
+    transition: all 0.3s ease;
+}
+
+.s_policy_cards .policy-card:hover .version-chip {
+    background: rgba(164, 194, 59, 0.25);
+}
+
+.s_policy_cards .policy-card:hover .category-tag {
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.s_policy_cards .date-info {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 1rem;
+    border-radius: 12px;
+}
+
+.s_policy_cards .view-policy-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #a4c23b, #8fa834);
+    color: white;
+    padding: 1rem;
+    border-radius: 12px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: background 0.3s, transform 0.3s;
+}
+
+.s_policy_cards .view-policy-btn:hover {
+    background: linear-gradient(135deg, #8fa834, #a4c23b);
+    transform: scale(1.05);
+}
+
+.s_policy_cards .btn-icon {
+    transition: all 0.3s ease;
+}
+
+.s_policy_cards .view-policy-btn:hover .btn-icon {
+    transform: rotate(45deg);
+    background: rgba(255,255,255,0.3);
+}
+
+.s_policy_cards .decoration-circle-1,
+.s_policy_cards .decoration-circle-2 {
+    transition: all 0.6s ease;
+}
+
+.s_policy_cards .policy-card:hover .decoration-circle-1 {
+    transform: scale(1.2) rotate(45deg);
+}
+
+.s_policy_cards .policy-card:hover .decoration-circle-2 {
+    transform: scale(1.3) rotate(-45deg);
+}
+
+.s_policy_cards .highlight-dot {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+    100% { transform: scale(1); }
+}
+
+/* Responsive Grid Layouts */
+.s_policy_cards .policy-grid.grid-2 {
+    grid-template-columns: repeat(2, 1fr) !important;
+}
+
+.s_policy_cards .policy-grid.grid-3 {
+    grid-template-columns: repeat(3, 1fr) !important;
+}
+
+.s_policy_cards .policy-grid.grid-4 {
+    grid-template-columns: repeat(4, 1fr) !important;
+}
+
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.pagination .page-item {
+    margin: 0 5px;
+}
+
+.pagination .page-link {
+    padding: 10px 15px;
+    border: 1px solid #a4c23b;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #a4c23b;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s, transform 0.3s;
+}
+
+.pagination .page-link:hover {
+    background-color: #a4c23b;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #a4c23b;
+    color: #fff;
+    border: 1px solid #a4c23b;
+}
+
+.pagination .page-item.disabled .page-link {
+    color: #ccc;
+    pointer-events: none;
+}
+
+.pagination .page-item .page-link i {
+    transition: transform 0.3s;
+}
+
+.pagination .page-item:hover .page-link i {
+    transform: translateX(2px);
+}
+.policy-navigation {
+    margin-top: 30px;
+    font-family: 'Roboto', sans-serif;
+}
+
+.btn-primary1 {
+    background-color: #a4c23b;
+    border: 1px solid #a4c23b;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary1:hover {
+    background-color: #a4c23b;
+    border-color: #a4c23b;
+}
+
+.rounded-pill {
+    border-radius: 50px;
+}
+
+.btn1 .fa {
+    font-size: 18px;
+}
+
+.policy-navigation .me-2 {
+    margin-right: 8px;
+}
+
+.policy-navigation .ms-2 {
+    margin-left: 8px;
+}
+
+.policy-navigation .ms-3 {
+    margin-left: 20px;
+}
+
+.btn:focus {
+    outline: none;
+    box-shadow: none;
+}
+
+.policy-navigation span {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.policy-grid.list-view {
+    display: block; /* Change to block for list view */
+}
+
+.policy-card {
+    margin-bottom: 1rem; /* Add margin for list view */
+}
+

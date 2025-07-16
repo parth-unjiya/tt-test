@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_form_inherit_attendance_timesheet" model="ir.ui.view">
+        <field name="name">res.users.form.timesheet</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form_simple_modif"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="inside">
+                <page string="Yesterday's Work" groups="base.group_user" invisible="editable_window == False">
+                    <field name="editable_window" invisible="1"/>
+                    <separator string="Yesterday's Time"/>
+                    <field name="yesterday_attendance" no_label="1" invisible="editable_window == False">
+                        <tree create="0" delete="0" no_open="1">
+                            <field name="lunch_time" widget="float_time_second"/>
+                            <field name="break_time" widget="float_time_second"/>
+                            <field name="estimate_time" widget="float_time_second"/>
+                            <field name="interview_time" widget="float_time_second"/>
+                            <field name="floor_active_time" widget="float_time_second"/>
+                            <field name="general_meeting_time" widget="float_time_second"/>
+                            <field name="no_work_time" widget="float_time_second"/>
+                            <field name="r_and_d_time" widget="float_time_second"/>
+                             <button name="action_edit_attendance" type="object" icon="fa-edit" title="Edit Attendance"/>
+                        </tree>
+                    </field>
+                    <separator string="Yesterday's Timesheet"/>
+                    <field name="yesterday_timesheets" no_label="1" invisible="editable_window == False">
+                        <tree create="0" delete="0" no_open="1">
+                            <field name="id" readonly="1"/>
+                            <field name="date" readonly="1"/>
+                            <field name="name" readonly="1"/>
+                            <field name="project_id" readonly="1"/>
+                            <field name="task_id" readonly="1"/>
+                            <field name="start_time" readonly="1"/>
+                            <field name="end_time" readonly="1"/>
+                            <field name="unit_amount" widget="float_time_second" readonly="0"/>
+                            <button name="action_edit_timesheet" type="object" icon="fa-edit" title="Edit Timesheet"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_users_form_inherit_role" model="ir.ui.view">
+        <field name="name">res.users.form.user.role</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[hasclass('oe_title')]" position="after">
+                <div class="oe_title">
+                    <group>
+                        <field name="user_role" invisible="id == 2"/>
+                    </group>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

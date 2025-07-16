@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+	<data>
+
+		<template id="sale_order_portal_content_inherit" inherit_id="sale.sale_order_portal_content" name="Sales Order Portal Content Inherit">
+
+		    <!-- Hide Quantity Header -->
+		    <xpath expr="//th[@id='product_qty_header']" position="attributes">
+		        <attribute name="style">display: none;</attribute>
+		    </xpath>
+
+		    <!-- Hide Quantity Data Cell -->
+		    <xpath expr="//td[@id='quote_qty_td']" position="attributes">
+		        <attribute name="style">display: none;</attribute>
+		    </xpath>
+
+		    <!-- Rename "Products" to "Description" -->
+		    <xpath expr="//th[@id='product_name_header']" position="replace">
+		        <th class="text-start" id="product_name_header">Description</th>
+		    </xpath>
+
+		    <!-- Insert Project Column Header Before Description -->
+		    <xpath expr="//th[@id='product_name_header']" position="before">
+		    	<th class="text-start" id="project_header">
+			    	<t t-set="project" t-value="request.env['project.project'].search([('sale_order_id', '=', sale_order.id)], limit=1)"/>
+			    	<t t-if="project">
+			        	Project
+			        </t>
+		        </th>
+		    </xpath>
+
+		    <!-- Insert Project Cell Before Product Name -->
+		    <xpath expr="//td[@id='product_name']" position="before">
+		        <td>
+		            <t t-set="project" t-value="request.env['project.project'].search([('sale_order_id', '=', line.order_id.id)], limit=1)"/>
+		            <t t-if="project">
+		                <span t-esc="project.name"/>
+		            </t>
+		        </td>
+		    </xpath>
+
+		    <!-- Conditionally hide Taxes Column Header -->
+		    <xpath expr="//th[@id='taxes_header']" position="attributes">
+		        <attribute name="t-if">any(line.tax_id for line in sale_order.order_line)</attribute>
+		    </xpath>
+
+		    <!-- Conditionally hide Taxes Cell -->
+		    <xpath expr="//td[@id='taxes']" position="attributes">
+		        <attribute name="t-if">any(line.tax_id for line in sale_order.order_line)</attribute>
+		    </xpath>
+
+		</template>
+
+
+	</data>
+</odoo>

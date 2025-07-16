@@ -1,0 +1,182 @@
+<odoo>
+    <data>
+
+        <template id="report_release_note_document">
+            <t t-call="web.external_layout">
+                <div class="page">
+
+                    <style>
+                        
+                        table {
+                            page-break-inside: auto;
+                            border-collapse: collapse;
+                            width: 100%;
+                            table-layout: fixed;
+                        }
+                        tr {
+                            page-break-inside: avoid;
+                            page-break-after: auto;
+                        }
+                        th, td {
+                            border: 1px solid black !important;
+                            padding: 6px;
+                            overflow-wrap: break-word;
+                            word-wrap: break-word;
+                            word-break: break-word;
+                        }
+
+                        th {
+                            width: 30%;
+                            text-align: left;
+                            background-color: #f2f2f2;
+                        }
+                        td {
+                            width: 70%;
+                        }
+                    </style>
+
+                    <h2 style="text-align:center;">Release Note : <t t-esc="doc.project_id.name or ''"/></h2>
+
+                    <table class="table mt-4">
+                        <tbody>
+                            <tr>
+                                <!-- style="background-color: #17a2b8;" -->
+                                <th>Project</th>
+                                <td><t t-esc="doc.project_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Milestone</th>
+                                <td><t t-esc="doc.milestone_id.name"/></td>
+                            </tr>
+                            <tr>
+                                <th>Platform</th>
+                                <td>
+                                    <t t-esc="dict(doc.fields_get(allfields=['plateform'])['plateform']['selection'])[doc.plateform]"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Application Version</th>
+                                <td><t t-esc="doc.app_version"/></td>
+                            </tr>
+                            <tr>
+                                <th>Build Number</th>
+                                <td><t t-esc="doc.build_number"/></td>
+                            </tr>
+                            <tr>
+                                <th>SVN Number / Commit ID</th>
+                                <td><t t-esc="doc.commit_id"/></td>
+                            </tr>
+                            <tr>
+                                <th>Released Date</th>
+                                <td><t t-esc="doc.released_date.strftime('%d-%b-%Y') if doc.released_date else ''"/></td>
+                            </tr>
+                            <tr>
+                                <th>Tested Devices</th>
+                                <td><t t-esc="doc.tested_device"/></td>
+                            </tr>
+                            <tr>
+                                <th>Application Link</th>
+                                <td><t t-esc="doc.application_link"/></td>
+                            </tr>
+                            <!-- Large content rows below with inner div -->
+                            <tr>
+                                <th>Steps To Install</th>
+                                <td>
+                                    <t t-out="doc.steps_to_install"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Features Implemented</th>
+                                <td>
+                                    <t t-out="doc.features_implemented"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Test Cases</th>
+                                <td>
+                                    <t t-out="doc.test_cases"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Open Bugs Status</th>
+                                <td>
+                                    <t t-out="doc.open_bugs_status"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Fixed Bugs Status</th>
+                                <td>
+                                    <t t-out="doc.fixed_bugs_status"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Notes</th>
+                                <td>
+                                    <t t-out="doc.notes"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Known Issues</th>
+                                <td>
+                                    <t t-out="doc.known_issues"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>Pending Modules</th>
+                                <td>
+                                    <t t-out="doc.pending_modules"/>
+                                </td>
+                            </tr>
+                            <!-- Remaining small content -->
+                            <tr>
+                                <th>Build Remark</th>
+                                <td><t t-esc="doc.build_remark"/></td>
+                            </tr>
+                            <tr>
+                                <th>Created by</th>
+                                <td><t t-esc="doc.create_uid.name"/> - <t t-esc="doc.create_uid.email"/></td>
+                            </tr>
+                            <tr>
+                                <th>Verified By</th>
+                                <td><t t-esc="doc.verified_by.name"/> - <t t-esc="doc.verified_by.name"/></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </t>
+        </template>
+
+        <template id="report_release_note_raw">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="custom_project.report_release_note_document"/>
+                </t>
+            </t>
+        </template>
+
+        <record id="paperformat_release_note" model="report.paperformat">
+            <field name="name">Release Note Paper Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">40</field>
+            <field name="margin_bottom">25</field>
+            <field name="margin_left">15</field>
+            <field name="margin_right">15</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">25</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <record id="action_report_release_note" model="ir.actions.report">
+            <field name="name">Release note report</field>
+            <field name="model">release.note</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">custom_project.report_release_note_raw</field>
+            <field name="report_file">custom_project.report_release_note_raw</field>
+            <field name="print_report_name">'Release Note - %s' % (object.app_version or '')</field>
+            <field name="paperformat_id" ref="custom_project.paperformat_release_note"/>
+        </record>
+
+    </data>
+</odoo>

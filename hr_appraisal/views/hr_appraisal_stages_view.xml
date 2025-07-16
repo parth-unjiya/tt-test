@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    Form view of the model HR Appraisal Stages-->
+    <record id="hr_appraisal_stages_view_form" model="ir.ui.view">
+        <field name="name">hr.appraisal.stages.view.form</field>
+        <field name="model">hr.appraisal.stages</field>
+        <field name="priority">1</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="sequence"/>
+                        <field name="name"/>
+                        <field name="fold"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+
+
+    <!--    Tree view of the model HR Appraisal Stages-->
+    <record model="ir.ui.view" id="hr_appraisal_stages_view_tree">
+        <field name="name">hr.appraisal.stages.view.tree</field>
+        <field name="model">hr.appraisal.stages</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_appraisal_stage_action" model="ir.actions.act_window">
+        <field name="name">Appraisal Stages</field>
+        <field name="res_model">hr.appraisal.stages</field>
+        <field name="view_id" ref="hr_appraisal_stages_view_tree"/>
+        <field name='view_mode'>tree,form</field>
+    </record>
+
+</odoo>

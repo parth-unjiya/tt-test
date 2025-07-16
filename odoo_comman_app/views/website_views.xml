@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <record model="ir.ui.view" id="comman_view_website_form_custom">
+        <field name="name">website.form.inherit</field>
+        <field name="model">website</field>
+        <field name="inherit_id" ref="website.view_website_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='logo']" position="after">
+                <field name="logo_redirect_url"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

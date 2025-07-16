@@ -1,0 +1,94 @@
+<odoo>
+    <template id="attendance_template">
+        <style>
+            table {
+            border-collapse: collapse;
+            }
+
+            table, th, td {
+            border: 1px solid black;
+            }
+            .text-center {
+            text-align: center;
+            text-align: -internal-center;
+            }
+        </style>
+        <table style=" border-collapse: collapse;  border: 1px solid black;">
+            <thead style="background-color: #93C47D;">
+                <tr>
+                    <th style="border: 1px solid black;" colspan="100%">Please find the Absentees and Lateness
+                        details
+                        as below
+                    </th>
+                </tr>
+                <tr>
+                    <th style="border: 1px solid black;" colspan="100%">Lateness Details</th>
+                </tr>
+                <tr>
+                    <th style="border: 1px solid black;  text-align: center;">SR No.</th>
+                    <th style="border: 1px solid black;  text-align: center;">EMP_CODE</th>
+                    <th style="border: 1px solid black; text-align: left;">Name</th>
+                    <th style="border: 1px solid black;  text-align: center;">Department</th>
+                    <th style="border: 1px solid black;  text-align: center;">Shift Timing</th>
+                    <th style="border: 1px solid black;  text-align: center;">Company</th>
+                    <th style="border: 1px solid black;  text-align: center;">No of Days Late</th>
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="i" t-value="1"/>
+                <t t-foreach="lateness_data" t-as="item">
+                    <tr>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="i"/><t t-set="i" t-value="i+1"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('employee_code')"/></td>
+                        <td style="border: 1px solid black;"><t t-esc="item.get('employee')"/></td>
+                        <td style="border: 1px solid black;  text-align: center;"><t t-esc="item.get('department')"/></td>
+                        <td style="border: 1px solid black;  text-align: center;"><t t-esc="item.get('shift')" t-options="{'widget': 'float_time'}"/></td>
+                        <td style="border: 1px solid black;  text-align: center;" ><t t-esc="item.get('company')"/></td>
+                        <td><t t-esc="item.get('late_count')"/></td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+        <br/>
+        <br/>
+        <table style="border-collapse: collapse;  border: 1px solid black;">
+            <thead style="background-color: #EF7637;">
+                <tr>
+                    <th colspan="100%" class="text-center">Absentees Details</th>
+                </tr>
+                <tr>
+                    <th style="border: 1px solid black; text-align: center;">SR No.</th>
+                    <th style="border: 1px solid black; text-align: center;">EMP_CODE</th>
+                    <th style="border: 1px solid black;">Name</th>
+                    <th style="border: 1px solid black; text-align: center;">Department</th>
+                    <th style="border: 1px solid black; text-align: center;">Company</th>
+                    <th style="border: 1px solid black; text-align: center;">IS Absent</th>
+                    <th style="border: 1px solid black; text-align: center;">Leave Applied</th>
+                    <th style="border: 1px solid black; text-align: center;">Leave Current Month</th>
+                    <th style="border: 1px solid black; text-align: center;">Attendance Recorded</th>
+                    <th style="border: 1px solid black; text-align: center;">Absence Date</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                <t t-set="j" t-value="1"/>
+                <t t-foreach="absentees_data" t-as="item">
+                    <tr>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="j"/><t t-set="j" t-value="j+1"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('emp_code')"/></td>
+                        <td style="border: 1px solid black;"><t t-esc="item.get('name')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('department')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('company')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('is_absent')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('leave_applied')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('leave_current_month')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('attendance_recorded')"/></td>
+                        <td style="border: 1px solid black; text-align: center;"><t t-esc="item.get('absence_date')"/></td>
+                    </tr>
+                </t>
+            </tbody>
+        </table>
+        <br/>
+        <br/>
+    </template>
+</odoo>

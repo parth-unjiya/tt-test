@@ -1,0 +1,50 @@
+.table th, .table td {
+    padding: 15px;
+    text-align: left;
+}
+.table th {
+    font-weight: 500;
+    font-size:16px;
+}
+
+/* Pagination Styling */
+.pagination {
+    display: flex;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    justify-content: flex-end;
+    padding-bottom: 2px;
+}
+
+.page-item {
+    margin: 0 2px;
+}
+
+.page-link {
+    display: block;
+    padding: 8px 16px;
+    font-size: 16px;
+    // color: #007bff; /* Bootstrap primary color */
+    text-decoration: none;
+    border: 1px solid #dee2e6;
+    border-radius: 4px;
+    background-color: #ffffff; /* White background for pagination links */
+}
+
+.page-link:hover {
+    background-color: #e9ecef; /* Slightly darker background on hover */
+}
+
+.page-item.disabled .page-link {
+    color: #6c757d; /* Disabled state color */
+    pointer-events: none;
+    background-color: #f8f9fa; /* Background for disabled state */
+    border-color: #dee2e6;
+}
+
+.page-item.active .page-link {
+    // background-color: #007bff; /* Active page background color */
+    color: #ffffff; /* Active page text color */
+}

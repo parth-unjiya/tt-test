@@ -1,0 +1,77 @@
+===============================================================================
+	MySQL Connector for Python
+===============================================================================
+
+1. department_script.py        [Done With status]
+2. designation_script.py       [Done with status] [Not Need]
+3. sub_desination_script.py    [Done with status]
+4. job_position_script.py      [Done with status]
+
+
+
+5. res_user.py                 [Done with status]
+6. hr_employee_script.py 	   [Done with status]
+7. hr_attadance_script.py      [Done Not  status]
+8. leave_master_script.py      [Done (Direct state not update in that)]
+9. survey_question_script.py   [Done - Not Imp]
+
+
+10. employee_handover_script.py         [Done - But approver_id set Null Bcoz realted fields]
+11. employee_handover_details.py        [Not Done 2ed Part]
+12. employee_probation_review_script.PY  [Done]
+
+
+
+13. candidate_applicant_data_script.py      [Done with status] 
+14. candidate_call_data_script.py           [Done with status]
+15. candidate_academic_details_script.py    [Done]
+16. candidate_family_detail_script.py       [Done]
+17. candidate_personal_details_script.py    [Done]
+18. candidate_evaluation.py
+
+18. device_master_script.py                 [Done with status]
+19. device_booking_script.py                [Done with status]
+
+20. ticket_category.py                      [Done with status]
+21. ticket_helpdesk.py                      [Done with status]
+
+
+=====================
+Not Needed
+=====================
+==> hr_apprasal_script
+==> survey_question_script
+
+
+=============================
+2ED Part Project Module
+=============================
+1. project_project_script
+2. project_task_script
+
+3. time_tracking_logs
+
+
+
+
+
+        designation_id = models.execute_kw(
+            odoo_db,
+            uid,
+            odoo_password,
+            "hr.employee.designation",
+            "search",
+            [[("tt_id", "=", record.get("iDesignationMasterId"))]],
+        )
+
+
+        # Search for the designation in Odoo
+        designation_data = models.execute_kw(
+            odoo_db,
+            uid,
+            odoo_password,
+            "hr.employee.designation",  # Model name in Odoo
+            "search_read",
+            [[("tt_id", "=", record.get("iDesignationMasterId"))]],  # Search by designation name
+            {"fields": ["id", "department_id"]},  # Read only ID and Name
+        )

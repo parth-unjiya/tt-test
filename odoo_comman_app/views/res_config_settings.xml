@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="res_config_settings_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.web.window.title</field>
+            <field name="model">res.config.settings</field>
+            <field name="inherit_id" ref="base_setup.res_config_settings_view_form"/>
+            <field name="arch" type="xml">
+                <!-- Section -->
+                <div id="languages" position="before">
+                    <h2>Odoo Comman App</h2>
+                    <div class="row mt16 o_settings_container" name="app_security_boost">
+
+                        <group>
+                            <group>
+                                <field name="web_title"/>
+                            </group>
+                            <group>
+                                <field name="landing_pages_url"/>
+                            </group>
+                        </group>
+
+                        <group>
+                            <group string="Show Header Eliment On Logout Page">
+                                <field name="header_search_box"/>
+                                <field name="header_social_links"/>
+                                <field name="header_call_to_action"/>
+                                <field name="header_text_element"/>
+                            </group>
+                            <group string="Show Footer">
+                                <field name="app_show_footer"/>
+                            </group>
+                        </group>
+                        
+                        <group string="Comma-separated list of CC emails (e.g., hr1@example.com, hr2@example.com)">
+                            <field name="cc_emails"/>
+                        </group>
+                        <group string="Select the email templates for which CC should be automatically added.">
+                            <field name="cc_templates" widget="many2many_tags"/>
+                        </group>
+                        
+                        <group string="Comma-separated list of To emails (e.g., management@example.com, director@example.com)">
+                            <field name="to_emails"/>
+                        </group>
+                        
+
+                    </div>
+                </div>
+            </field>
+        </record>
+
+    </data>
+</odoo>

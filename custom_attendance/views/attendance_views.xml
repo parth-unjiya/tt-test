@@ -1,0 +1,132 @@
+<odoo>
+    <record model="ir.ui.view" id="hr_attendance_inherit">
+        <field name="name">hr.attendance.inherit</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.hr_attendance_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form//sheet" position="before">
+                <header string="TimeTracker Data">
+                    <field name="need_validation" invisible="1"/>
+                    <button name="action_validate_attendance" type="object" string="Validate" class="oe_highlight" invisible="need_validation == False"/>
+                    <button name="action_cancel_attendance" type="object" string="Cancel" class="btn-danger" invisible="need_validation == False"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='overtime_hours']" position="after">
+                <field name="late_mark" widget="boolean_toggle" readonly="0" groups="hr_attendance.group_hr_attendance_manager"/>
+            </xpath>
+            <xpath expr="//field[@name='employee_id']" position="after">
+                <field name="tt_id" invisible="1"/>
+            </xpath>
+            <xpath expr="//form//sheet//group[1]//group[1]" position="after">
+                <separator string="Biomatric Punch Data"/>
+                <group colspan="2">
+                    <group col="1">
+                        <field name="punch_in" options="{'rounding': 0}" readonly="1"/>
+                        <field name="punch_out" options="{'rounding': 0}" readonly="1"/>
+                    </group>
+                </group>
+                <separator string="TimeTracker Data"/>
+                <group colspan="2">
+                    <group col="1">
+                        <field name="lunch_time" widget="float_time_second" readonly="1"/>
+                        <field name="break_time" widget="float_time_second" readonly="1"/>
+                        <field name="estimate_time" widget="float_time_second" readonly="1"/>
+                        <field name="interview_time" widget="float_time_second" readonly="1"/>
+                    </group>
+                    <group col="2">
+                        <field name="floor_active_time" widget="float_time_second" readonly="1"/>
+                        <field name="general_meeting_time" widget="float_time_second" readonly="1"/>
+                        <field name="no_work_time" widget="float_time_second" readonly="1"/>
+                        <field name="r_and_d_time" widget="float_time_second" readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="custom_tree_view_attendance" model="ir.ui.view">
+        <field name="name">hr.attendance.tree</field>
+        <field name="model">hr.attendance</field>
+        <field name="inherit_id" ref="hr_attendance.view_attendance_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//tree" position="attributes">
+                <attribute name="multi_edit">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='check_out']" position="after">
+                <field name="late_mark" widget="boolean_toggle" readonly="0" groups="hr_attendance.group_hr_attendance_manager"/>
+                <field name="punch_in" readonly="1"/>
+                <field name="punch_out" readonly="1"/>
+            </xpath>
+        </field>
+    </record>
+
+
+    <record id="attendance_edit_form_view" model="ir.ui.view">
+        <field name="name">hr.attendance.form</field>
+        <field name="model">hr.attendance</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="id" readonly="1"/>
+                        <field name="actual_lunch_start_time" invisible="actual_lunch_start_time == False"/>
+                        <field name="actual_lunch_end_time" invisible="actual_lunch_end_time == False"/>
+                        <field name="actual_break_start_time" invisible="actual_break_start_time == False"/>
+                        <field name="actual_break_end_time" invisible="actual_break_end_time == False"/>
+                        <field name="actual_estimate_start_time" invisible="actual_estimate_start_time == False"/>
+                        <field name="actual_estimate_end_time" invisible="actual_estimate_end_time == False"/>
+                        <field name="actual_interview_start_time" invisible="actual_interview_start_time == False"/>
+                        <field name="actual_interview_end_time" invisible="actual_interview_end_time == False"/>
+                        <field name="actual_floor_start_time" invisible="actual_floor_start_time == False"/>
+                        <field name="actual_floor_end_time" invisible="actual_floor_end_time == False"/>
+                        <field name="actual_general_meeting_start_time" invisible="actual_general_meeting_start_time == False"/>
+                        <field name="actual_general_meeting_end_time" invisible="actual_general_meeting_end_time == False"/>
+                        <field name="actual_no_work_start_time" invisible="actual_no_work_start_time == False"/>
+                        <field name="actual_no_work_end_time" invisible="actual_no_work_end_time == False"/>
+                        <field name="actual_r_and_d_start_time" invisible="actual_r_and_d_start_time == False"/>
+                        <field name="actual_r_and_d_end_time" invisible="actual_r_and_d_end_time == False"/>
+                        <field name="reason" placeholder="Write a Proper Reason"/>
+                    </group>
+                    <footer>
+                        <button name="action_submit_attendance" type="object" string="Submit" class="oe_highlight"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+     <record id="action_edit_attendance" model="ir.actions.act_window">
+        <field name="name">Edit Timesheet</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="custom_attendance.attendance_edit_form_view"/>
+        <field name="target">new</field>
+    </record>
+
+
+    <record id="action_validate_attendance" model="ir.actions.act_window">
+        <field name="name">Attendance Validation</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('need_validation', '=', True)]</field>
+    </record>
+
+    <record id="model_hr_attendance_action_send_lateness_email" model="ir.actions.server">
+            <field name="name">Lateness Email</field>
+            <field name="model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_model_id" ref="hr_attendance.model_hr_attendance"/>
+            <field name="binding_view_types">list</field>
+            <field name="state">code</field>
+            <field name="code">action = records._attendance_email()</field>
+    </record>
+
+    <record id="action_lateness_attendance" model="ir.actions.act_window">
+        <field name="name">Late Attendance</field>
+        <field name="res_model">hr.attendance</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain">[('late_mark', '=', True),('punch_in', '&gt;=', context_today().strftime('%Y-%m-%d 00:00:00')),
+             ('punch_in', '&lt;=', context_today().strftime('%Y-%m-%d 23:59:59'))]</field>
+    </record>
+
+
+</odoo>

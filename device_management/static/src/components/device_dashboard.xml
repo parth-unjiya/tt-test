@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="device_management.Dashboard">
+        <div class="o_device_dashboard">
+            <!-- Stats Overview -->
+            <div class="stats-overview">
+                <div class="stat-card total">
+                    <i class="fa fa-mobile-alt"/>
+                    <div class="stat-content">
+                        <h3><t t-esc="state.stats.total"/></h3>
+                        <p>Total Devices</p>
+                    </div>
+                </div>
+                <div class="stat-card available">
+                    <i class="fa fa-check-circle"/>
+                    <div class="stat-content">
+                        <h3><t t-esc="state.stats.available"/></h3>
+                        <p>Available</p>
+                    </div>
+                </div>
+                <div class="stat-card occupied">
+                    <i class="fa fa-user-clock"/>
+                    <div class="stat-content">
+                        <h3><t t-esc="state.stats.occupied"/></h3>
+                        <p>In Use</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="dashboard-grid">
+                <!-- Device List -->
+                <div class="dashboard-card device-list">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <h4>Device List</h4>
+                        <div class="header-actions">
+                            <div class="btn-group">
+                                <button class="btn btn-sm btn-secondary" t-on-click="() => this.filterDevices('all')">All</button>
+                                <button class="btn btn-sm btn-success" t-on-click="() => this.filterDevices('available')">Available</button>
+                                <button class="btn btn-sm btn-warning" t-on-click="() => this.filterDevices('occupied')">In Use</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="device-table-container">
+                        <table class="table table-sm">
+                            <thead>
+                                <tr>
+                                    <th>Device</th>
+                                    <th>OS Version</th>
+                                    <th>Occupied</th>
+                                    <th>Department</th>
+<!--                                    <th>Status</th>-->
+                                    <th>User</th>
+                                    <th>Occupied At</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="this.getFilteredDevices()" t-as="device" t-key="device.id">
+                                    <tr class="device-row"> <!-- t-on-click="() => this.openDeviceForm(device.id)" -->
+                                        <td>
+                                            <div class="device-name">
+                                                <strong t-esc="device.name"/>
+                                                <small class="text-muted d-block" t-esc="device.device_label"/>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span t-esc="device.device_type"/>
+                                            <t t-if="device.os_version">
+                                                <small class="text-muted d-block" t-esc="device.os_version"/>
+                                            </t>
+                                        </td>
+                                        <td>
+                                           <span t-att-style="device.is_occupied ? 'color: red;' : 'color: green;'">
+                                               <strong t-esc="device.is_occupied and 'Occupied' or 'Available'"/>
+                                           </span>
+                                        </td>
+                                        <td t-esc="device.department_id[1] || '-'"/>
+<!--                                        <td>-->
+<!--                                            <span t-attf-class="badge text-bg-#{device.state === 'available' ? 'success' : 'warning'}" -->
+<!--                                                  t-esc="device.state"/>-->
+<!--                                        </td>-->
+                                        <td t-esc="device.occupied_by[1] || '-'"/>
+                                        <td t-raw="device.device_line_data &amp;&amp; device.device_line_data[0] &amp;&amp; device.device_line_data[0].occupied_at ? device.is_occupied ? device.device_line_data[0].occupied_at : '-' : '-'"/>
+                                        <td>
+                                            <button class="btn btn-sm btn-primary" t-on-click="() => this.openDeviceHistory(device.id)">
+                                                <i class="fa fa-eye"> History</i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Recent Activities -->
+<!--                <div class="dashboard-card recent-activities">-->
+<!--                    <h4>Recent Activities</h4>-->
+<!--                    <div class="activity-list">-->
+<!--                        <t t-if="this.getRecentActivities().length === 0">-->
+<!--                            <div class="no-activities">No recent activities</div>-->
+<!--                        </t>-->
+<!--                        <t t-foreach="this.getRecentActivities()" t-as="activity" t-key="activity_index">-->
+<!--                            <div class="activity-item">-->
+<!--                                <div class="activity-icon">-->
+<!--                                    <i t-attf-class="fa #{activity.type === 'checked-out' ? 'fa-sign-out-alt' : 'fa-sign-in-alt'}" -->
+<!--                                       t-attf-title="#{activity.type === 'checked-out' ? 'Checked Out' : 'Checked In'}" -->
+<!--                                       role="img" -->
+<!--                                       t-attf-aria-label="#{activity.type === 'checked-out' ? 'Checked Out' : 'Checked In'}"/>-->
+<!--                                </div>-->
+<!--                                <div class="activity-details">-->
+<!--                                    <p><t t-esc="activity.device"/> - <t t-esc="activity.user"/></p>-->
+<!--                                    <small><t t-esc="activity.date"/></small>-->
+<!--                                </div>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+                <!-- Department Distribution -->
+<!--                <div class="dashboard-card departments">-->
+<!--                    <h4>By Department</h4>-->
+<!--                    <div class="department-grid">-->
+<!--                        <t t-if="this.getDepartments().length === 0">-->
+<!--                            <div class="no-departments">No departments found</div>-->
+<!--                        </t>-->
+<!--                        <t t-foreach="this.getDepartments()" t-as="dept" t-key="dept[0]">-->
+<!--                            <div class="department-card" t-on-click="() => this.openDeviceList({department_id: dept[0]})">-->
+<!--                                <h5 t-esc="dept[0]"/>-->
+<!--                                <div class="dept-count" t-esc="dept[1]"/>-->
+<!--                            </div>-->
+<!--                        </t>-->
+<!--                    </div>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </t>
+
+    <t t-name="device_management.device_dashboard.OpenDeviceHistory">
+        <div class="device-history p-4">
+            <div class="device-history-header mb-4">
+                <h4>Device History</h4>
+            </div>
+            <div class="device-history-body">
+                <div class="timeline">
+                    <t t-foreach="this.state.deviceHistory" t-as="line" t-key="line.id">
+                        <div class="timeline-item mb-4">
+                            
+                            <div t-if="line.is_date" class="timeline-date mb-2">
+                                <span class="badge bg-danger"> <t t-esc="line.date"/> </span>
+                            </div>
+
+                            
+                            <div class="d-flex align-items-center">
+                                <div class="timeline-icon me-3">
+                                    <i class="fa fa-user-circle fa-2x text-success"/>
+                                </div>
+                                <div>
+                                    <span class="fw-bold"> <t t-esc="line.user_name"/> </span><br/>
+                                    <small class="text-muted"> <t t-esc="line.time_range"/> </small>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates> 

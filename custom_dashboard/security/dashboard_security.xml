@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+
+		<record model="ir.module.category" id="module_category_dashboard">
+		    <field name="name">Dashboard Rights</field>
+		    <field name="sequence">104</field>
+		</record>
+
+		<record id="group_dashboard_admin" model="res.groups">
+		    <field name="name">Admin</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_hr" model="res.groups">
+		    <field name="name">HR</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_resource_manager" model="res.groups">
+		    <field name="name">Resource Manager</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_resource_manager_assistant" model="res.groups">
+		    <field name="name">Resource Manager Assistant</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_project_manager" model="res.groups">
+		    <field name="name">Project Manager</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_operation_manager" model="res.groups">
+		    <field name="name">Operation Manager</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+		<record id="group_dashboard_employee" model="res.groups">
+		    <field name="name">Employee</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+			<field name="implied_ids" eval="[
+				(4, ref('project.group_project_user')),
+				(4, ref('hr_timesheet.group_hr_timesheet_user')),
+				(4, ref('employee_handover.group_technique_user')),
+				(4, ref('odoo_website_helpdesk.helpdesk_user')),
+        	]"/>
+		</record>
+
+		<record id="group_dashboard_account_department" model="res.groups">
+		    <field name="name">Account Department</field>
+		    <field name="category_id" ref="custom_dashboard.module_category_dashboard"/>
+		</record>
+
+	</data>
+</odoo>

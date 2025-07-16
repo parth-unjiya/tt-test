@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_device_management_user,device.management.user,model_device_management,base.group_user,1,0,0,0
+access_device_management_manager,device.management.manager,model_device_management,hr.group_hr_manager,1,1,1,1
+
+access_device_line_user,device.line.user,model_device_line,base.group_user,1,0,0,0
+access_device_line_manager,device.line.manager,model_device_line,hr.group_hr_manager,1,1,1,1
+
+access_device_category_user,device.category.user,model_device_category,base.group_user,1,0,0,0
+access_device_category_manager,device.category.manager,model_device_category,base.group_user,1,1,1,1
+
+access_user_qr_code_user,user.qr.code.user,model_user_qr_code,base.group_user,1,0,0,0
+access_user_qr_code_manager,user.qr.code.manager,model_user_qr_code,hr.group_hr_manager,1,1,1,1

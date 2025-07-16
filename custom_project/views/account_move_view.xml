@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <data>
+        <record id="account_move_custom_form_view" model="ir.ui.view">
+            <field name="name">account.move.custom.form.view</field>
+            <field name="model">account.move</field>
+            <field name="inherit_id" ref="account.view_move_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//button[@name='button_draft']" position="before">
+                    <button name="action_approve" string="Approve" type="object" class="btn-primary"
+                            groups="custom_dashboard.group_dashboard_resource_manager" invisible="state in ['approved','draft','cancel']"/>
+                    <button name="action_rejected" string="Revision" type="object" class="btn-primary"
+                            groups="custom_dashboard.group_dashboard_resource_manager" invisible="state in ['approved','draft','cancel']"/>
+                </xpath>
+
+                <xpath expr="//button[@name='action_register_payment']" position="attributes">
+                    <attribute name="invisible">1</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_reverse']" position="attributes">
+                    <attribute name="invisible">move_type not in ('out_invoice', 'in_invoice') or state != 'approved'</attribute>
+                </xpath>
+                <xpath expr="//button[@name='action_invoice_sent']" position="attributes">
+                    <attribute name="invisible">state != 'approved' or is_being_sent or invoice_pdf_report_id or move_type not in ('out_invoice', 'out_refund')</attribute>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

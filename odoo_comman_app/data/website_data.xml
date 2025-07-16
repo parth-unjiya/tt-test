@@ -1,0 +1,27 @@
+<odoo>
+	<!-- Default Website -->
+	<record id="website.default_website" model="website">
+	    <field name="name">My Website</field>
+	    <field name="company_id" ref="base.main_company"/>
+	    <field name="user_id" ref="base.public_user"/>
+	    <field name="logo" type="base64" file="odoo_comman_app/static/src/img/logo.png"/>
+	</record>
+
+	<record id="website.homepage_page" model="website.page">
+	    <field name="is_published">True</field>
+	    <field name="url">/</field>
+	    <field name="view_id" ref="website.homepage"/>
+	    <field name="track">True</field>
+	    <field name="website_meta_description">This is the homepage of the website</field>
+	    <field name="is_in_menu">False</field>
+	</record>
+	<record id="website.contactus_page" model="website.page">
+	    <field name="url">/contactus</field>
+	    <field name="is_published">True</field>
+	    <field name="view_id" ref="website.contactus"/>
+	    <field name="track">True</field>
+	    <field name="website_meta_description">This is the contact us page of the website</field>
+	    <field name="is_in_menu">False</field>
+	</record>
+
+</odoo>

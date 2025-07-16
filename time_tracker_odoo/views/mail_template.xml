@@ -1,0 +1,139 @@
+<odoo>
+    <template id="employee_daily_report_template">
+        
+        <div style="width: 700px; margin: 0 auto; font-family: Arial, sans-serif; font-size: 12px; color: #666;">
+            
+            <table style="border-collapse: collapse; width: 100%; margin-bottom: 15px; border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="3" style="text-align: left; padding: 15px; border: 1px solid #ddd;">
+                            <t t-esc="current_time"/>
+                        </th>
+                        <th style="text-align: right; padding: 15px; border: 1px solid #ddd;">
+                            <strong><t t-esc="user_name"/></strong>
+                        </th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr style="background-color: #ebebee;">
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Work</th>
+                        <th colspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd;">Meeting</th>
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <t t-set="color" t-value="attendance_data['work_color']"/>
+                        <td t-att-style="'text-align: center; padding: 15px; border: 1px solid #ddd; color: %s;' % color">
+                            <strong style="font-size: 20px;"><t t-esc="attendance_data['today_total_work']"/></strong>
+                        </td>
+                        <td colspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                            <strong style="font-size: 20px;"><t t-esc="attendance_data['meeting']"/></strong>
+                        </td>
+                        <td style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                            <strong style="font-size: 20px;"><t t-esc="attendance_data['total_time']"/></strong>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- Projects Table -->
+            <table style="border-collapse: collapse; width: 100%; margin-bottom: 15px; border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong>Projects</strong></th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr style="background-color: #ebebee;">
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Name</th>
+                        <th colspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd;">Time</th>
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Comment</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-foreach="project_data" t-as="project">
+                        <tr>
+                            <td rowspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd; width: 28%;">
+                                <strong><t t-esc="project['project_name']"/></strong>
+                            </td>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                                <strong>Estimated</strong><br/>
+                                <span style="font-size: 20px; padding-top: 10px;"><strong>00:00:00</strong></span>
+                            </td>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                                <strong>Actual</strong><br/>
+                                <span style="font-size: 20px; padding-top: 10px;"><strong>
+                                    <t t-esc="project['hours']"/>
+                                </strong></span>
+                            </td>
+                            <td rowspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                                <t t-esc="project['task_name']"/>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                                <strong>Work</strong><br/>
+                                <span style="font-size: 20px; padding-top: 10px;"><strong><t t-esc="project['hours']"/></strong></span>
+                            </td>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;">
+                                <strong>Meeting</strong><br/>
+                                <span style="font-size: 20px; padding-top: 10px;"><strong>00:00:00</strong></span>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+
+            <table style="border-collapse: collapse; width: 100%; margin-bottom: 15px; border: 1px solid #ddd;">
+                <thead>
+                    <tr>
+                        <th colspan="4" style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong>Other Activity</strong></th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr style="background-color: #ebebee;">
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd; width: 28%;">Name</th>
+                        <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Time</th>
+                        <th colspan="2" style="text-align: center; padding: 15px; border: 1px solid #ddd;">Comment (Optional)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <t t-set="row_count" t-value="len(other_activity)" t-index="i"/>
+                    <t t-foreach="other_activity" t-as="act">
+                        <tr>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong><t t-esc="act['name']"/></strong></td>
+                            <td style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong><t t-esc="act['time']"/></strong></td>
+                            <t t-if="i == 0">
+                                <td t-att-rowspan="row_count" style="text-align: center; padding: 15px; border: 1px solid #ddd;"><t t-esc="act['comment']"/></td>
+                            </t>
+                        </tr>
+
+                    </t>
+                </tbody>
+            </table>
+
+            <!-- Checklist -->
+            <!-- <table style="border-collapse: collapse; width: 100%; margin-bottom: 15px; border: 1px solid #ddd;">
+               <tbody>
+                   <tr>
+                       <th style="text-align: center; padding: 15px; border: 1px solid #ddd; width: 28%;">Is Code Committed</th>
+                       <td style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong>Yes / No</strong></td>
+                   </tr>
+                   <tr>
+                       <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Notes</th>
+                       <td style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong>[Notes]</strong></td>
+                   </tr>
+                   <tr>
+                       <th style="text-align: center; padding: 15px; border: 1px solid #ddd;">Priority</th>
+                       <td style="text-align: center; padding: 15px; border: 1px solid #ddd;"><strong>[Priority]</strong></td>
+                   </tr>
+               </tbody>
+            </table> -->
+
+
+        </div>
+    </template>
+
+</odoo>

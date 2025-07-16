@@ -1,0 +1,1348 @@
+<odoo>
+	<data>
+
+        <template id="candidate_portal_form_template" name="Candidate Form">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure oe_empty">
+
+                    <section class="s_text_block pt48 pb32 bg-white">
+                        <div class="container">
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img img-fluid mb-3 mx-auto" style="max-height: 60px;"/>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="s_text_block pt0 pb64">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-10 col-xl-9 candidate_form">
+                                    <div class="card shadow-sm rounded-3">
+                                        <div class="card-body p-4 p-md-5">
+                                            
+                                            <h3 class="mb-2 text-center">Submit Your Details</h3>
+                                            <p class="text-muted mb-4 text-center"> You can share your information in one of the three ways below. Choose the method that's easiest for you! </p>
+                                            <hr class="mb-4" />
+
+                                            <!-- Tabs -->
+                                            <ul class="nav nav-pills nav-fill mb-4 flex-column flex-sm-row" id="candidateTab" role="tablist">
+                                                <li class="nav-item">
+                                                    <button class="nav-link w-100 mb-2 mb-sm-0" id="linkedin-tab" data-bs-toggle="pill" data-bs-target="#linkedin" type="button" role="tab">
+                                                        <i class="fa fa-linkedin me-1"/> LinkedIn
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link w-100 mb-2 mb-sm-0" id="manual-tab" data-bs-toggle="pill" data-bs-target="#manual" type="button" role="tab" >
+                                                        <i class="fa fa-pencil me-1"/> Manual Entry
+                                                    </button>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <button class="nav-link w-100" id="resume-tab" data-bs-toggle="pill" data-bs-target="#resume" type="button" role="tab" >
+                                                        <i class="fa fa-file-text-o me-1"/> Upload Resume
+                                                    </button>
+                                                </li>
+                                            </ul>
+                                            <hr/>
+                                            <!-- Tab Content -->
+                                            <div class="tab-content pt-3" id="candidateTabContent">
+
+                                                <!-- LinkedIn Tab -->
+                                                <div class="tab-pane fade" id="linkedin" role="tabpanel">
+
+                                                    <p class="text-muted">Paste your LinkedIn profile URL below. We’ll try to auto-fill your information.</p>
+                                                    
+                                                    <form action="/linkedin/candidate/detail/submit" method="post" enctype="multipart/form-data" id="candidate_linkedin_form">
+                                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                        <input type="hidden" id="token" name="token" t-att-value="token"/>
+                                                        <div class="mb-3">
+                                                            
+                                                            <label for="linkedin_url" class="form-label">LinkedIn Profile URL</label>
+                                                            <input type="url" class="form-control" id="linkedin_url" name="linkedin_url" 
+                                                                placeholder="https://linkedin.com/in/your-profile" required="required"/>
+                                                            
+                                                            <div class="form-text">Make sure your profile is public so we can fetch details.</div>
+                                                            <div id="linkedin_url_error" class="form-text text-danger mt-1" style="display: none;"></div>
+                                                            
+                                                            <div id="error" t-att-style="'display:visible' if error else 'display: none;'" class="form-text text-danger mt-1" > Error: <t t-esc="error"/></div>
+                                                            
+                                                        </div>
+                                                        <button type="button" class="btn btn-primary linkedIn_form_submit">
+                                                            <i class="fa fa-search me-1" /> Fetch My Details 
+                                                        </button>
+
+                                                    </form>
+                                                </div>
+
+                                                <!-- Manual Entry Tab -->
+                                                <div class="tab-pane fade" id="manual" role="tabpanel">
+                                                    <p class="text-muted">Enter your basic details manually. This is useful if you don't have a resume or LinkedIn profile handy.</p>
+
+                                                    <form id="condidate_form" action="/candidate/detail/submit" method="post" enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+                                                        <input type="hidden" id="token" name="token" t-att-value="token"/>
+
+                                                        <div class="card shadow-sm mb-4">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">Personal Details</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="row">
+                                                                    <!-- Email -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="email" class="form-label">Email</label>
+                                                                        <input type="email" class="form-control" id="email" t-att-value="candidate.email_from" t-att-readonly="'readonly' if candidate.email_from else None" />
+                                                                    </div>
+
+                                                                    <!-- Mobile Number -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="partner_mobile" class="form-label">Mobile Number</label>
+                                                                        <input type="text" class="form-control" id="partner_mobile" t-att-value="candidate.partner_mobile" t-att-readonly="'readonly' if candidate.partner_mobile else None" />
+                                                                    </div>
+
+                                                                    <!-- Alternate Number -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="partner_phone" class="form-label">Alternate Number</label>
+                                                                        <input type="text" class="form-control" id="partner_phone" t-att-value="candidate.partner_phone" t-att-readonly="'readonly' if candidate.partner_phone else None" />
+                                                                    </div>
+
+                                                                    <!-- Birth Date -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="dob" class="form-label">Birth Date</label>
+                                                                        <input type="date" class="form-control" id="dob" t-att-value="candidate.dob" t-att-readonly="'readonly' if candidate.dob else None" />
+                                                                    </div>
+
+                                                                    <!-- Relevant Experience -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="relevant_experience" class="form-label">Relevant Experience</label>
+                                                                        <input type="text" class="form-control" id="relevant_experience" t-att-value="candidate.relevant_experience" t-att-readonly="'readonly' if candidate.relevant_experience else None" />
+                                                                    </div>
+
+                                                                    <!-- Total Experience -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="total_experience" class="form-label">Total Experience</label>
+                                                                        <input type="text" class="form-control" id="total_experience" t-att-value="candidate.total_experience" t-att-readonly="'readonly' if candidate.total_experience else None" />
+                                                                    </div>
+
+                                                                    <!-- Marital Status -->
+                                                                    <div class="col-md-4 mb-3">
+                                                                        <label for="marital_status" class="form-label">Marital Status</label>
+                                                                        <select name="marital_status" id="marital_status" class="form-select" t-att-disabled="'disabled' if candidate.marital else None">
+                                                                            <option value="">Select</option>
+                                                                            <option value="single" t-att-selected="'selected' if candidate.marital == 'single' else None">Single</option>
+                                                                            <option value="married" t-att-selected="'selected' if candidate.marital == 'married' else None">Married</option>
+                                                                            <option value="divorce" t-att-selected="'selected' if candidate.marital == 'divorce' else None">Divorce</option>
+                                                                        </select>
+                                                                    </div>
+
+                                                                    <!-- LinkedIn Profile -->
+                                                                    <div class="col-md-8 mb-3">
+                                                                        <label for="linkedin_profile" class="form-label">LinkedIn Profile</label>
+                                                                        <input type="text" class="form-control" id="linkedin_profile" t-att-value="candidate.linkedin_profile" t-att-readonly="'readonly' if candidate.linkedin_profile else None" />
+                                                                    </div>
+
+                                                                    <!-- Current Address -->
+                                                                    <div class="col-md-6 mb-3">
+                                                                        <label class="form-label"><strong>Current Address</strong></label>
+                                                                        <input type="text" class="form-control mb-2" id="current_street" placeholder="Address Line 1" t-att-value="candidate.current_street" t-att-readonly="'readonly' if candidate.current_street else None" />
+
+                                                                        <input type="text" class="form-control mb-2" id="current_city" placeholder="City" t-att-value="candidate.current_city" t-att-readonly="'readonly' if candidate.current_city else None" />
+                                                                        
+                                                                    </div>
+
+                                                                    <div class="col-md-6 mb-3 mt-2">
+                                                                        <label class="form-label"><strong></strong></label>
+                                                                        <input type="text" class="form-control mb-2" id="current_street2" placeholder="Address Line 2" t-att-value="candidate.current_street2" t-att-readonly="'readonly' if candidate.current_street2 else None" />
+
+                                                                         <input type="text" class="form-control mb-2" id="current_zip" placeholder="ZIP Code" t-att-value="candidate.current_zip" t-att-readonly="'readonly' if candidate.current_zip else None" />
+
+                                                                    </div>
+                                                                    
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="card mb-4">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">Professional Details</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div id="professional_container">
+
+                                                                    <t t-set="index" t-value="0"/>
+                                                                    <t t-foreach="candidate.professional_detail_ids or []" t-as="professional" t-key="professional.id">
+                                                                        <t t-set="index" t-value="index + 1"/>
+                                                                        <div class="row">
+                                                                            <div class="col-12 mb-2">
+                                                                                <h5 class="text-muted fw-semibold"><t t-esc="professional.company_name or 'N/A'"/></h5>
+                                                                            </div>
+
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label class="form-label">Company Name</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.company_name or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-6 mb-3">
+                                                                                <label class="form-label">Designation</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.designation or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Duration (Start Date)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.start_date or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Duration (End Date)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.end_date or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Reason Leave Job</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.reason or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Current CTC (monthly)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.current_ctc or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Expected CTC (monthly)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.expected_ctc or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Notice Period</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.notice_period or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <div class="col-md-4 mb-3">
+                                                                                <label class="form-label">Last Appraisal Date</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="professional.last_appraisal_date or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+
+                                                                            <hr/>
+                                                                        </div>
+                                                                    </t>
+
+                                                                    
+
+                                                                    <div class="row professional-entry">
+                                                                        <div class="col-12 mb-2">
+                                                                            <h5 class="text-muted fw-semibold">Current Company</h5>
+                                                                        </div>
+
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <label for="company_name" class="form-label">Company Name</label>
+                                                                            <input type="text" class="form-control" id="company_name_1" name="company_name_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-6 mb-3">
+                                                                            <label for="designation" class="form-label">Designation</label>
+                                                                            <input type="text" class="form-control" id="designation_1" name="designation_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="start_date" class="form-label">Duration (Start Date)</label>
+                                                                            <input type="date" class="form-control" id="start_date_1" name="start_date_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="end_date" class="form-label">Duration (End Date)</label>
+                                                                            <input type="date" class="form-control" id="end_date_1" name="end_date_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="reason" class="form-label">Reason Leave Job</label>
+                                                                            <input type="text" class="form-control" id="reason_1" name="reason_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="current_ctc" class="form-label">Current CTC (monthly)</label>
+                                                                            <input type="text" class="form-control" id="current_ctc_1" name="current_ctc_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="expected_ctc" class="form-label">Expected CTC (monthly)</label>
+                                                                            <input type="text" class="form-control" id="expected_ctc_1" name="expected_ctc_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="notice_period" class="form-label">Notice Period</label>
+                                                                            <input type="text" class="form-control" id="notice_period_1" name="notice_period_1" />
+                                                                        </div>
+
+                                                                        <div class="col-md-4 mb-3">
+                                                                            <label for="last_appraisal_date" class="form-label">Last Appraisal Date</label>
+                                                                            <input type="date" class="form-control" id="last_appraisal_date_1" name="last_appraisal_date_1" />
+                                                                        </div>
+                                                                        <hr/>
+                                                                    </div>
+                                                                </div>
+
+                                                                <!-- <div class="d-flex gap-2 mt-2">
+                                                                    <button id="addProfessional" class="btn btn-primary">Add</button>
+                                                                    <button id="removeProfessional" class="btn btn-danger">Remove</button>
+                                                                </div> -->
+
+                                                                <div class="d-flex gap-2 mt-2">
+                                                                    <button type="button" id="addProfessional" class="btn btn-md btn-outline-success">
+                                                                        <i class="fa fa-plus" /> Add </button>
+                                                                    
+                                                                    <button type="button" id="removeProfessional" class="btn btn-md btn-outline-danger" >
+                                                                        <i class="fa fa-minus" /> Remove </button>
+                                                                    <!-- t-att-disabled="not candidate.professional_detail_ids or len(candidate.professional_detail_ids) &lt;= 0" -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <div class="card mb-4">
+                                                            <div class="card-header">
+                                                                <h5 class="mb-0">Academic Details</h5>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div id="academic_container">
+
+                                                                    <t t-set="index" t-value="0"/>
+                                                                    <t t-foreach="candidate.academic_data_ids or []" t-as="academic" t-key="academic.id">
+                                                                        <t t-set="index" t-value="index + 1"/>
+                                                                        <div class="row">
+                                                                            <div class="col-md-3 mb-3">
+                                                                                <label class="form-label">Qualification (Degree)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="academic.type_id.name or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-3 mb-3">
+                                                                                <label class="form-label">Institute/University</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="academic.institute_name or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-3 mb-3">
+                                                                                <label class="form-label">Passed Year</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="academic.pass_year or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="col-md-3 mb-3">
+                                                                                <label class="form-label">Marks (%)</label>
+                                                                                <div class="form-control bg-light">
+                                                                                    <t t-esc="academic.percentage or 'N/A'"/>
+                                                                                </div>
+                                                                            </div>
+                                                                            <hr/>
+                                                                        </div>
+                                                                    </t>
+                                                                
+                                                                    <div class="row academic-entry">
+                                                                        <div class="col-md-3 mb-3">
+                                                                            <label class="form-label">Qualification (Degree)</label>
+                                                                            <input type="text" class="form-control" name="degree_1" id="degree_1" />
+                                                                        </div>
+                                                                        <div class="col-md-3 mb-3">
+                                                                            <label class="form-label">Institute/University</label>
+                                                                            <input type="text" class="form-control" name="institute_name_1" id="institute_name_1" />
+                                                                        </div>
+                                                                        <div class="col-md-3 mb-3">
+                                                                            <label class="form-label">Passed Year</label>
+                                                                            <input type="text" class="form-control" name="passed_year_1" id="passed_year_1" />
+                                                                        </div>
+                                                                        <div class="col-md-3 mb-3">
+                                                                            <label class="form-label">Marks (%)</label>
+                                                                            <input type="text" class="form-control" name="mark_1" id="mark_1" />
+                                                                        </div>
+                                                                        <hr/>
+                                                                    </div>
+                                                                </div>
+                                                                <!-- <div class="d-flex gap-2">
+                                                                    <button id="btadAdd" class="btn btn-primary">Add</button>
+                                                                    <button id="btadRm" class="btn btn-danger">Remove</button>
+                                                                </div>
+ -->
+                                                                <div class="d-flex gap-2 mt-2">
+                                                                    <button type="button" id="btadAdd" class="btn btn-md btn-outline-success">
+                                                                        <i class="fa fa-plus" /> Add </button>
+                                                                    
+                                                                    <button type="button" id="btadRm" class="btn btn-md btn-outline-danger" >
+                                                                        <i class="fa fa-minus" /> Remove </button>
+                                                                    <!-- t-att-disabled="not candidate.professional_detail_ids or len(candidate.professional_detail_ids) &lt;= 0" -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                       
+                                                        <div class="text-center mt-4">
+                                                            <button type="button" class="btn btn-primary btn-md o_portal_form_submit">
+                                                                <i class="fa fa-check me-1" /> Submit Details </button>
+                                                        </div>
+
+                                                    </form>
+                                                    
+                                                </div>
+                                            
+                                                <!-- Resume Upload Tab -->
+                                                <div class="tab-pane fade" id="resume" role="tabpanel">
+
+                                                    <p class="text-muted">Upload your resume and we’ll extract your details automatically.</p>
+                                                    <form action="/resume/upload/candidate/submit" method="post" enctype="multipart/form-data" id="candidate_resume_form" data-pre-fill="true">
+                                                        
+                                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                        <input type="hidden" id="token" name="token" t-att-value="token"/>
+
+                                                        <div class="mb-3">
+                                                            <label class="form-label">Select Resume File</label>
+                                                            <input type="file" class="form-control" id="resume_file" name="resume" accept=".pdf" required="required"/>
+                                                            <div class="form-text">Accepted formats: PDF</div>
+                                                            <div id="resume_file_error" class="form-text text-danger mt-1" style="display: none;"></div>
+
+                                                            <div id="resume_error" t-att-style="'display:visible' if resume_error else 'display: none;'" class="form-text text-danger mt-1">Error: <t t-esc="resume_error"/></div>
+                                                        </div>
+
+                                                        <button type="button" class="btn btn-primary resume_form_submit">
+                                                            <i class="fa fa-upload me-1" /> Upload &amp; Extract 
+                                                        </button>
+
+                                                    </form>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="linkedin_loader" id="linkedin_loader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 1060; text-align: center; padding-top: 20%;">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <p class="mt-2 text-primary fw-bold">Fetching your LinkedIn data, please wait...</p>
+                                            </div>
+                                            <div class="resume_loader" id="resume_loader" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.85); z-index: 1060; text-align: center; padding-top: 20%;">
+                                                <div class="spinner-border text-primary" role="status">
+                                                    <span class="visually-hidden">Loading...</span>
+                                                </div>
+                                                <p class="mt-2 text-primary fw-bold">Uploading your resume, please wait...</p>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+		<template id="candidate_portal_form_template_orignal" name="Candidate Form">
+		    <t t-call="website.layout">
+
+		    	<style>
+		    	    .nav-tabs.no-radius .btn {
+		    	        border-radius: 0 !important;
+		    	    }
+
+		    	</style>	
+
+		    	<div class="container my-4">
+					<!-- Logo Column -->
+		            <div class="col-md-2 col-12 mb-2">
+		                <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img-fluid" style="max-height: 80px;"/>
+		            </div>
+	            	<!-- <hr/> -->
+		        </div>
+		    	 
+		    	<div class="container my-4">
+		    	    
+		    	    <div class="card p-4 shadow-sm rounded-3 candidate_form">
+		    	        
+		    	        <h3 class="mb-2">Submit Your Details</h3>
+		    	        
+		    	        <p class="text-muted mb-3">
+		    	            You can share your information in one of the three ways below. Choose the method that's easiest for you!
+		    	        </p>
+		    	        <hr class="mb-3" style="margin-top: 0.1em;"/>
+
+    	                <ul class="nav nav-tabs no-radius btn-group w-100 mb-4" id="candidateTab" role="tablist">
+    	                    <li class="nav-item flex-fill">
+    	                        <button class="btn btn-outline-primary w-100" id="linkedin-tab" data-bs-toggle="tab" data-bs-target="#linkedin" type="button" role="tab">
+    	                            🌐 LinkedIn
+    	                        </button>
+    	                    </li>
+    	                    <li class="nav-item flex-fill">
+    	                        <button class="btn btn-outline-primary w-100" id="manual-tab" data-bs-toggle="tab" data-bs-target="#manual" type="button" role="tab">
+    	                            ✍️ Manual Entry
+    	                        </button>
+    	                    </li>
+    	                    <li class="nav-item flex-fill">
+    	                        <button class="btn btn-outline-primary w-100" id="resume-tab" data-bs-toggle="tab" data-bs-target="#resume" type="button" role="tab">
+    	                            📄 Upload Resume
+    	                        </button>
+    	                    </li>
+    	                </ul>
+
+		    	        <!-- Tab Content -->
+		    	        <div class="tab-content" id="candidateTabContent">
+		    	            
+		    	            <!-- LinkedIn Tab -->
+		    	            <div class="tab-pane fade" id="linkedin" role="tabpanel">
+
+		    	                <p class="text-muted">Paste your LinkedIn profile URL below. We’ll try to auto-fill your information.</p>
+		    	                
+		    	                <form action="/linkedin/candidate/detail/submit" method="post" enctype="multipart/form-data" id="candidate_linkedin_form">
+
+		    	                	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+		            				<input type="hidden" id="token" name="token" t-att-value="token"/>
+
+			    	                <div class="mb-3">
+			    	                    
+			    	                    <label for="linkedin_url" class="form-label">LinkedIn Profile URL</label>
+			    	                    <input type="url" class="form-control" id="linkedin_url" name="linkedin_url" 
+			    	                    	placeholder="https://linkedin.com/in/your-profile" required="required"/>
+			    	                    
+			    	                    <div class="form-text">Make sure your profile is public so we can fetch details.</div>
+			    	                    <div id="linkedin_url_error" class="form-text text-danger mt-1" style="display: none;"></div>
+			    	                    
+			    	                    <div id="error" t-att-style="'display:visible' if error else 'display: none;'" class="form-text text-danger mt-1" >	Error: <t t-esc="error"/></div>
+			    	                    
+			    	                </div>
+		    	                
+		    	                	<button type="button" class="btn btn-primary linkedIn_form_submit">🔍 Fetch My Details</button>
+
+		    	                </form>
+
+		    	            </div>
+
+		    	            <!-- Manual Entry Tab -->
+		    	            <div class="tab-pane fade" id="manual" role="tabpanel">
+		    	                <p class="text-muted">Enter your basic details manually. This is useful if you don't have a resume or LinkedIn profile handy.</p>
+
+		    	                <form id="condidate_form" action="/candidate/detail/submit" method="post" enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+		    	                	<input type="hidden" id="token" name="token" t-att-value="token"/>
+
+			    	                <div class="card shadow-sm mb-4">
+			    	                    <div class="card-header">
+			    	                        <h5 class="mb-0">Personal Details</h5>
+			    	                    </div>
+			    	                    <div class="card-body">
+			    	                        <div class="row">
+			    	                            <!-- Email -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="email" class="form-label">Email</label>
+			    	                                <input type="email" class="form-control" id="email" t-att-value="candidate.email_from" t-att-readonly="'readonly' if candidate.email_from else None" />
+			    	                            </div>
+
+			    	                            <!-- Mobile Number -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="partner_mobile" class="form-label">Mobile Number</label>
+			    	                                <input type="text" class="form-control" id="partner_mobile" t-att-value="candidate.partner_mobile" t-att-readonly="'readonly' if candidate.partner_mobile else None" />
+			    	                            </div>
+
+			    	                            <!-- Alternate Number -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="partner_phone" class="form-label">Alternate Number</label>
+			    	                                <input type="text" class="form-control" id="partner_phone" t-att-value="candidate.partner_phone" t-att-readonly="'readonly' if candidate.partner_phone else None" />
+			    	                            </div>
+
+			    	                            <!-- Birth Date -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="dob" class="form-label">Birth Date</label>
+			    	                                <input type="date" class="form-control" id="dob" t-att-value="candidate.dob" t-att-readonly="'readonly' if candidate.dob else None" />
+			    	                            </div>
+
+			    	                            <!-- Relevant Experience -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="relevant_experience" class="form-label">Relevant Experience</label>
+			    	                                <input type="text" class="form-control" id="relevant_experience" t-att-value="candidate.relevant_experience" t-att-readonly="'readonly' if candidate.relevant_experience else None" />
+			    	                            </div>
+
+			    	                            <!-- Total Experience -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="total_experience" class="form-label">Total Experience</label>
+			    	                                <input type="text" class="form-control" id="total_experience" t-att-value="candidate.total_experience" t-att-readonly="'readonly' if candidate.total_experience else None" />
+			    	                            </div>
+
+			    	                            <!-- Marital Status -->
+			    	                            <div class="col-md-4 mb-3">
+			    	                                <label for="marital_status" class="form-label">Marital Status</label>
+			    	                                <select name="marital_status" id="marital_status" class="form-select" t-att-disabled="'disabled' if candidate.marital else None">
+			    	                                    <option value="">Select</option>
+			    	                                    <option value="single" t-att-selected="'selected' if candidate.marital == 'single' else None">Single</option>
+			    	                                    <option value="married" t-att-selected="'selected' if candidate.marital == 'married' else None">Married</option>
+			    	                                    <option value="divorce" t-att-selected="'selected' if candidate.marital == 'divorce' else None">Divorce</option>
+			    	                                </select>
+			    	                            </div>
+
+			    	                            <!-- LinkedIn Profile -->
+			    	                            <div class="col-md-8 mb-3">
+			    	                                <label for="linkedin_profile" class="form-label">LinkedIn Profile</label>
+			    	                                <input type="text" class="form-control" id="linkedin_profile" t-att-value="candidate.linkedin_profile" t-att-readonly="'readonly' if candidate.linkedin_profile else None" />
+			    	                            </div>
+
+			    	                            <!-- Current Address -->
+			    	                            <div class="col-md-6 mb-3">
+			    	                                <label class="form-label"><strong>Current Address</strong></label>
+			    	                                <input type="text" class="form-control mb-2" id="current_street" placeholder="Address Line 1" t-att-value="candidate.current_street" t-att-readonly="'readonly' if candidate.current_street else None" />
+
+			    	                                <input type="text" class="form-control mb-2" id="current_city" placeholder="City" t-att-value="candidate.current_city" t-att-readonly="'readonly' if candidate.current_city else None" />
+
+			    	                                <!-- <select name="current_state_id" id="current_state_id" class="form-select state_id mb-2" hidden="hidden">
+			    	                                    <option>States...</option>
+			    	                                    <t t-foreach="states or []" t-as="state">
+			    	                                        <option class="state" t-att-value="state.id">
+			    	                                            <t t-esc="state.name" />
+			    	                                        </option>
+			    	                                    </t>
+			    	                                </select> -->
+			    	                            </div>
+
+			    	                            <div class="col-md-6 mb-3 mt-2">
+			    	                            	<label class="form-label"><strong></strong></label>
+			    	                            	<input type="text" class="form-control mb-2" id="current_street2" placeholder="Address Line 2" t-att-value="candidate.current_street2" t-att-readonly="'readonly' if candidate.current_street2 else None" />
+
+			    	                            	 <input type="text" class="form-control mb-2" id="current_zip" placeholder="ZIP Code" t-att-value="candidate.current_zip" t-att-readonly="'readonly' if candidate.current_zip else None" />
+
+			    	                            </div>
+
+			    	                            <!-- Permanent Address -->
+			    	                            <!-- <div class="col-md-6 mb-3">
+			    	                                <label class="form-label"><strong>Permanent Address</strong></label>
+			    	                                <input type="text" class="form-control mb-2" id="permanent_street" placeholder="Address Line 1" t-att-value="candidate.permanent_street" t-att-readonly="'readonly' if candidate.permanent_street else None" />
+
+			    	                                <input type="text" class="form-control mb-2" id="permanent_street2" placeholder="Address Line 2" t-att-value="candidate.permanent_street2" t-att-readonly="'readonly' if candidate.permanent_street2 else None" />
+
+			    	                                <input type="text" class="form-control mb-2" id="permanent_city" placeholder="City" t-att-value="candidate.permanent_city" t-att-readonly="'readonly' if candidate.permanent_city else None" />
+
+			    	                                <input type="text" class="form-control mb-2" id="permanent_zip" placeholder="ZIP Code" t-att-value="candidate.permanent_zip" t-att-readonly="'readonly' if candidate.permanent_zip else None" />
+
+			    	                                <select name="permanent_state_id" id="permanent_state_id" class="form-select state_id mb-2" hidden="hidden">
+			    	                                    <option>States...</option>
+			    	                                    <t t-foreach="states or []" t-as="state">
+			    	                                        <option class="state" t-att-value="state.id">
+			    	                                            <t t-esc="state.name" />
+			    	                                        </option>
+			    	                                    </t>
+			    	                                </select>
+			    	                            </div> -->
+			    	                        </div>
+			    	                    </div>
+			    	                </div>
+
+			    	                <div class="card mb-4">
+			    	                    <div class="card-header">
+			    	                        <h5 class="mb-0">Professional Details</h5>
+			    	                    </div>
+			    	                    <div class="card-body">
+			    	                        <div id="professional_container">
+
+			    	                        	<t t-set="index" t-value="0"/>
+			    	                        	<t t-foreach="candidate.professional_detail_ids or []" t-as="professional" t-key="professional.id">
+			    	                        	    <t t-set="index" t-value="index + 1"/>
+			    	                        	    <div class="row">
+			    	                        	        <div class="col-12 mb-2">
+			    	                        	            <h5 class="text-muted fw-semibold"><t t-esc="professional.company_name or 'N/A'"/></h5>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-6 mb-3">
+			    	                        	            <label class="form-label">Company Name</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.company_name or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-6 mb-3">
+			    	                        	            <label class="form-label">Designation</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.designation or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Duration (Start Date)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.start_date or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Duration (End Date)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.end_date or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Reason Leave Job</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.reason or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Current CTC (monthly)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.current_ctc or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Expected CTC (monthly)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.expected_ctc or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Notice Period</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.notice_period or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <div class="col-md-4 mb-3">
+			    	                        	            <label class="form-label">Last Appraisal Date</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="professional.last_appraisal_date or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+
+			    	                        	        <hr/>
+			    	                        	    </div>
+			    	                        	</t>
+
+			    	                        	
+
+			    	                            <div class="row professional-entry">
+			    	                                <div class="col-12 mb-2">
+			    	                                    <h5 class="text-muted fw-semibold">Current Company</h5>
+			    	                                </div>
+
+			    	                                <div class="col-md-6 mb-3">
+			    	                                    <label for="company_name" class="form-label">Company Name</label>
+			    	                                    <input type="text" class="form-control" id="company_name_1" name="company_name_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-6 mb-3">
+			    	                                    <label for="designation" class="form-label">Designation</label>
+			    	                                    <input type="text" class="form-control" id="designation_1" name="designation_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="start_date" class="form-label">Duration (Start Date)</label>
+			    	                                    <input type="date" class="form-control" id="start_date_1" name="start_date_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="end_date" class="form-label">Duration (End Date)</label>
+			    	                                    <input type="date" class="form-control" id="end_date_1" name="end_date_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="reason" class="form-label">Reason Leave Job</label>
+			    	                                    <input type="text" class="form-control" id="reason_1" name="reason_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="current_ctc" class="form-label">Current CTC (monthly)</label>
+			    	                                    <input type="text" class="form-control" id="current_ctc_1" name="current_ctc_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="expected_ctc" class="form-label">Expected CTC (monthly)</label>
+			    	                                    <input type="text" class="form-control" id="expected_ctc_1" name="expected_ctc_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="notice_period" class="form-label">Notice Period</label>
+			    	                                    <input type="text" class="form-control" id="notice_period_1" name="notice_period_1" />
+			    	                                </div>
+
+			    	                                <div class="col-md-4 mb-3">
+			    	                                    <label for="last_appraisal_date" class="form-label">Last Appraisal Date</label>
+			    	                                    <input type="date" class="form-control" id="last_appraisal_date_1" name="last_appraisal_date_1" />
+			    	                                </div>
+			    	                            	<hr/>
+			    	                            </div>
+			    	                        </div>
+
+			    	                        <div class="d-flex gap-2 mt-2">
+			    	                            <button id="addProfessional" class="btn btn-primary">Add</button>
+			    	                            <button id="removeProfessional" class="btn btn-danger">Remove11</button>
+			    	                        </div>
+			    	                    </div>
+			    	                </div>
+
+
+			    	                <div class="card mb-4">
+			    	                    <div class="card-header">
+			    	                        <h5 class="mb-0">Academic Details</h5>
+			    	                    </div>
+			    	                    <div class="card-body">
+			    	                        <div id="academic_container">
+
+			    	                        	<t t-set="index" t-value="0"/>
+			    	                        	<t t-foreach="candidate.academic_data_ids or []" t-as="academic" t-key="academic.id">
+			    	                        	    <t t-set="index" t-value="index + 1"/>
+			    	                        	    <div class="row">
+			    	                        	        <div class="col-md-3 mb-3">
+			    	                        	            <label class="form-label">Qualification (Degree)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="academic.type_id.name or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+			    	                        	        <div class="col-md-3 mb-3">
+			    	                        	            <label class="form-label">Institute/University</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="academic.institute_name or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+			    	                        	        <div class="col-md-3 mb-3">
+			    	                        	            <label class="form-label">Passed Year</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="academic.pass_year or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+			    	                        	        <div class="col-md-3 mb-3">
+			    	                        	            <label class="form-label">Marks (%)</label>
+			    	                        	            <div class="form-control bg-light">
+			    	                        	                <t t-esc="academic.percentage or 'N/A'"/>
+			    	                        	            </div>
+			    	                        	        </div>
+			    	                        	        <hr/>
+			    	                        	    </div>
+			    	                        	</t>
+			    	                        
+			    	                            <div class="row academic-entry">
+			    	                                <div class="col-md-3 mb-3">
+			    	                                    <label class="form-label">Qualification (Degree)</label>
+			    	                                    <input type="text" class="form-control" name="degree_1" id="degree_1" />
+			    	                                </div>
+			    	                                <div class="col-md-3 mb-3">
+			    	                                    <label class="form-label">Institute/University</label>
+			    	                                    <input type="text" class="form-control" name="institute_name_1" id="institute_name_1" />
+			    	                                </div>
+			    	                                <div class="col-md-3 mb-3">
+			    	                                    <label class="form-label">Passed Year</label>
+			    	                                    <input type="text" class="form-control" name="passed_year_1" id="passed_year_1" />
+			    	                                </div>
+			    	                                <div class="col-md-3 mb-3">
+			    	                                    <label class="form-label">Marks (%)</label>
+			    	                                    <input type="text" class="form-control" name="mark_1" id="mark_1" />
+			    	                                </div>
+			    	                                <hr/>
+			    	                            </div>
+			    	                        </div>
+			    	                        <div class="d-flex gap-2">
+			    	                            <button id="btadAdd" class="btn btn-primary">Add</button>
+			    	                            <button id="btadRm" class="btn btn-danger">Remove</button>
+			    	                        </div>
+			    	                    </div>
+			    	                </div>
+
+			    	               
+			    	                <div class="text-center mt-3">
+			    	                    <button type="button" class="btn btn-primary o_portal_form_submit">Submit</button>
+			    	                </div>
+
+		    	            	</form>
+		    	                
+		    	            </div>
+
+		    	            <!-- Resume Upload Tab -->
+		    	            <div class="tab-pane fade" id="resume" role="tabpanel">
+
+		    	                <p class="text-muted">Upload your resume and we’ll extract your details automatically.</p>
+		    	                <form action="/resume/upload/candidate/submit" method="post" enctype="multipart/form-data" id="candidate_resume_form" data-pre-fill="true">
+			    	                
+            	                	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                    				<input type="hidden" id="token" name="token" t-att-value="token"/>
+
+			    	                <div class="mb-3">
+			    	                    <label class="form-label">Select Resume File</label>
+			    	                    <input type="file" class="form-control" id="resume_file" name="resume" accept=".pdf" required="required" data-fill-with="resume"/>
+			    	                    <div class="form-text">Accepted formats: PDF</div>
+			    	                    <div id="resume_file_error" class="form-text text-danger mt-1" style="display: none;"></div>
+
+			    	                    <div id="resume_error" t-att-style="'display:visible' if resume_error else 'display: none;'" class="form-text text-danger mt-1">Error: <t t-esc="resume_error"/></div>
+			    	                    
+			    	                </div>
+
+		    	                	<button type="button" class="btn btn-primary resume_form_submit">📤 Upload &amp; Extract</button>
+		    	                </form>
+
+		    	            </div>
+		    	        </div>
+
+		    	        <div class="linkedin_loader" id="linkedin_loader" style="display: none; position: fixed; top: 0; left: 0;
+						    width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999;
+						    text-align: center; padding-top: 20%;">
+		    	            <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+		    	            <p class="mt-2">Fetching your LinkedIn data, please wait...</p>
+		    	        </div>
+
+			    	    <div class="resume_loader" id="resume_loader" style="display: none; position: fixed; top: 0; left: 0;
+						    width: 100%; height: 100%; background: rgba(255,255,255,0.8); z-index: 9999;
+						    text-align: center; padding-top: 20%;">
+			    	        <i class="fa fa-spinner fa-spin fa-2x text-primary"></i>
+			    	        <p class="mt-2">Uploading your resume, please wait...</p>
+			    	    </div>
+
+		    	    </div>
+
+		    	</div>
+		    
+		    </t>
+		</template>
+
+
+
+		<template id="candidate_portal_form_template_one" name="Candidate Form">
+
+			<t t-call="website.layout">
+
+				<style>
+					.box{
+					    background: #fff;
+					    border: 1px solid #ddd;
+					    margin-bottom: 40px;
+					}
+
+					.box .box_head{background-color: #ddd;padding: 10px 15px;}
+					.box .box_head h2{color: #000;font-size: 20px;font-weight: 500;line-height: 28px;}
+					.box .detail{padding: 40px 40px 20px;}
+
+					.form-group{margin-bottom: 25px;}
+					.form-group label{font-weight: 500; margin-bottom: 8px;color: #444;}
+
+					.small-head {
+					    font-size: 18px;
+					    font-weight: 700;
+					    margin-bottom: 20px;
+					}
+
+
+					.btn.btn-green{
+						background-color: #a6ce39;color: #fff;margin:10px 0;padding: 8px 15px;min-width: 150px;border: 1px solid #a6ce39;border-radius: 0;font-weight: 500;font-size: 16px;
+					}
+					.btn.btn-green:hover,.btn.btn-green:focus{color:#a6ce39;background: #fff; }
+
+					.submit_btn{margin-bottom: 50px;text-align: center;}
+
+					.is-invalid { border-color: #dc3545 !important;}
+					.form-error-msg { font-size: 0.875em; }
+
+				</style>
+
+				<section class="s_text_block pt40 pb40 o_colored_level" data-snippet="s_text_block">
+					<div class="container">
+						<div class="row candidate_form">
+
+							<!-- Logo Column -->
+				            <div class="col-md-2 col-12 mb-2">
+				                <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img-fluid" style="max-height: 80px;"/>
+				            </div>
+
+				            <hr/>
+
+
+						    <div class="col-12 mt-2">
+
+						    	<h2 class="fw-semibold fs-5 mb-2">Dear <t t-esc="candidate.name"/>,</h2>
+						    	<p class="text-secondary mb-4 fs-6" style="max-width: 700px;">
+						    		Please fill up the following details. 
+						    		<!-- for the post of "HTML Developer (Zoom)". -->
+						    	</p>
+
+						    	<!-- Candidate Form-->
+						    	<form id="condidate_form" action="/candidate/detail/submit" method="post" enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+						    		<input type="hidden" id="token" name="token" t-att-value="token"/>
+
+						    		<!-- Personal Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Personal Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div class="row">
+												
+												<!-- Email -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="email" class="form-label">Email</label>
+													<input type="email"
+														class="form-control"
+														id="email"
+														t-att-value="candidate.email_from"
+														t-att-readonly="'readonly' if candidate.email_from else None" 
+													/>
+												</div>
+
+												<!-- Mobile Number -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="partner_mobile" class="form-label">Mobile Number</label>
+													<input type="text"
+														class="form-control"
+														id="partner_mobile"
+														t-att-value="candidate.partner_mobile"
+														t-att-readonly="'readonly' if candidate.partner_mobile else None"
+													/>
+												</div>
+
+												<!-- Alernate Number -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="partner_phone" class="form-label">Alernate Number</label>
+													<input type="text"
+														class="form-control"
+														id="partner_phone"
+														t-att-value="candidate.partner_phone"
+														t-att-readonly="'readonly' if candidate.partner_phone else None"
+													/>
+												</div>
+
+												<!-- Birth Date -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="dob" class="form-label">Birth Date</label>
+													<input type="date"
+														class="form-control"
+														id="dob"
+														t-att-value="candidate.dob"
+														t-att-readonly="'readonly' if candidate.dob else None"
+													/>
+												</div>
+
+												<!-- Relevant Experience -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="relevant_experience" class="form-label">Relevant Experience</label>
+													<input type="text"
+														class="form-control"
+														id="relevant_experience"
+														t-att-value="candidate.relevant_experience"
+														t-att-readonly="'readonly' if candidate.relevant_experience else None"
+													/>
+												</div>
+
+												<!-- Total Experience -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="total_experience" class="form-label">Total Experience</label>
+													<input type="text"
+														class="form-control"
+														id="total_experience"
+														t-att-value="candidate.total_experience"
+														t-att-readonly="'readonly' if candidate.total_experience else None"
+													/>
+												</div>
+
+												<!-- Marital Status -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="marital_status" class="form-label">Marital Status</label>
+													<select name="marital_status" id="marital_status" class="form-control" 
+														t-att-disabled="'disabled' if candidate.marital else None">
+				                                        <option value="">Select</option>
+				                                        <option value="single" t-att-selected="'selected' if candidate.marital == 'single' else None">Single</option>
+		                                                <option value="married" t-att-selected="'selected' if candidate.marital == 'married' else None">Married</option>
+		                                                <option value="divorce" t-att-selected="'selected' if candidate.marital == 'divorce' else None">Divorce</option>
+				                                    </select>
+												</div>
+
+												<!-- Linkedin Profile -->
+												<div class="col-sm-8 col-xs-12 mb-4">
+													<label for="linkedin_profile" class="form-label">Linkedin Profile</label>
+													<input type="text"
+														class="form-control"
+														id="linkedin_profile"
+														t-att-value="candidate.linkedin_profile"
+														t-att-readonly="'readonly' if candidate.linkedin_profile else None"
+													/>
+												</div>
+
+												<!-- Current Address  -->
+												<div class="col-lg-6 col-xs-12 mb-4">
+													<label for="linkedin_profile" class="form-label"><b>Current Address</b></label>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_street"
+														t-att-value="candidate.current_street"
+														t-att-readonly="'readonly' if candidate.current_street else None"
+														placeholder="Address Line 1 of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_street2"
+														t-att-value="candidate.current_street2"
+														t-att-readonly="'readonly' if candidate.current_street2 else None"
+														placeholder="Address Line 2 of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_city"
+														t-att-value="candidate.current_city"
+														t-att-readonly="'readonly' if candidate.current_city else None"
+														placeholder="City of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_zip"
+														t-att-value="candidate.current_zip"
+														t-att-readonly="'readonly' if candidate.current_zip else None"
+														placeholder="Zip of Current Address"
+													/>
+
+													<!-- <select name="current_state_id" id="current_state_id" class="form-select state_id mb-3" hidden="hidden">
+													    <option>States...</option>
+													    <t t-foreach="states or []" t-as="state">
+													        <option class="state" t-att-value="state.id">
+													            <t t-esc="state.name"/>
+													        </option>
+													    </t>
+													</select> -->
+
+												</div>
+												<!-- Permanent Address  -->
+												<div class="col-lg-6 col-xs-12 mb-4">
+													<label class="form-label"><b>Permanent Address</b></label>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_street"
+														t-att-value="candidate.permanent_street"
+														t-att-readonly="'readonly' if candidate.permanent_street else None"
+														placeholder="Address Line 1 of Permanent Address"
+
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_street2"
+														t-att-value="candidate.permanent_street2"
+														t-att-readonly="'readonly' if candidate.permanent_street2 else None"
+														placeholder="Address Line 2 of Permanent Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_city"
+														t-att-value="candidate.permanent_city"
+														t-att-readonly="'readonly' if candidate.permanent_city else None"
+														placeholder="City of Permanent Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_zip"
+														t-att-value="candidate.permanent_zip"
+														t-att-readonly="'readonly' if candidate.permanent_zip else None"
+														placeholder="Zip of Permanent Address"
+													/>
+
+													<select name="permanent_state_id" id="permanent_state_id" class="form-select state_id mb-3" hidden="hidden">
+													    <option>States...</option>
+													    <t t-foreach="states or []" t-as="state">
+													        <option class="state" t-att-value="state.id">
+													            <t t-esc="state.name"/>
+													        </option>
+													    </t>
+													</select>
+												</div>
+
+											</div>
+										</div>
+							    	</div>
+
+							    	<!-- Academic Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Academic Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div id="academic_container">
+								    			<div class="row academic-entry">
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Qualification(Degree)</label>
+														<input type="text" class="form-control" name="degree_1" id="degree_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Institute/University</label>
+								    					<input type="text" class="form-control" name="institute_name_1" id="institute_name_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Passed Year</label>
+								    					<input type="text" class="form-control" name="passed_year_1" id="passed_year_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Marks(%)</label>
+								    					<input type="text" class="form-control" name="mark_1" id="mark_1" />
+								    				</div>
+
+								    			</div>
+								    		</div>
+							    			<div class="form-group">
+
+							    				<button id="btadAdd" class="btn btn-primary">Add</button>
+							    				<button id="btadRm" class="btn btn-danger">Remove</button>
+
+							    			</div>
+
+							    		</div>
+							    	</div>
+
+							    	<!-- Professional Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Professional Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div id="professional_container">
+							    				<div class="row professional-entry">
+							    					<div class="small-head">Current</div>
+
+							    					<div class="col-sm-6 col-xs-12 mb-4">
+							    						<label for="company_name" class="form-label">Company Name</label>
+							    						<input type="text" class="form-control" id="company_name_1" name="company_name_1" />
+							    					</div>
+
+							    					<div class="col-sm-6 col-xs-12 mb-4">
+							    						<label for="designation" class="form-label">Designation</label>
+							    						<input type="text" class="form-control" id="designation_1" name="designation_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="start_date" class="form-label">Duration (Start Date)</label>
+							    						<input type="date" class="form-control" id="start_date_1" name="start_date_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="end_date" class="form-label">Duration (End Date)</label>
+							    						<input type="date" class="form-control" id="end_date_1" name="end_date_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="reason" class="form-label">Reason Leave Job</label>
+							    						<input type="text" class="form-control" id="reason_1" name="reason_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="current_ctc" class="form-label">Current Ctc (monthly)</label>
+							    						<input type="text" class="form-control" id="current_ctc_1" name="current_ctc_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="expected_ctc" class="form-label">Expected Ctc (monthly)</label>
+							    						<input type="text" class="form-control" id="expected_ctc_1" name="expected_ctc_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="notice_period" class="form-label">Notice Period</label>
+							    						<input type="text" class="form-control" id="notice_period_1" name="notice_period_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="last_appraisal_date" class="form-label">Last Appraisal Date</label>
+							    						<input type="date" class="form-control" id="last_appraisal_date_1" name="last_appraisal_date_1" />
+							    					</div>
+							    				</div>
+							    			</div>
+
+							    			<div class="form-group mt-2">
+							    				<button id="addProfessional" class="btn btn-primary">Add</button>
+							    				<button id="removeProfessional" class="btn btn-danger">Remove11</button>
+							    			</div>
+							    		</div>
+							    	</div>
+
+							    							    	
+							    	<div class="submit_btn">
+							    		<button type="button" class="btn btn-green o_portal_form_submit">Submit</button>
+							    	</div>
+
+							    </form>
+
+						    </div>
+						</div>
+					</div>
+				</section>
+			</t>
+
+		</template>
+
+
+		<template id="candidate_form_expired_page" name="Candidate Form Expired Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container py-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-danger shadow-lg rounded p-4">
+			                        <h2>Your form has expired.</h2>
+			                        <p>We're sorry, but the Review form you are trying to access has expired.<br/>
+			                        Please contact to HR if you need further assistance.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+		<template id="candidate_form_thank_you" name="Candidate Thank You Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+		            <div class="container">
+		                <div class="row justify-content-center">
+		                    <div class="col-md-8 text-center">
+		                        <div class="alert alert-success shadow-lg rounded p-4">
+		                            <h2 class="mb-3">Thank You!</h2>
+		                            <p>Your application has been successfully submitted.</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </t>
+		</template>
+
+		<template id="candidate_form_already_submitted_page" name="Candidate Already Submitted">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container mt-5 mb-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-success shadow-lg rounded p-4">
+			                        <h2>You've already submitted your form</h2>
+			                        <p>Thank you! Your response has already been recorded.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+
+	</data>
+</odoo>

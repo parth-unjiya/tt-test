@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="send_review_form_wizard_view" model="ir.ui.view">
+        <field name="name">send.review.form.wizard.view</field>
+        <field name="model">send.review.form.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Send Candidate Evaluation Form">
+                <group>
+                    <field name="applicant_id" invisible="1"/>
+                    <field name="interviewer_ids" widget="many2many_tags"/>
+                    <!-- <field name="review_form_id" domain="[('is_candidate_form_create','=', True)]"/> -->
+                </group>
+                <footer>
+                    <button string="Send" type="object" name="action_send_portal_link" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_open_interview_review_wizard" model="ir.actions.act_window">
+        <field name="name">Send Review Form</field>
+        <field name="res_model">send.review.form.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="send_review_form_wizard_view"/>
+        <field name="target">new</field>
+        <field name="context">{'default_applicant_id': active_id}</field>
+    </record>
+</odoo>

@@ -1,0 +1,129 @@
+<odoo>
+    <data>
+
+        <record id="project_acceptance_portal_email_template" model="mail.template">
+            <field name="name">Project Acceptance Portal Email</field>
+            <field name="model_id" ref="custom_project.model_project_acceptance_report"/>
+            <field name="subject">Please Review Project Acceptance Report</field>
+            <field name="email_to">{{ object.client_id.email }}</field>
+            <field name="body_html" type="html">
+
+                <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse: separate; padding-bottom: 10px;">
+                    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+                        </div>
+                        <hr/>
+
+
+                        <div style="text-align: center; padding-top: 4px;">
+                            <h2 style="margin: 0; color: #333333;">Project Acceptance Report</h2>
+                        </div>
+
+                        <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                            <p>Dear <t t-out="object.client_id.name or ''"/>,</p>
+
+                            <p>You can now review and sign the final project acceptance report for: 
+                                <strong><t t-out="object.project_id.name"/></strong>.
+                            </p>
+
+                            <p>
+                                Please complete the review by clicking the link below:
+                            </p>
+
+                            <p style="text-align: center;">
+                                <a t-att-href="ctx.get('portal_url', '#')" style="display: inline-block; background-color: #28a745; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Review Report</a>
+                            </p>
+
+                            <p>
+                                <strong>Note:</strong> This link will expire on
+                                <strong><t t-esc="ctx.get('token_expiry').strftime('%B %d, %Y at %I:%M %p')"/></strong>.
+                            </p>
+
+                            <p>
+                                For questions, contact your project manager at
+                                <a href="#" style="color: #007BFF;">
+                                    <t t-out='object.project_manager_id.email'/>
+                                </a>.
+                            </p>
+
+                            <p>We appreciate your feedback and collaboration.</p>
+                            <p>Best regards,<br/><strong><t t-out="object.project_manager_id.name"/></strong></p>
+                        </div>
+                    </div>
+                </div>
+
+            </field>
+        </record>
+
+        <!-- Project Confirm Email -->
+
+        <record id="project_acceptance_client_email_template" model="mail.template">
+            <field name="name">Project Acceptance - Client Notification</field>
+            <field name="model_id" ref="custom_project.model_project_acceptance_report"/>
+            <field name="email_to">{{ object.client_id.email }}</field>
+            <field name="email_cc">{{ ctx.get('email_cc') }}</field>
+            <field name="subject">
+                {{ 'Project Rejected' if ctx.get('rejected') else 'Project Auto-Accepted' if ctx.get('auto_accepted') else 'Project Accepted' }} for {{ object.project_id.name or '' }}
+            </field>
+
+            <field name="body_html" type="html">
+                <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse: separate; padding-bottom: 10px;">
+                    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                        
+                        <!-- Logo and header -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <t t-set="base_url" t-value="object.get_base_url()"/>
+                            <img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+                        </div>
+                        <hr/>
+
+                        <div style="text-align: center; padding-top: 4px;">
+                            <h2 style="text-align: center; margin: 0; color: #333333;">
+                                <t t-if="ctx.get('rejected')">Project Rejected</t>
+                                <t t-elif="ctx.get('auto_accepted')">Project Auto-Accepted</t>
+                                <t t-else="">Project Accepted</t>
+                            </h2>
+                        </div>
+
+                        <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                            <p>Dear <t t-out="object.client_id.name or ''"/>,</p>
+
+                            <t t-if="ctx.get('rejected')">
+                                <p>
+                                    The acceptance report for project <strong><t t-out="object.project_id.name"/></strong> has been <strong>rejected</strong> by you.
+                                </p>
+                            </t>
+                            <t t-elif="ctx.get('auto_accepted')">
+                                <p>
+                                    As no response was received, the acceptance report for project <strong><t t-out="object.project_id.name"/></strong> has been <strong>automatically accepted</strong>.
+                                </p>
+                            </t>
+                            <t t-else="">
+                                <p>
+                                    We confirm that you have <strong>accepted</strong> the project completion report for <strong><t t-out="object.project_id.name"/></strong>.
+                                </p>
+                            </t>
+
+                            <p>Please find the attached PDF for details.</p>
+
+                            <p>
+                                For questions, contact your project manager at
+                                <a href="#" style="color: #007BFF;">
+                                    <t t-out='object.project_manager_id.email'/>
+                                </a>.
+                            </p>
+
+                            <p>Thank you for your collaboration.</p>
+                            <p>Best regards,<br/><strong><t t-out="object.project_manager_id.name"/></strong></p>
+                        </div>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+
+    </data>
+</odoo>

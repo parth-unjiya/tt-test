@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+
+    <record id="view_contract_document_wizard" model="ir.ui.view">
+        <field name="name">contract.document.wizard.form</field>
+        <field name="model">contract.document.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Generate Documents">
+                <group>
+                    <field name="contract_id"/>
+                    <field name="document_template_ids" widget="many2many_tags"/>
+                </group>
+                <footer>
+                    <button string="Generate" type="object" name="action_generate_documents" class="btn-primary"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+</odoo>

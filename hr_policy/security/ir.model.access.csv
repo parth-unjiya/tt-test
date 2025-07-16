@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_hr_policy_manager,hr.policy.manager,model_hr_policy,custom_dashboard.group_dashboard_operation_manager,1,1,1,1
+access_sop_category_public_manager,sop.category.public.manager,model_sop_category,custom_dashboard.group_dashboard_operation_manager,1,1,1,1
+access_hr_policy_user,hr.policy.user,model_hr_policy,custom_dashboard.group_dashboard_hr,1,0,0,0

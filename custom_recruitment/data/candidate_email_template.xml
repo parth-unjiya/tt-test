@@ -1,0 +1,174 @@
+<odoo>
+   <data>
+        <!-- Candidate Information -->
+        <record id="candidate_information_email_template" model="mail.template">
+           <field name="name">Candidate Portal Link Notification</field>
+           <field name="model_id" ref="custom_recruitment.model_hr_applicant"/>
+           <field name="subject">Candidate Information Form</field>
+           <field name="email_to">{{ object.email_from }}</field>
+           <field name="description">This template is used to collect candidate information.</field>
+           <field name="body_html" type="html">
+               
+                <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse: separate; padding-bottom: 10px;">
+                                    
+                    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                        
+                        <!-- Company Logo and Name Section with Flexbox -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+                            <!-- Company name is removed as per the code provided -->
+                        </div>
+
+                        <hr/>
+
+                        <!-- Title Section -->
+                        <div style="text-align: center; padding-top: 4px;">
+                            <h2 style="margin: 0; color: #333333;">Candidate Information Form</h2>
+                        </div>
+
+                        <!-- Main Content Section -->
+                        <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                            
+                            <p>Dear <t t-esc="object.partner_name"/>,</p>
+                            
+                            <p>
+                                You have been assigned to fill out your information as part of our recruitment process.
+                            </p>
+                            
+                            <p>
+                                Please complete the form by clicking the link below:
+                            </p>
+                            
+                            <p style="text-align: center;">
+                                <a t-att-href="object.get_portal_url()" style="display: inline-block; background-color: #a4c23b; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Complete Information Form</a>
+                            </p>
+                            
+                            <p>
+                                <strong>Note:</strong> This link will expire on <strong>
+                                    <t t-esc="object.token_expiry.strftime('%B %d, %Y at %I:%M %p')"/>
+                                </strong>.
+                            </p>
+                            
+                            <p>
+                                If you have any questions or need assistance, please contact the HR team at  
+                                <a href="#" style="color: #007BFF;">
+                                    <t t-esc="ctx.get('user_email')"/>
+                                </a>.
+                            </p>
+                            
+                            <p>Thank you for your time and cooperation.</p>
+                            <p>Best regards,<br/><strong><t t-esc="ctx.get('user_name')"/></strong></p>
+
+                        </div>
+
+                    </div>
+                </div>
+
+
+           </field>
+       </record>
+
+       <!-- Candidate Evaluation -->
+        <record id="email_template_candidate_evaluation" model="mail.template">
+            <field name="name">Candidate Evaluation Request Notification</field>
+            <field name="subject">Candidate Evaluation Form For {{ ctx.get('employee_name') }}</field>
+            <field name="model_id" ref="custom_recruitment.model_candidate_evaluation"/>
+            <field name="description">This template is for requesting candidate evaluations as part of the recruitment process.</field>
+            <field name="body_html" type="html">
+
+                <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; border-collapse:separate;  padding-bottom: 10px;">
+                    
+                    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+
+                        <!-- Company Logo and Name Section with Flexbox -->
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+                            <!-- Company name is removed as per the code provided -->
+                        </div>
+
+                        <hr/>
+
+                        <!-- Title Section -->
+                        <div style="text-align: center; padding-top: 4px;">
+                            <h2 style="margin: 0; color: #333333;">Candidate Evaluation Request</h2>
+                        </div>
+                        
+                        
+                        <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                            
+                            <p>Dear <t t-esc="ctx.get('interviewer_name', 'Reviewer')"/>,</p>
+                            
+                            <p>
+                                You have been assigned to evaluate <strong><t t-esc="ctx.get('employee_name')"/></strong> as part of our recruitment process.
+                            </p>
+                            
+                            <p>
+                                Please complete the evaluation by clicking the link below:
+                            </p>
+                            
+                            <p style="text-align: center;">
+                                <a t-att-href="ctx.get('portal_url', '#')" style="display: inline-block; background-color: #a4c23b; color: #ffffff; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">Complete Evaluation Form</a>
+                            </p>
+                            
+                            <p>
+                                <strong>Note:</strong> This link will expire on <strong>
+                                    <t t-esc="ctx.get('expiry_date').strftime('%B %d, %Y at %I:%M %p')"/>
+                                </strong>.
+                            </p>
+                            
+                            <p>
+                                Your feedback is important and will contribute to the hiring decision. If you have any questions or need assistance, please contact the HR team at 
+                                <a href="#" style="color: #007BFF;">
+                                    <t t-esc="ctx.get('user_email')"/>
+                                </a>.
+                            </p>
+                            
+                            <p>Thank you for your time and contribution.</p>
+                            <p>Best regards,<br/><strong><t t-esc="ctx.get('user_name')"/></strong></p>
+
+                        </div>
+                    </div>
+                </div>
+
+            </field>
+        </record>
+
+        <!-- Candidate Hired -->
+        <record id="candidate_hired_email_template" model="mail.template">
+            <field name="name">Candidate Hired Notification</field>
+            <field name="model_id" ref="custom_recruitment.model_hr_applicant"/>
+            <field name="subject">Candidate Hired – {{ object.name }} for {{ object.job_id.name }}</field>
+            <field name="auto_delete" eval="False"/>
+            <field name="body_html" type="html">
+                <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%;">
+                    <div style="max-width: 600px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05);">
+                        
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                            <t t-set="base_url" t-value="object.get_base_url()"/>
+<img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'" alt="Company Logo" style="width: 150px; height: auto;"/>
+                        </div>
+
+                        <hr/>
+
+                        <div style="text-align: center;">
+                            <h2 style="color: #333;">Candidate Hired</h2>
+                        </div>
+
+                        <div style="padding: 20px 0; color: #444; line-height: 1.6;">
+                            <p>Dear Management,</p>
+                            <p>We are pleased to inform you that <strong><t t-esc="object.name"/></strong> has been officially hired for the position of <strong><t t-esc="object.job_id.name or 'N/A'"/></strong>.</p>
+                            <p>The hire date has been confirmed as <strong><t t-esc="object.date_closed.strftime('%d-%m-%Y') if object.date_closed else 'TBD'"/></strong>.</p>
+                            <p>All required documentation and hiring formalities are completed as per the recruitment process.</p>
+                            <p>Please ensure that the respective departments are informed for further onboarding arrangements.</p>
+                            <p>Best Regards,<br/>HR Department</p>
+                        </div>
+
+                    </div>
+                </div>
+            </field>
+        </record>
+
+   </data>
+</odoo>

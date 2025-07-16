@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<!--    Default Projects-->
+
+    <record id="hr_project" model="project.project">
+        <field name="name">HR</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="is_handover" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="admin_project" model="project.project">
+        <field name="name">Network/Admin</field>
+        <field name="user_id" ref="base.user_admin"/>
+        <field name="is_handover" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+
+<!--    Handover Tasks-->
+
+     <record id="hr_task_0" model="project.task">
+            <field name="sequence">1</field>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="name">Document</field>
+            <field name="color">4</field>
+            <field name="priority">1</field>
+            <field name="project_id" ref="employee_handover.hr_project"/>
+    </record>
+
+    <record id="hr_task_1" model="project.task">
+            <field name="sequence">2</field>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="name">Payslip</field>
+            <field name="color">3</field>
+            <field name="priority">1</field>
+            <field name="project_id" ref="employee_handover.hr_project"/>
+    </record>
+
+    <record id="admin_task_0" model="project.task">
+            <field name="sequence">1</field>
+            <field name="user_ids" eval="[(4, ref('base.user_admin'))]"/>
+            <field name="name">Asset Handover</field>
+            <field name="color">3</field>
+            <field name="priority">1</field>
+            <field name="project_id" ref="employee_handover.admin_project"/>
+    </record>
+
+
+
+</odoo>

@@ -1,0 +1,163 @@
+<odoo>
+    <data>
+        <template id="portal_acceptance_report_form" name="Project Acceptance Report Form">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure">
+                    <!-- Logo -->
+                    <section class="s_text_block pt48 pb-2 bg-white">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg"
+                                         alt="Logo" class="img img-fluid mb-3" style="max-height: 60px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Acceptance Report Form -->
+                    <section class="s_text_block pt0 pb64">
+                        <div class="container py-2">
+                            <div class="row">
+                                <div class="col-12 col-md-10 offset-md-1 mb-4">
+                                    <h3 class="mb-4 text-center">Project Acceptance Report</h3>
+
+                                    <form action="/project/acceptance/submit" method="POST">
+                                        <input type="hidden" name="report_id" t-att-value="report.id"/>
+                                        <input type="hidden" name="access_token" t-att-value="report.token"/>
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr><th>Project</th><td><t t-esc="report.project_id.name"/></td></tr>
+                                                    <tr><th>Client</th><td><t t-esc="report.client_id.name"/></td></tr>
+                                                    <tr><th>Project Manager</th><td><t t-esc="report.project_manager_id.name"/></td></tr>
+                                                    <tr><th>Date of Execution</th><td><t t-esc="report.date_of_execution"/></td></tr>
+                                                    <tr><th>Date of Completion</th><td><t t-esc="report.date_of_completion"/></td></tr>
+                                                    <tr>
+                                                        <th>Annexure Link</th>
+                                                        <td>
+                                                            <t t-if="report.annexure_link">
+                                                                <a t-att-href="report.annexure_link" target="_blank">Download Annexure</a>
+                                                            </t>
+                                                            <t t-else="">-</t>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Milestones</th>
+                                                        <td>
+                                                            <ul>
+                                                                <t t-foreach="report.milestone_ids" t-as="ms">
+                                                                    <li><t t-esc="ms.name"/></li>
+                                                                </t>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Deliverables</th>
+                                                        <td>
+                                                            <ul>
+                                                                <t t-foreach="report.deliverable_line_ids" t-as="dl">
+                                                                    <li><strong><t t-esc="dl.deliverable"/>:</strong> <t t-esc="dl.repository_link"/></li>
+                                                                </t>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- Client Comment -->
+                                        <div class="form-group mt-4">
+                                            <label><strong>Your Comments</strong></label>
+                                            <textarea name="client_comment" rows="6" class="form-control activity_summary" placeholder="Enter your comments here..."><t t-esc="report.note"/></textarea>
+                                        </div>
+
+                                        <!-- Signature Alert -->
+                                        <div class="mt-4">
+                                            <t t-if="not report.client_signature">
+                                                <div class="alert alert-warning text-center">
+                                                    <i class="fa fa-exclamation-circle me-1 text-warning"/> To approve this report, you must <strong>Accept &amp; Sign</strong> first.
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="alert alert-success text-center">
+                                                    <i class="fa fa-check-circle me-1"/> Signature submitted by <strong><t t-esc="report.client_signed_by"/></strong> on <t t-esc="report.client_signed_on"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Button Row -->
+                                        <div class="row mt-4">
+                                            <div class="col-md-6 text-start">
+                                                <t t-if="not report.client_signature">
+                                                    <a role="button" class="btn btn-outline-primary px-4 py-2 fw-medium"
+                                                       data-bs-toggle="modal" data-bs-target="#modalaccept">
+                                                        <i class="fa fa-pencil-alt me-2"/> Accept &amp; Sign
+                                                    </a>
+                                                </t>
+                                            </div>
+
+                                            <div class="col-md-6 text-end">
+                                                <button type="submit" class="btn btn-success px-4 py-2">
+                                                    <i class="fa fa-paper-plane me-2"/> Submit Feedback
+                                                </button>
+                                                <t t-if="not report.client_signature">
+                                                    <p class="mt-2 text-danger small">
+                                                        <i class="fa fa-info-circle me-1"/> Without signature, this report will be <strong>rejected</strong>.
+                                                    </p>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                    <!-- Signature Modal -->
+                                    <div role="dialog" class="modal fade" id="modalaccept">
+                                        <div class="modal-dialog">
+                                            <form id="accept" method="POST" t-att-data-report-id="report.id" t-att-data-token="report.token" class="js_accept_json modal-content js_website_submit_form">
+                                                <input type="hidden" name="report_id" t-att-value="report.id"/>
+                                                <input type="hidden" name="access_token" t-att-value="report.token"/>
+                                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                                <header class="modal-header">
+                                                    <h4 class="modal-title">Acceptance Signature</h4>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                                </header>
+                                                <main class="modal-body">
+                                                    <p>By signing this document, I confirm the successful delivery and acceptance of the full project.</p>
+                                                    <t t-call="portal.signature_form">
+                                                        <t t-set="call_url" t-value="'/project/acceptance/sign/%s?access_token=%s' % (report.id, report.token)"/>
+                                                        <t t-set="default_name" t-value="report.client_id.name"/>
+                                                    </t>
+                                                </main>
+                                            </form>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_acceptance_token_invalid" name="Acceptance Token Invalid">
+            <t t-call="website.layout">
+                <div class="container py-5 text-center">
+                    <h2 class="text-danger">Invalid or Expired Link</h2>
+                    <p>The acceptance report link you are trying to access is either expired or incorrect.</p>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_acceptance_thank_you" name="Acceptance Thank You">
+            <t t-call="website.layout">
+                <div class="container py-5 text-center">
+                    <h2 class="text-success">Thank You!</h2>
+                    <p>Your feedback and signature have been submitted successfully.</p>
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

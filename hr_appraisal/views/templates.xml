@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <template id="employee_basic_data" name="Employee Basic Data">
+            <div class="box">
+            <div class="box_head">
+                <h2>Employee Information</h2>
+            </div>
+            <div class="detail">
+                <div class="row mb-3">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Employee Name:</label>
+                            <p t-field="appraisal.employee_id.name" class="form-control-plaintext"/>
+                            <input type="hidden" name="employee_id" t-att-value="appraisal.employee_id.id"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Department:</label>
+                            <p t-field="appraisal.employee_id.department_id.name" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Employee Code:</label>
+                            <p t-field="appraisal.employee_id.emp_code" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Total Years of Experience:</label>
+                            <p t-esc="total_work_experience "
+                               class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Tenure with Space-O:</label>
+                            <p t-esc="company_work_experience"
+                               class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Date of Joining:</label>
+                            <p t-out="appraisal.employee_id.joining_date or 'N/A'" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Last Appraisal:</label>
+                            <p t-out="appraisal.employee_id.last_appraisal_date or 'N/A'" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Due Appraisal:</label>
+                            <p t-field="appraisal.employee_id.name" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Duration:</label>
+                            <p t-field="appraisal.employee_id.emp_code" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Next Appraisal:</label>
+                            <p t-esc="next_appraisal_date.strftime('%Y-%m-%d')" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Name(s) of Reporting Manager:</label>
+                            <p t-out="appraisal.employee_id.parent_id or 'N/A'" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Mentor:</label>
+                            <p t-field="appraisal.employee_id.coach_id" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-4 col-xs-12">
+                        <div class="form-group">
+                            <label class="fw-bold">Evaluated by:</label>
+                            <p t-field="appraisal.employee_id.name" class="form-control-plaintext"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </template>
+
+        <template id="project_details" name="Project Details">
+            <div class="container">
+                <div class="box">
+                    <div class="box_head">
+                        <h2>Time Spent on Projects</h2>
+                    </div>
+                    <div class="detail">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Project Name</th>
+                                    <th>Assigned Tasks</th>
+                                    <th>Completed Tasks</th>
+                                    <th>Total Time Spent</th>
+                                </tr>
+                            </thead>
+                            <tbody t-if="project_data">
+                                <tr t-foreach="project_data.values()" t-as="project">
+                                    <td>
+                                        <t t-esc="project.get('project_name')"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="project.get('total_task_count', 0)"/>
+                                    </td>
+                                    <td>
+                                        <t t-esc="project.get('completed_task_count', 0)"/>
+                                    </td>
+                                    <td>
+                                        <span t-esc="('%02d:%02d' % (int(float(project.get('total_hours_spent') or '0')), (float(project.get('total_hours_spent') or '0') * 60) % 60))"/>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template id="last_tasks_goal" name="Last Tasks Goal">
+            <div class="box">
+                <div class="box_head">
+                    <h2>PROGRESS TOWARDS GOALS IDENTIFIES IN LAST PERFORMANCE REVIEW (IF APPLICABLE)</h2>
+                </div>
+                <div class="detail">
+                    <table class="table" id="last-goals-table">
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Action Taken</th>
+                                <th>Completed?</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="last-goal-entry">
+                                <td>
+                                    <input type="text" name="goal_description_1" id="goal_description_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="goal_action_1" id="goal_action_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <select name="goal_completed_1" id="goal_completed_1" class="form-control">
+                                        <option value="yes">Yes</option>
+                                        <option value="no">No</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger" id="removeGoal"><i class="fa fa-trash"/></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" id="addGoal">Add Goal</button>
+                    <button type="button" class="btn btn-danger" id="removeGoal">Remove</button>
+                </div>
+            </div>
+        </template>
+
+        <template id="future_goals" name="Future Goals">
+            <div class="box">
+                <div class="box_head">
+                    <h2>ACTION PLAN – GOALS FOR NEXT REVIEW PERIOD</h2>
+                </div>
+                <div class="detail">
+                    <table class="table" id="goals-table">
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Actions need to be taken</th>
+                                <th>Estimated time of completion</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="goal-entry">
+                                <td>
+                                    <input type="text" name="goal_description_future_1" id="goal_description_future_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="goal_action_future_1" id="goal_action_future_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="estimated_time_future_1" id="estimated_time_future_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                <button type="button" class="btn btn-danger" id="removeGoalFuture"><i class="fa fa-trash"/></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" id="addGoalFuture">Add Goal</button>
+                    <button type="button" class="btn btn-danger" id="removeGoalFuture">Remove</button>
+                </div>
+            </div>
+        </template>
+
+        <!-- GOALS AND NOTES BY EVALUATOR -->
+
+        <template id="goal_and_notes_by_evaluator" name="GOALS AND NOTES BY EVALUATOR">
+            <div class="box">
+                <div class="box_head">
+                    <h2>GOALS AND NOTES BY EVALUATOR</h2>
+                </div>
+                <div class="detail">
+                    <table class="table" id="goals-notes-table">
+                        <thead>
+                            <tr>
+                                <th>Goal</th>
+                                <th>Notes</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="goal-entry">
+                                <input type="hidden" name="is_evaluator" t-att-value="is_evaluator"/>
+                                <td>
+                                    <input type="text" name="goal_1" id="goal_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <input type="text" name="goal_notes_1" id="goal_notes_1" class="form-control"
+                                           required="required"/>
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-danger btn-remove-goal" hidden="hidden" id="removeGoalNotes"><i class="fa fa-trash"/></button>
+
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <button type="button" class="btn btn-primary" id="addGoalNotes">Add Goal</button>
+                </div>
+            </div>
+
+            <!-- COMMENTS BY EVALUATOR -->
+            <div class="box">
+                <div class="box_head">
+                    <h2>COMMENTS BY EVALUATOR</h2>
+                </div>
+                <div class="detail">
+                    <div class="form-group">
+                        <textarea class="form-control" rows="3" cols="12" name="additional_comments" id="additional_comments">
+                        </textarea>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+        <template name="attributes_data" id="attributes_data">
+            <div class="box">
+                <div class="box_head">
+                    <h2>Attributes Evaluation</h2>
+                    <p>(1-3 = Poor, 4-6 = Satisfactory, 7-9 = Good, 10 = Excellent)</p>
+                </div>
+                <div class="detail">
+                    <div class="table-responsive">
+                        <table class="table table-bordered align-middle text-nowrap">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th style="width: 5%;">Sr. No.</th>
+                                    <th style="width: 30%;">Functional Area</th>
+                                    <th style="width: 10%;">Ratings</th>
+                                    <th style="width: 55%;">Comments</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-set="sr_no" t-value="1"/>
+                                <t t-foreach="attributes_data" t-as="attribute" t-key="attribute.id">
+                                    <tr>
+                                        <td><t t-esc="sr_no"/></td>
+                                        <td><t t-esc="attribute.name"/></td>
+                                        <td>
+                                            <input type="number"
+                                                   t-att-name="'rating_' + str(attribute.id)"
+                                                   t-att-id="'rating_' + str(attribute.id)"
+                                                   min="1" max="10"
+                                                   class="form-control" required="required"/>
+                                        </td>
+                                        <td>
+                                            <input type="text"
+                                                   t-att-name="'comment_' + str(attribute.id)"
+                                                   t-att-id="'comment_' + str(attribute.id)"
+                                                   class="form-control" required="required"/>
+                                        </td>
+                                        <input type="hidden" name="rating_emp_id" t-att-value="rating_employee_id"/>
+                                    </tr>
+                                    <t t-set="sr_no" t-value="sr_no + 1"/>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </template>
+
+
+        <template id="additional_points" name="Additional Comments">
+            <div class="box">
+                <div class="box_head">
+                    <h2>ADDITIONAL POINTS, IF YOU WANT TO DISCUSS</h2>
+                </div>
+                <div class="detail">
+                    <textarea name="additional_points" id="additional_points" class="form-control" required="required"/>
+                </div>
+            </div>
+        </template>
+
+
+
+        <template id="appraisal_review_form" name="Appraisal Review Form">
+            <t t-call="website.layout">
+                <style>
+                    .box {
+                    background: #fff;
+                    border: 1px solid #ddd;
+                    margin-bottom: 40px;
+                    }
+                    .box .box_head {
+                    background-color: #ddd;
+                    padding: 10px 15px;
+                    text-align:center;
+                    }
+                    .box .box_head h2 {
+                    color: #000;
+                    font-size: 20px;
+                    font-weight: 500;
+                    line-height: 28px;
+                    }
+                    .box .detail {
+                    padding: 40px 40px 20px;
+                    }
+                    .btn.btn-green {
+                    background-color: #a6ce39;
+                    color: #fff;
+                    margin: 10px 0;
+                    padding: 8px 15px;
+                    min-width: 150px;
+                    border: 1px solid #a6ce39;
+                    border-radius: 0;
+                    font-weight: 500;
+                    font-size: 16px;
+                    }
+                </style>
+
+
+                <section class="s_text_block pt40 pb40 o_colored_level">
+                    <div class="container appraisal_review_form">
+
+                        <!-- Appraisal Form-->
+                        <form id="appraisal_review_form" action="/appraisal/submit" method="post"
+                              enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+                            <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                            <input type="hidden" id="token" name="token" t-att-value="token"/>
+
+                            <div class="row align-items-center justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img img-fluid mb-3 mx-auto" style="max-height: 60px;"/>
+                                </div>
+                            </div>
+
+                            <h3 class="text-center mb-4">Quarterly Performance Evaluation Form</h3>
+
+                            <!-- Employee Basic Data -->
+                            <t t-call="hr_appraisal.employee_basic_data"/>
+
+                            <!-- Time Spent on Projects -->
+                            <t t-call="hr_appraisal.project_details"/>
+
+                            <t t-if="is_employee">
+                                <!-- Goals Section -->
+                                <t t-call="hr_appraisal.last_tasks_goal"/>
+
+                                <!-- Future Goals Section -->
+                                <t t-call="hr_appraisal.future_goals"/>
+
+                                <!-- Additional Points-->
+                                <t t-call="hr_appraisal.additional_points"/>
+                            </t>
+
+                            <t t-if="is_manager or is_evaluator or is_technical_evaluator or is_mantor">
+                            <!-- Attributes Evaluation -->
+                                <t t-call="hr_appraisal.attributes_data">
+                                    <t t-set="rating_employee_id" t-value="user.employee_id.id"/>
+                                </t>
+                            </t>
+
+                            <t t-if="is_evaluator">
+                                <t t-call="hr_appraisal.goal_and_notes_by_evaluator">
+                                    <t t-set="is_evaluator" t-value="is_evaluator"/>
+                                </t>
+                            </t>
+
+                            <!-- Submit Button -->
+                            <div class="submit_btn text-center">
+                                <button type="submit" class="btn btn-green">Submit</button>
+                            </div>
+                        </form>
+                    </div>
+                </section>
+            </t>
+        </template>
+
+
+        <template id="appraisal_form_expired_page" name="Appraisal Form Expired Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container py-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-danger shadow-lg rounded p-4">
+			                        <h2>Your form has expired.</h2>
+			                        <p>We're sorry, but the Review form you are trying to access has expired.<br/>
+			                        Please contact to HR if you need further assistance.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+		<template id="appraisal_form_thank_you" name="Appraisal Thank You Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+		            <div class="container">
+		                <div class="row justify-content-center">
+		                    <div class="col-md-8 text-center">
+		                        <div class="alert alert-success shadow-lg rounded p-4">
+		                            <h2 class="mb-3">Thank You!</h2>
+		                            <p>Your application has been successfully submitted.</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </t>
+		</template>
+
+		<template id="appraisal_form_already_submitted_page" name="Appraisal Already Submitted">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container mt-5 mb-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-success shadow-lg rounded p-4">
+			                        <h2>You've already submitted your form</h2>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+    </data>
+</odoo>

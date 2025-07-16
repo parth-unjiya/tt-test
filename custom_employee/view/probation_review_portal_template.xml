@@ -1,0 +1,461 @@
+<odoo>
+
+		<template id="probation_review_form_portal" name="Probation Period Review Form">
+		    <t t-call="website.layout">
+		    	<div id="wrap" class="oe_structure oe_empty">
+
+                    <section class="s_text_block pt0 pb64">
+                            
+			        <div class="container mt-5 mb-5" id="emp-review-form">
+			        	<div class="row justify-content-center">
+                        <div class="col-lg-10 col-xl-10 candidate_form">
+			            <!-- <div class="card shadow-sm rounded-3"> -->
+			            <!-- <div class="card-body p-4 p-md-4"> -->
+
+			            <div class="row align-items-center justify-content-center">
+			                <div class="col-lg-8 text-center">
+			                    <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img img-fluid mb-3 mx-auto" style="max-height: 60px;"/>
+			                     </div>
+			            </div>
+			            
+			            <h3 class="text-center mb-2">Probation Period Review Form</h3>
+			            
+			            <!-- <div class="card mb-4 mt-4">
+			                <div class="card-header font-weight-bold"><strong>EMPLOYEE INFORMATION</strong></div>
+			                <div class="card-body py-4">
+			                    <div class="row g-3">
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Employee Name:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.name"/></div>
+			                        </div>
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Designation:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.job_id.name or 'N/A'"/></div>
+			                        </div>
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Department:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.department_id.name or 'N/A'"/></div>
+			                        </div>
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Employee ID:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.emp_code or 'N/A'"/></div>
+			                        </div>
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Date of Joining:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.joining_date or 'N/A'"/></div>
+			                        </div>
+			                        <div class="col-md-6">
+			                            <label class="form-label fw-semibold">Reporting Manager:</label>
+			                            <div class="form-text"><t t-esc="review.review_id.employee_id.parent_id.name or 'N/A'"/></div>
+			                        </div>
+			                    </div>
+			                </div>
+			            </div> -->
+
+			            <div class="card mb-4 mt-4 ">
+			                <div class="card-header font-weight-bold"><strong>EMPLOYEE INFORMATION</strong></div>
+			                <div class="card-body py-4">
+				                <div class="row g-3">
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Employee Name:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.name"/></span>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Designation:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.job_id.name or 'N/A'"/></span>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Department:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.department_id.name or 'N/A'"/></span>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Employee ID:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.emp_code or 'N/A'"/></span>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Date of Joining:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.joining_date or 'N/A'"/></span>
+				                    </div>
+				                    <div class="col-md-6">
+				                        <strong class="text-secondary d-block mb-1">Reporting Manager:</strong>
+				                        <span><t t-esc="review.review_id.employee_id.parent_id.name or 'N/A'"/></span>
+				                    </div>
+				                </div>
+				            </div>
+			            </div>
+
+			            <form id="condidate_form" action="/review/submit" method="post" enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+			            	<input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+			            	<input type="hidden" name="review_line_id" t-att-value="review.id"/>
+
+			            	<!-- SECTION I -->
+			            	<div class="card mb-4 mt-5 employee-review-card" data-section="task">
+			            	    <div class="card-header font-weight-bold">
+			            	        <strong>SECTION I – <t t-esc="review.review_id.review_type"/> Month Review</strong>
+			            	    </div>
+			            	    <div class="card-body" id="task-container">
+			            	        <div class="row task-row mb-3">
+			            	            <div class="col-md-4 mb-2">
+			            	                <input type="text" name="task_objective_0" class="form-control" placeholder="Objectives Set / Task Given" required="required"/>
+			            	            </div>
+			            	            <div class="col-md-4 mb-2">
+			            	                <input type="text" name="task_feedback_0" class="form-control" placeholder="Performance Feedback" required="required"/>
+			            	            </div>
+			            	            <div class="col-md-3 mb-2">
+			            	                <input type="text" name="task_duration_0" class="form-control" placeholder="Duration" required="required"/>
+			            	            </div>
+			            	            <div class="col-md-1 mb-2">
+			            	                <button type="button" class="btn btn-danger remove-task w-100"><i class="fa fa-trash" aria-hidden="true"></i></button>
+			            	            </div>
+			            	        </div>
+			            	        <input type="hidden" id="task-count" name="task_count" value="1"/>
+			            	        <button type="button" id="add-task-row" class="btn btn-primary mt-2">Add New Row</button>
+			            	    </div>
+			            	</div>
+
+				            <!-- Section 2 -->
+				            <div class="container mb-4 mt-5">
+				                <div class="card shadow-sm">
+				                    
+				                    <div class="card-header font-weight-bold">
+				                        <strong>SECTION 1(A) – Monthly Review</strong>
+				                    </div>
+
+				                    <div class="card-body">
+
+				                        <!-- Quality and Accuracy of Work -->
+				                        <div class="mb-4">
+				                            <label class="form-label fw-bold">Quality and Accuracy of Work</label>
+				                            <div class="row mt-2">
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="quality_accuracy" value="1" id="qa1" required="required"/><label class="form-check-label" for="qa1">Improvement Required</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="quality_accuracy" value="2" id="qa2" required="required"/><label class="form-check-label" for="qa2">Average</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="quality_accuracy" value="3" id="qa3" required="required"/><label class="form-check-label" for="qa3">Good</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="quality_accuracy" value="4" id="qa4" required="required"/><label class="form-check-label" for="qa4">Excellent</label></div></div>
+				                            </div>
+				                        </div>
+
+				                        <!-- Efficiency -->
+				                        <div class="mb-4">
+				                            <label class="form-label fw-bold">Efficiency</label>
+				                            <div class="row mt-2">
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="efficiency" value="1" id="eff1" required="required"/><label class="form-check-label" for="eff1">Improvement Required</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="efficiency" value="2" id="eff2" required="required" /><label class="form-check-label" for="eff2">Average</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="efficiency" value="3" id="eff3" required="required" /><label class="form-check-label" for="eff3">Good</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="efficiency" value="4" id="eff4" required="required" /><label class="form-check-label" for="eff4">Excellent</label></div></div>
+				                            </div>
+				                        </div>
+
+				                        <!-- Attendance -->
+				                        <div class="mb-4">
+				                            <label class="form-label fw-bold">Attendance</label>
+				                            <div class="row mt-2">
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="attendance" value="1" id="att1" required="required" /><label class="form-check-label" for="att1">Improvement Required</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="attendance" value="2" id="att2" required="required" /><label class="form-check-label" for="att2">Average</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="attendance" value="3" id="att3" required="required" /><label class="form-check-label" for="att3">Good</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="attendance" value="4" id="att4" required="required"/><label class="form-check-label" for="att4">Excellent</label></div></div>
+				                            </div>
+				                        </div>
+
+				                        <!-- Time Keeping -->
+				                        <div class="mb-4">
+				                            <label class="form-label fw-bold">Time Keeping</label>
+				                            <div class="row mt-2">
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="time_keeping" value="1" id="tk1" required="required"/><label class="form-check-label" for="tk1">Improvement Required</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="time_keeping" value="2" id="tk2" required="required"/><label class="form-check-label" for="tk2">Average</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="time_keeping" value="3" id="tk3" required="required" /><label class="form-check-label" for="tk3">Good</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="time_keeping" value="4" id="tk4" required="required"/><label class="form-check-label" for="tk4">Excellent</label></div></div>
+				                            </div>
+				                        </div>
+
+				                        <!-- Work Relationships -->
+				                        <div class="mb-4">
+				                            <label class="form-label fw-bold">Work Relationships (Teamwork, Interpersonal &amp; Communication)</label>
+				                            <div class="row mt-2">
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="work_relationships" value="1" id="wr1" required="required"/><label class="form-check-label" for="wr1">Improvement Required</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="work_relationships" value="2" id="wr2" required="required"/><label class="form-check-label" for="wr2">Average</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="work_relationships" value="3" id="wr3" required="required" /><label class="form-check-label" for="wr3">Good</label></div></div>
+				                                <div class="col-6 col-md-3"><div class="form-check"><input class="form-check-input" type="radio" name="work_relationships" value="4" id="wr4" required="required"/><label class="form-check-label" for="wr4">Excellent</label></div></div>
+				                            </div>
+				                        </div>
+
+				                    </div>
+				                </div>
+				            </div>
+
+				            
+				            <!-- SECTION II -->
+
+				            <div class="card mb-4 mt-5 employee-review-card" data-section="improve">
+				                <div class="card-header font-weight-bold">
+				                    <strong>SECTION II – Improvement Areas &amp; Actions</strong>
+				                </div>
+				                <div class="card-body" id="task-new-container">
+				                    
+				                    <!-- Improvement Row -->
+				                    <div class="row task-row mb-3">
+				                        <div class="col-md-6 mb-2">
+				                        	<label for="improve_area_0" class="form-label fw-medium text-muted mb-1">Areas for Improvement</label>
+				                            <input type="text" name="improve_area_0" class="form-control" placeholder="Enter area" required="required" />
+				                        </div>
+				                        <div class="col-md-6 mb-2">
+				                        	<label for="improve_discussion_0" class="form-label fw-medium text-muted mb-1">Discussion Points / Action Agreed</label>
+				                            <input type="text" name="improve_discussion_0" class="form-control" placeholder="Enter discussion/action" required="required" />
+				                        </div>
+				                        <div class="col-md-6 mb-2">
+				                            <label for="improve_action_by_0" class="form-label fw-medium text-muted mb-1">Action by whom: Employee/Manager</label>
+				                            <input type="text" name="improve_action_by_0" class="form-control" placeholder="e.g., Employee" required="required" />
+				                        </div>
+				                        <div class="col-md-1 mb-2 d-flex align-items-start">
+				                            <!-- <button type="button" class="btn btn-danger remove-task w-100" aria-label="Remove Task">
+				                                <i class="fa fa-trash" aria-hidden="true"></i>
+				                            </button> -->
+				                        </div>
+				                    </div>
+
+				                    <!-- Hidden counter -->
+				                    <input type="hidden" id="task-new-count" name="task_new_count" value="1" />
+
+				                    <!-- Add row button -->
+				                    <div class="mb-3">
+				                        <button type="button" id="add-task-row" class="btn btn-primary">
+				                            Add New Row
+				                        </button>
+				                    </div>
+
+				                    <!-- Summary field -->
+				                    <div class="form-group mt-4">
+				                        <label for="summary" class="mb-2">
+				                            Summary of employee's overall performance:
+				                        </label>
+				                        <input type="text" id="summary" name="summary" class="form-control" required="required" />
+				                    </div>
+
+				                </div>
+				            </div>
+
+
+
+				            <!-- Token Check and Submit -->
+				            <t t-if="not review.portal_filled">
+				                <!-- <div class="d-flex justify-content-center mt-3">
+				                 	<button type="submit" class="btn btn-primary">Submit</button>
+				                </div> -->
+
+				                <div class="text-center mt-4">
+				                    <button type="submit" class="btn btn-primary btn-md">
+				                        <i class="fa fa-check me-1" /> Submit Details </button>
+				                </div>
+
+				            </t>
+				            <t t-else="">
+				                <div class="alert alert-danger text-center">This review link has expired or already submitted.</div>
+				            </t>
+			                
+			        	</form>
+			        	
+			        	<!-- </div> -->
+			        	<!-- </div> -->
+			        	</div>
+			        	</div>
+			        </div>
+			    	</section>
+			    </div>
+		    </t>
+		</template>
+
+
+		<template id="employee_review_form_expired_page" name="Employee Form Expired Page">
+		    <t t-call="website.layout">
+		    	<div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container py-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-danger shadow-lg rounded p-4">
+			                        <h2>Your form has expired.</h2>
+			                        <p>We're sorry, but the Review form you are trying to access has expired.<br/>
+			                        Please contact to HR if you need further assistance.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+		<template id="review_form_thank_you" name="Review Thank You Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+		            <div class="container">
+		                <div class="row justify-content-center">
+		                    <div class="col-md-8 text-center">
+		                        <div class="alert alert-success shadow-lg rounded p-4">
+		                            <h2 class="mb-3">Thank You!</h2>
+		                            <p>Your application has been successfully submitted.</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </t>
+		</template>
+
+		<template id="review_already_submitted_page" name="Review Already Submitted">
+		    <t t-call="website.layout">
+		    	<!-- style="height:100vh; margin:0; background: radial-gradient(circle at center, #a1c4fd, #c2e9fb);" -->
+		    	<div class="d-flex align-items-center justify-content-center" style="height:80vh;">
+			        <div class="container mt-5 mb-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-success shadow-lg rounded p-4">
+			                    	<!-- <i class="fa fa-check-circle fa-3x text-success mb-2" aria-hidden="true"></i> -->
+			                        <h2>You've already submitted your form</h2>
+			                        <p>Thank you! Your response has already been recorded.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+		<template id="review_already_submitted_page_two">
+		    <t t-call="website.layout">
+		        <t t-set="website_title">Form Already Submitted</t>
+
+		        <style>
+		            .bubble-background {
+		                position: relative;
+		                height: 100vh;
+		                overflow: hidden;
+		                background-color: #000;
+		                display: flex;
+		                justify-content: center;
+		                align-items: center;
+		            }
+
+		            .bubble-background .bubble {
+		                position: absolute;
+		                bottom: -150px;
+		                background: radial-gradient(circle, #ffffff, #dcdcdc);
+		                border-radius: 50%;
+		                animation: rise 12s linear infinite;
+		                opacity: 0.7;
+		                box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
+		                filter: blur(1px);
+		            }
+
+		            @keyframes rise {
+		                0% {
+		                    transform: translateY(0) scale(1);
+		                    opacity: 0.8;
+		                }
+		                100% {
+		                    transform: translateY(-1200px) scale(1.4);
+		                    opacity: 0;
+		                }
+		            }
+
+		            /* Customize bubble sizes, positions, and animation delay */
+		            .bubble:nth-child(1) { width: 40px; height: 40px; left: 10%; animation-delay: 0s; }
+		            .bubble:nth-child(2) { width: 25px; height: 25px; left: 30%; animation-delay: 3s; }
+		            .bubble:nth-child(3) { width: 60px; height: 60px; left: 50%; animation-delay: 1s; }
+		            .bubble:nth-child(4) { width: 20px; height: 20px; left: 70%; animation-delay: 4.5s; }
+		            .bubble:nth-child(5) { width: 35px; height: 35px; left: 85%; animation-delay: 2s; }
+
+		            .message-box {
+		                z-index: 2;
+		                background: rgba(255, 255, 255, 0.95);
+		                padding: 40px;
+		                border-radius: 15px;
+		                text-align: center;
+		                max-width: 600px;
+		                box-shadow: 0 8px 30px rgba(255, 255, 255, 0.15);
+		            }
+
+		            .message-box h3 {
+		                color: #2d3436;
+		                margin-bottom: 10px;
+		            }
+
+		            .message-box p {
+		                color: #555;
+		                font-size: 18px;
+		            }
+		        </style>
+
+		        <div class="bubble-background">
+		            <!-- 3D white bubbles -->
+		            <div class="bubble"></div>
+		            <div class="bubble"></div>
+		            <div class="bubble"></div>
+		            <div class="bubble"></div>
+		            <div class="bubble"></div>
+
+		            <!-- Submission message -->
+		            <div class="message-box">
+		            	<i class="fa fa-check-circle fa-3x text-success mb-2" aria-hidden="true"></i>
+		                <h2>You've already submitted your form</h2>
+		                <p>Thank you! Your response has already been recorded.</p>
+		            </div>
+		        </div>
+		    </t>
+		</template>
+
+
+
+
+
+		<template id="review_already_submitted_page_two" name="Review Already Submitted">
+		    <t t-call="website.layout">
+		        <div class="submitted-page d-flex align-items-center justify-content-center">
+		            <div class="overlay-bg">
+		                <div class="card thankyou-card text-center p-5 shadow-lg">
+		                    <i class="fa fa-check-circle fa-4x text-success mb-4" aria-hidden="true"></i>
+		                    <h2 class="mb-3">Review Already Submitted</h2>
+		                    <p class="lead mb-0">We've already received your response. Thank you for your feedback!</p>
+		                </div>
+		            </div>
+		        </div>
+
+		        <style>
+		            .submitted-page {
+		                min-height: 100vh;
+		                background: url('https://wallpapers.com/downloads/high/oklahoma-city-blue-illustration-white-background-d1fbs5o7ulmovowx.webp?auto=format&amp;fit=crop&amp;w=1500&amp;q=80') no-repeat center center;
+		                background-size: cover;
+		                position: relative;
+		                font-family: 'Open Sans', sans-serif;
+		            }
+
+		            .overlay-bg {
+		                background-color: rgba(255, 255, 255, 0.85);
+		                backdrop-filter: blur(6px);
+		                border-radius: 1rem;
+		                padding: 2rem;
+		                max-width: 600px;
+		                width: 100%;
+		            }
+
+		            .thankyou-card {
+		                background: white;
+		                border: none;
+		                border-radius: 1rem;
+		                animation: fadeInUp 0.6s ease-out;
+		            }
+
+		            @keyframes fadeInUp {
+		                0% {
+		                    opacity: 0;
+		                    transform: translateY(20px);
+		                }
+		                100% {
+		                    opacity: 1;
+		                    transform: translateY(0);
+		                }
+		            }
+		        </style>
+		    </t>
+		</template>
+
+
+
+</odoo>

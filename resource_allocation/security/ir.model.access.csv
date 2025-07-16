@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+resource_allocation.access_resource_allocation,access_resource_allocation,resource_allocation.model_resource_allocation,base.group_user,1,1,1,1
+access_free_resource_report,access.free.resource.report,model_free_resource_report,project.group_project_manager,1,1,1,1
+resource_allocation.access_resource_availability_wizard,access_resource_availability_wizard,resource_allocation.model_resource_availability_wizard,base.group_user,1,1,1,1
+resource_allocation.access_resource_availability_line,access_resource_availability_line,resource_allocation.model_resource_availability_line,base.group_user,1,1,1,1

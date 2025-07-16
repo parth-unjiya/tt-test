@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+custom_time_off.access_hr_sandwich_leave_rule,access_hr_sandwich_leave_rule,custom_time_off.model_hr_sandwich_leave_rule,base.group_user,1,1,1,1

@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+custom_attendance.access_upload_file_wizard,access_upload_file_wizard,custom_attendance.model_upload_file_wizard,base.group_user,1,1,1,1
+custom_attendance.access_employee_attendance_report,access_employee_attendance_report,custom_attendance.model_employee_attendance_report,base.group_user,1,1,1,1

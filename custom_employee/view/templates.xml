@@ -1,0 +1,377 @@
+<odoo>
+
+    <template id="realtime_signing_form" name="Real-Time Document Signing Form">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <h2 class="mb-3">Sign Document</h2>
+
+                <div class="border p-3 mb-3">
+                    <div id="pdf-viewer" style="height: 700px; border: 1px solid #ccc;"/>
+                </div>
+
+                <div class="mt-4">
+                    <h4>Draw Your Signature:</h4>
+                    <canvas id="signature-pad" style="border: 1px solid #ccc; width: 100%; height: 200px;"/>
+                    <div class="my-2">
+                        <button class="btn btn-secondary" onclick="clearPad()">Clear</button>
+                    </div>
+                </div>
+
+                <form id="signature-form" method="post" action="/submit-live-signature">
+                    <input type="hidden" name="token" t-att-value="object.token"/>
+                    <input type="hidden" name="signature_data" id="signature-data"/>
+                    <input type="hidden" name="page" id="page-number"/>
+                    <input type="hidden" name="x" id="sig-x"/>
+                    <input type="hidden" name="y" id="sig-y"/>
+                    <button class="btn btn-primary mt-3" type="submit">Submit Signature</button>
+                </form>
+            </div>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"/>
+            <script>
+                const url = "/web/content/" + {{ object.document_attachment_id.id }} + "?download=false";
+                const viewer = document.getElementById("pdf-viewer");
+
+                let signatureCanvas = document.getElementById("signature-pad");
+                let signatureCtx = signatureCanvas.getContext("2d");
+                let isDrawing = false;
+
+                signatureCanvas.addEventListener("mousedown", (e) => {
+                isDrawing = true;
+                signatureCtx.beginPath();
+                signatureCtx.moveTo(e.offsetX, e.offsetY);
+                });
+
+                signatureCanvas.addEventListener("mousemove", (e) => {
+                if (isDrawing) {
+                signatureCtx.lineTo(e.offsetX, e.offsetY);
+                signatureCtx.stroke();
+                }
+                });
+
+                signatureCanvas.addEventListener("mouseup", () => isDrawing = false);
+
+                function clearPad() {
+                signatureCtx.clearRect(0, 0, signatureCanvas.width, signatureCanvas.height);
+                }
+
+                pdfjsLib.GlobalWorkerOptions.workerSrc =
+                'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.worker.min.js';
+
+                let selectedPage = 1;
+                let clickX = 0;
+                let clickY = 0;
+
+                pdfjsLib.getDocument(url).promise.then(function(pdf) {
+                pdf.getPage(selectedPage).then(function(page) {
+                const scale = 1.5;
+                const viewport = page.getViewport({ scale: scale });
+
+                const canvas = document.createElement('canvas');
+                const context = canvas.getContext('2d');
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                viewer.appendChild(canvas);
+
+                canvas.addEventListener("click", function(e) {
+                const rect = canvas.getBoundingClientRect();
+                clickX = e.clientX - rect.left;
+                clickY = e.clientY - rect.top;
+                document.getElementById('page-number').value = selectedPage;
+                document.getElementById('sig-x').value = clickX;
+                document.getElementById('sig-y').value = clickY;
+                alert("Signature will be placed at: X = " + clickX + ", Y = " + clickY);
+                });
+
+                const renderContext = {
+                canvasContext: context,
+                viewport: viewport
+                };
+                page.render(renderContext);
+                });
+                });
+
+                document.getElementById("signature-form").addEventListener("submit", function(e) {
+                const dataUrl = signatureCanvas.toDataURL("image/png");
+                document.getElementById("signature-data").value = dataUrl;
+                });
+            </script>
+        </t>
+    </template>
+
+
+    <template id="signature_form_pdfjs" name="PDFJS Signature Form">
+        <t t-call="website.layout">
+            <div class="container my-5">
+                <h2>Document Signature Request</h2>
+                <p>Hello<t t-esc="object.employee_id.name"/>! Please sign your document below.
+                </p>
+
+                <div class="pdf-container" style="border: 1px solid #ccc; position: relative;">
+                    <canvas id="pdf-canvas"/>
+                    <img id="signature-preview" src=""
+                         style="position: absolute; display: none; width: 150px; height: 50px; border: 1px solid black;"/>
+                </div>
+
+                <div class="mt-4">
+                    <h4>Draw Your Signature:</h4>
+                    <canvas id="signature-pad" style="border: 1px solid #ccc; width: 100%; height: 200px;"/>
+                    <button class="btn btn-secondary my-2" type="button" onclick="clearPad()">Clear</button>
+                </div>
+
+                <button class="btn btn-primary" onclick="submitSignature()">Submit Signature</button>
+
+                <input type="hidden" id="token" t-att-value="object.token"/>
+                <input type="hidden" id="pdf-url" t-att-value="pdf_url"/>
+            </div>
+
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"/>
+            <script>
+                let canvas = document.getElementById('signature-pad');
+                let ctx = canvas.getContext('2d');
+                let drawing = false;
+                let signatureData = "";
+                let selectedCoords = null;
+
+                canvas.addEventListener('mousedown', function(e) {
+                drawing = true;
+                ctx.beginPath();
+                ctx.moveTo(e.offsetX, e.offsetY);
+                });
+
+                canvas.addEventListener('mousemove', function(e) {
+                if (drawing) {
+                ctx.lineTo(e.offsetX, e.offsetY);
+                ctx.stroke();
+                }
+                });
+
+                canvas.addEventListener('mouseup', function() {
+                drawing = false;
+                });
+
+                function clearPad() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+
+                const preview = document.getElementById('signature-preview');
+                const token = document.getElementById('token').value;
+
+                function submitSignature() {
+                if (!selectedCoords) return alert("Please click on the PDF to place your signature");
+                signatureData = canvas.toDataURL('image/png');
+
+                fetch('/submit-signature', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                token: token,
+                signature_data: signatureData,
+                x: selectedCoords.x,
+                y: selectedCoords.y,
+                page: selectedCoords.page
+                })
+                }).then(r => r.json()).then(res => {
+                if (res.status === 'success') window.location.reload();
+                else alert("Something went wrong");
+                });
+                }
+
+                const pdfUrl = document.getElementById('pdf-url').value;
+                const pdfCanvas = document.getElementById('pdf-canvas');
+                const ctxPDF = pdfCanvas.getContext('2d');
+
+                let pdf = null;
+                let scale = 1.5;
+
+                pdfjsLib.getDocument(pdfUrl).promise.then(pdfDoc_ => {
+                pdf = pdfDoc_;
+                return pdf.getPage(1);
+                }).then(page => {
+                const viewport = page.getViewport({ scale });
+                pdfCanvas.height = viewport.height;
+                pdfCanvas.width = viewport.width;
+                const renderContext = { canvasContext: ctxPDF, viewport: viewport };
+                page.render(renderContext);
+
+                pdfCanvas.addEventListener('click', function(e) {
+                const rect = pdfCanvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                preview.src = canvas.toDataURL('image/png');
+                preview.style.left = `${x}px`;
+                preview.style.top = `${y}px`;
+                preview.style.display = 'block';
+                selectedCoords = { x: x, y: y, page: 0 };
+                });
+                });
+            </script>
+        </t>
+    </template>
+
+
+    <template id="signature_form" name="Signature Form">
+        <t t-call="website.layout" header="false" footer="false">
+            <!--            <header>-->
+            <!--                <span t-if="object.employee_id.company_id.logo">-->
+            <!--                    <img t-att-src="image_data_uri(object.employee_id.company_id.logo)" style="max-height:45pt;max-width:90%" alt="Company Logo"/>-->
+            <!--                </span>-->
+            <!--            </header>-->
+            <div class="container my-5">
+                <h2>Document Signature Request</h2>
+                <p>Hello<t t-esc="object.employee_id.name"/>! Please sign your document below.
+                </p>
+
+                <iframe t-att-src="'/web/content/%s?download=true' % object.document_attachment_id.id"
+                        width="100%" height="500px" frameborder="0"/>
+                <div class="mt-4">
+                    <h4>Draw Your Signature:</h4>
+                    <canvas id="signature-pad" width="600" height="200" style="border:1px solid #ccc;"/>
+                    <button type="button" onclick="clearPad()">Clear</button>
+
+                </div>
+
+                <form action="/submit-signature" method="post" onsubmit="return submitSignature(event);">
+                    <input type="hidden" name="token" t-att-value="object.token"/>
+                    <input type="hidden" name="signature_data" id="signature-data"/>
+                    <button class="btn btn-primary" type="submit">Submit Signature</button>
+                </form>
+
+                <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
+
+                <script>
+                    let canvas = document.getElementById('signature-pad');
+                    let signaturePad = new SignaturePad(canvas);
+
+                    function clearPad() {
+                    signaturePad.clear();
+                    }
+
+                    function submitSignature(event) {
+                    event.preventDefault();
+                    if (signaturePad.isEmpty()) {
+                    alert("Please provide a signature.");
+                    return;
+                    }
+
+                    let dataURL = signaturePad.toDataURL('image/png');
+                    document.getElementById('signature-data').value = dataURL;
+
+                    event.target.submit(); // Submit form to backend
+                    }
+
+                </script>
+
+                <!--                <script>-->
+                <!--                    let canvas = document.getElementById('signature-pad');-->
+                <!--                    let ctx = canvas.getContext('2d');-->
+                <!--                    let drawing = false;-->
+
+                <!--                    canvas.addEventListener('mousedown', function(e) {-->
+                <!--                    drawing = true;-->
+                <!--                    ctx.beginPath();-->
+                <!--                    ctx.moveTo(e.offsetX, e.offsetY);-->
+                <!--                    });-->
+
+                <!--                    canvas.addEventListener('mousemove', function(e) {-->
+                <!--                    if (drawing) {-->
+                <!--                    ctx.lineTo(e.offsetX, e.offsetY);-->
+                <!--                    ctx.stroke();-->
+                <!--                    }-->
+                <!--                    });-->
+
+                <!--                    canvas.addEventListener('mouseup', function() {-->
+                <!--                    drawing = false;-->
+                <!--                    });-->
+
+                <!--                    function clearPad() {-->
+                <!--                    ctx.clearRect(0, 0, canvas.width, canvas.height);-->
+                <!--                    }-->
+
+                <!--                    function submitSignature(event) {-->
+                <!--                    event.preventDefault();-->
+                <!--                    let dataURL = canvas.toDataURL('image/png');-->
+                <!--                    document.getElementById('signature-data').value = dataURL;-->
+                <!--                    event.target.submit();-->
+                <!--                    }-->
+                <!--                </script>-->
+            </div>
+        </t>
+    </template>
+
+
+    <!-- Success Template -->
+    <template id="signature_success" name="Signature Success">
+        <!--        <t t-call="website.layout">-->
+        <div class="container my-5  text-center">
+            <h2 class="text-success">🎉 Document Signed Successfully!</h2>
+            <p>Thank you for completing the signature process.</p>
+            <!--                <a href="/" class="btn btn-primary mt-3">Back to Homepage</a>-->
+        </div>
+        <!--        </t>-->
+    </template>
+
+    <!-- Invalid Token Template -->
+    <template id="signature_invalid_token" name="Invalid Token">
+        <t t-call="website.layout">
+            <div class="container my-5 text-center">
+                <h2 class="text-danger">⚠️ Invalid or Expired Link</h2>
+                <p>We're sorry, but this document link is no longer valid.</p>
+                <!--                <a href="/" class="btn btn-secondary mt-3">Back to Homepage</a>-->
+            </div>
+        </t>
+    </template>
+
+
+    <!--    Signature Email Template-->
+    <record id="signature_email_template" model="mail.template">
+        <field name="name">Document Signature Request</field>
+        <field name="model_id" ref="model_signature_request"/>
+        <field name="subject">Please sign your document: {{ object.employee_id.name or '' }}</field>
+        <field name="email_from">${(user.email_formatted or '')}</field>
+        <field name="email_to">${(object.employee_id.work_email or '')}</field>
+        <field name="lang">${object.employee_id.user_id.lang or ''}</field>
+        <field name="auto_delete" eval="True"/>
+        <field name="body_html" type="html">
+            <div style="font-family: 'Helvetica', sans-serif; font-size: 14px; color: #333;">
+                <p>
+                    Hello<t t-out="object.employee_id.name or 'Employee'"/>,
+                </p>
+
+                <p>
+                    You have a new document requiring your signature.
+                </p>
+
+                <p>
+                    <strong>Document:</strong>
+                    <t t-out="object.name or ''"/>
+                    <br/>
+                    <strong>Sent By:</strong>
+                    <t t-out="object.create_uid.name or ''"/>
+                    <br/>
+                    <strong>Date Sent:</strong>
+                    <t t-out="format_date(object.create_date) or ''"/>
+                </p>
+
+                <div style="text-align: center; margin: 20px 0;">
+                    <a t-attf-href="{{ object.get_portal_url() }}"
+                       style="padding: 10px 20px; font-weight: bold; background-color: #875A7B; color: white; border-radius: 4px; text-decoration: none;">
+                        Review &amp; Sign Document
+                    </a>
+                </div>
+                <br/>
+                Thank you,
+                <br/>
+                <t t-out="object.create_uid.name or 'HR Department'"/>
+
+                <t t-if="user.signature">
+                    <br/>
+                    <br/>
+                    <t t-out="user.signature"/>
+                </t>
+            </div>
+        </field>
+    </record>
+
+
+</odoo>

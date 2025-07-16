@@ -1,0 +1,195 @@
+<odoo>
+    <data>
+        <template id="portal_milestone_completion_form" name="Milestone Completion Form">
+            <t t-call="website.layout">
+                <div id="wrap" class="oe_structure">
+                    <!-- Logo -->
+                    <section class="s_text_block pt48 pb-2 bg-white">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <div class="col-lg-8 text-center">
+                                    <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg"
+                                         alt="Logo" class="img img-fluid mb-3" style="max-height: 60px;" />
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Milestone Report Form -->
+                    <section class="s_text_block pt0 pb64">
+                        <div class="container py-2">
+                            <div class="row">
+                                <div class="col-12 col-md-10 offset-md-1 mb-4">
+                                    <h3 class="mb-4 text-center">Milestone Completion Report</h3>
+
+                                    <form action="/milestone/submit" method="POST" enctype="multipart/form-data">
+                                        <input type="hidden" name="milestone_id" t-att-value="milestone.id"/>
+                                        <input type="hidden" name="access_token" t-att-value="milestone.token"/>
+                                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+
+                                        <!-- Table Layout -->
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered table-striped">
+                                                <tbody>
+                                                    <tr>
+                                                        <th style="width: 30%;">Project</th>
+                                                        <td><t t-esc="milestone.project_id.name"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Milestones</th>
+                                                        <td>
+                                                            <ul class="mb-0 ps-3">
+                                                                <t t-foreach="milestone.milestone_ids" t-as="ml">
+                                                                    <li><t t-esc="ml.name"/></li>
+                                                                </t>
+                                                            </ul>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Reached Date</th>
+                                                        <td><t t-esc="milestone.reached_date"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Deliverables</th>
+                                                        <td style="white-space:normal;">
+                                                            <div t-out="milestone.deliverables"/>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Date of Execution Agreement</th>
+                                                        <td><t t-esc="milestone.date_of_execution_agreement"/></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>Annexure Link</th>
+                                                        <td>
+                                                            <t t-if="milestone.annexure_link">
+                                                                <a t-att-href="milestone.annexure_link" target="_blank">Download Annexure</a>
+                                                            </t>
+                                                            <t t-else="">-</t>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                        <!-- Client Comment -->
+                                        <div class="form-group mt-4">
+                                            <label><strong>Your Comments</strong></label>
+                                            <textarea name="client_comment" rows="6" class="form-control activity_summary" placeholder="Enter your comments here..."><t t-esc="milestone.client_comment"/></textarea>
+                                        </div>
+
+                                        <!-- Signature Alert Section -->
+                                        <div class="mt-4">
+                                            <t t-if="not milestone.signature">
+                                                <div class="alert alert-warning text-center">
+                                                    <i class="fa fa-exclamation-circle me-1 text-warning"/> 
+                                                    To approve this milestone, you must <strong>Accept &amp; Sign</strong> first.
+                                                </div>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="alert alert-success text-center">
+                                                    <i class="fa fa-check-circle me-1"/> Signature submitted by 
+                                                    <strong><t t-esc="milestone.signed_by"/></strong> on 
+                                                    <t t-esc="milestone.signed_on"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Button Row -->
+                                        <div class="row mt-4">
+                                            <div class="col-md-6 text-start">
+                                                <t t-if="not milestone.signature">
+                                                    <a role="button" class="btn btn-outline-primary px-4 py-2 fw-medium"
+                                                       data-bs-toggle="modal" data-bs-target="#modalaccept">
+                                                        <i class="fa fa-pencil-alt me-2"/> Accept &amp; Sign
+                                                    </a>
+                                                   <!--  <t t-if="not milestone.signature">
+                                                        <div class="text-muted small mt-2">
+                                                            <i class="fa fa-info-circle me-1"/> Without signature, this milestone will be <strong>rejected</strong>.
+                                                        </div>
+                                                    </t> -->
+                                                </t>
+                                            </div>
+
+                                            <div class="col-md-6 text-end">
+                                                <button type="submit" class="btn btn-success px-4 py-2">
+                                                    <i class="fa fa-paper-plane me-2"/> Submit Feedback
+                                                </button>
+                                                <t t-if="not milestone.signature">
+                                                    <!-- <p class="mt-2 text-danger small">
+                                                        Submitting without a signature will <strong>reject</strong> the milestone.
+                                                    </p> -->
+                                                    <p class="mt-2 text-danger small">
+                                                        <i class="fa fa-info-circle me-1"/> Without signature, this milestone will be <strong>rejected</strong>.
+                                                    </p>
+                                                    
+                                                </t>
+                                            </div>
+                                        </div>                                       
+
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Signature Modal -->
+                    <div role="dialog" class="modal fade" id="modalaccept">
+                        <div class="modal-dialog">
+                            <form id="accept" method="POST" t-att-data-milestone-id="milestone.id" t-att-data-token="milestone.token" class="js_accept_json modal-content js_website_submit_form">
+                                <input type="hidden" name="milestone_id" t-att-value="milestone.id"/>
+                                <input type="hidden" name="access_token" t-att-value="milestone.token"/>
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <header class="modal-header">
+                                    <h4 class="modal-title">Milestone Acceptance</h4>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </header>
+                                <main class="modal-body" id="sign-dialog">
+                                    <p>
+                                        <span>By signing this proposal, I agree to the following terms:</span>
+                                        <ul>
+                                            <li><span>Accepted on behalf of:</span> <b t-field="milestone.partner_id.commercial_partner_id"/></li>
+                                            <li><span>For Project:</span> <b t-field="milestone.project_id"/></li>
+                                            <li>
+                                                <span>Milestones:</span>
+                                                <ul>
+                                                    <t t-foreach="milestone.milestone_ids" t-as="ms">
+                                                        <li><t t-esc="ms.name"/></li>
+                                                    </t>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </p>
+                                    <t t-call="portal.signature_form">
+                                        <t t-set="call_url" t-value="'/milestone/sign/%s?access_token=%s' % (milestone.id, milestone.token)"/>
+                                        <t t-set="default_name" t-value="milestone.partner_id.name"/>
+                                    </t>
+                                </main>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_milestone_token_invalid" name="Milestone Link Invalid">
+            <t t-call="website.layout">
+                <div class="container py-5 text-center">
+                    <h2 class="text-danger">Invalid or Expired Link</h2>
+                    <p>The milestone link you are trying to access is either expired or incorrect.</p>
+                    <!-- <a href="/" class="btn btn-primary mt-3">Go to Homepage</a> -->
+                </div>
+            </t>
+        </template>
+
+        <template id="portal_milestone_thank_you" name="Milestone Thank You">
+            <t t-call="website.layout">
+                <div class="container py-5 text-center">
+                    <h2 class="text-success">Thank You!</h2>
+                    <p>Your feedback and signature have been submitted successfully.</p>
+                    <!-- <a href="/" class="btn btn-primary mt-3">Back to Home</a> -->
+                </div>
+            </t>
+        </template>
+    </data>
+</odoo>

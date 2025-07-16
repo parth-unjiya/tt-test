@@ -1,0 +1,55 @@
+<odoo>
+    <data>
+
+        <menuitem 
+            id="leave_menu" 
+            name="Leave" 
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="hr_holidays.hr_leave_action_my"
+            sequence="6"
+        />
+
+        <menuitem
+            id="lateness_menu"
+            name="Lateness"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="custom_attendance.action_lateness_attendance"
+            sequence="7"
+        />
+
+        <menuitem
+            id="validation_attendance_menu"
+            name="Attendance Validation"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="custom_attendance.action_validate_attendance"
+            sequence="8"
+        />
+
+        <menuitem
+            id="upload_file_for_attendees_attendance_menu"
+            name="Upload File for Attendees"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="custom_attendance.action_open_upload_file_wizard"
+            sequence="9"
+        />
+
+        <menuitem
+            id="attendance_pivot_menu"
+            name="Attendance Report"
+            parent="hr_attendance.menu_hr_attendance_root"
+            action="custom_attendance.action_employee_attendance_report"
+            sequence="10"
+        />
+
+        <menuitem 
+            id="hr_attendance.menu_hr_attendance_kiosk_no_user_mode" 
+            name="Kiosk Mode" 
+            parent="hr_attendance.menu_hr_attendance_root" 
+            sequence="10" 
+            groups="hr_attendance.group_hr_attendance_manager" 
+            action="hr_attendance.open_kiosk_url"
+            active="False"
+        />
+        
+    </data>
+</odoo>

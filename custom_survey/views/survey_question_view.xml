@@ -1,0 +1,24 @@
+<odoo>
+	<record model="ir.ui.view" id="survey_question_form_inherit">
+        <field name="name">survey.question.form.inherit.oh.appraisal</field>
+        <field name="model">survey.question</field>
+        <field name="inherit_id" ref="survey.survey_question_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='title']" position="after">
+                <field name="tt_id" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="survey_survey_form_inherit">
+        <field name="name">survey.question.form.inherit.oh.appraisal</field>
+        <field name="model">survey.survey</field>
+        <field name="inherit_id" ref="survey.survey_survey_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='users_login_required']" position="after">
+                <field name="tt_id" invisible="1"/>
+                <field name="is_candidate_form_create" invisible="0" widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

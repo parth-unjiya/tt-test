@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <template id="report_project_acceptance_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="web.external_layout">
+                    <t t-set="doc" t-value="doc.with_context(lang=lang)"/>
+                    <div class="page">
+                        <h2 class="text-center mb-3">Signoff Form <t t-esc="doc.project_id.name or ''"/></h2>
+
+                        <table class="table table-sm" style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Client Name:</strong><br/>
+                                    <t t-esc="doc.client_id.name"/>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Client’s Company Name:</strong><br/>
+                                    <t t-esc="doc.client_id.parent_id.name or doc.client_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Client Email:</strong><br/>
+                                    <t t-esc="doc.client_id.email"/>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Project Manager:</strong><br/>
+                                    <t t-esc="doc.project_manager_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Agreement / Contract / WBS reference:</strong><br/>
+                                    <t t-foreach="doc.agreement_files" t-as="attachment">
+                                        - <t t-esc="attachment.name"/><br/>
+                                    </t>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Date of execution of the agreement:</strong><br/>
+                                    <t t-esc="doc.date_of_execution"/>
+                                </td>
+                                <td style="border: 1px solid black;">
+                                    <strong>Date of Project completion:</strong><br/>
+                                    <t t-esc="doc.date_of_completion.strftime('%d %B, %Y') if doc.date_of_completion else ''"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Note:</strong><br/>
+                                    <p>
+                                        <t t-esc="doc.note"/>
+                                    </p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="2" style="border: 1px solid black;">
+                                    <strong>Project Aliases:</strong><br/>
+                                    <t t-esc="doc.project_aliases"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <p style="text-align: justify;">
+                            This document establishes formal acceptance of all the deliverables for the <strong><t t-esc="doc.project_aliases"/></strong> project/app.
+                            The application has met all the acceptance criteria defined in the requirements document and scope.
+                            All deliverables have been reviewed and approved. All training and documentation has been handed over to the client.
+                        </p>
+
+                        <br/>
+
+                        <table class="table table-bordered table-sm" style="width:100%; border: 1px solid black; border-collapse: collapse;">
+                            <thead>
+                                <tr style="background-color: #f2f2f2;">
+                                    <th style="border: 1px solid black;">Deliverable</th>
+                                    <th style="border: 1px solid black;">Repository / Client Link</th>
+                                    <th style="border: 1px solid black;">Notes</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="doc.deliverable_line_ids" t-as="line">
+                                    <tr>
+                                        <td style="border: 1px solid black;"><t t-esc="line.deliverable"/></td>
+                                        <td style="border: 1px solid black;"><t t-esc="line.repository_link"/></td>
+                                        <td style="border: 1px solid black;"><t t-out="line.notes"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+
+                        <br/>
+
+                        <table class="table table-sm" style="width:100%; border: 1px solid black; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid black;">
+                                    <strong>Milestone Name:</strong><br/>
+                                    <t t-foreach="doc.milestone_ids" t-as="ml">
+                                        - <t t-esc="ml.name"/><br/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <p class="mt-4" style="text-align: justify;">
+                            The Project Manager is authorized to continue with the formal close-out of this project, including final release,
+                            closure of communications, and archiving. Client <strong><t t-esc="doc.client_id.name"/></strong> will be notified upon completion.
+                        </p>
+
+                        <br/>
+
+                        <table style="width: 100%; border: 1px solid black; border-collapse: collapse;">
+                            <tr>
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    By signing this document, I acknowledge that I have delivered the features and functionality.
+                                </td>
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    By signing this document, I acknowledge that I have received all the deliverables.
+                                </td>
+                            </tr>
+                            <tr>
+                                <!-- PM Signature -->
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    <strong>Signature:</strong><br/>
+                                    <t t-if="doc.project_manager_id and doc.project_manager_id.digital_signature">
+                                        <img t-att-src="image_data_uri(doc.project_manager_id.digital_signature)" style="max-height: 4cm; max-width: 8cm;"/><br/>
+                                    </t>
+                                    <strong><t t-esc="doc.project_manager_id.name"/></strong><br/>
+                                    <t t-esc="doc.project_id.company_id.partner_id.contact_address"/><br/>
+                                    <strong>Date:</strong> <t t-esc="doc.pm_signed_on.strftime('%d %B %Y') if doc.pm_signed_on else ''"/>
+                                </td>
+
+                                <!-- Client Signature -->
+                                <td style="border: 1px solid black; padding: 10px;">
+                                    <strong>Signature:</strong><br/>
+                                    <t t-if="doc.client_signature">
+                                        <img t-att-src="image_data_uri(doc.client_signature)" style="max-height: 4cm; max-width: 8cm;"/><br/>
+                                    </t>
+                                    <strong><t t-esc="doc.client_signed_by"/></strong><br/>
+                                    <t t-esc="doc.client_id.contact_address"/><br/>
+                                    <strong>Date:</strong> <t t-esc="doc.client_signed_on.strftime('%d %B %Y') if doc.client_signed_on else ''"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <br/>
+
+                        <p><strong>Annexure Link:</strong> <t t-esc="doc.annexure_link"/></p>
+
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="action_project_acceptance_report_pdf" model="ir.actions.report">
+        <field name="name">Project Acceptance Report</field>
+        <field name="model">project.acceptance.report</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">custom_project.report_project_acceptance_template</field>
+        <field name="report_file">custom_project.report_project_acceptance_template</field>
+        <field name="print_report_name">'Project_Acceptance_Report_%s' % (object.project_id.name or '')</field>
+        <field name="binding_model_id" ref="custom_project.model_project_acceptance_report"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <record id="action_project_acceptance_report_html" model="ir.actions.report">
+        <field name="name">Project Acceptance Report (Preview)</field>
+        <field name="model">project.acceptance.report</field>
+        <field name="report_type">qweb-html</field>
+        <field name="report_name">custom_project.report_project_acceptance_template</field>
+        <field name="report_file">custom_project.report_project_acceptance_template</field>
+        <field name="print_report_name">'Project_Acceptance_Report_%s' % (object.project_id.name or '')</field>
+        <field name="binding_model_id" ref="custom_project.model_project_acceptance_report"/>
+        <field name="binding_type">report</field>
+    </record>
+</odoo>

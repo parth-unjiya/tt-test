@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="hr_applicant_call_view_form" model="ir.ui.view">
+        <field name="name">hr.applicant.call.form.view</field>
+        <field name="model">hr.applicant.call</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="convert_to_application" string="Convert to Application" type="object" class="oe_inline" invisible="is_applicant or status == 'line_up'" groups="hr_recruitment.group_hr_recruitment_user"/>
+                    <field name="status" widget="statusbar" options="{'clickable': '1', 'fold_field': 'fold'}" readonly="status == 'line_up'"/>
+                    <field name="is_applicant" invisible="1"/>
+                    <field name="tt_id" invisible="1"/>
+                    <button name="reset" string="Reset" type="object" class="oe_inline" groups="hr_recruitment.group_hr_recruitment_user" invisible="status != 'line_up'"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                    <button name="action_application" type="object" class="oe_stat_button"
+                        icon="fa-solid fa-file" invisible="is_applicant == False">
+                        <div class="o_stat_info">
+                            <span class="o_stat_text">Job Application</span>
+                        </div>
+                    </button>
+                    </div>
+                    <div class="oe_title pe-0">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1 class="d-flex justify-content-between align-items-center">
+                            <field name="name" options="{'line_breaks': False}" widget="text"
+                                   placeholder="e.g. John Doe"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group name="personal_details" string="Candidate Personal Details">
+                            <field name="email" readonly="status == 'line_up'"/>
+                            <field name="mobile" readonly="status == 'line_up'"/>
+                            <field name="social_network" readonly="status == 'line_up'"/>
+                            <field name="linkedin" readonly="status == 'line_up'"/>
+                            <field name="consultancy_name" readonly="status == 'line_up'"/>
+                            <field name="google_sheet" readonly="status == 'line_up'"/>
+                            <field name="total_experience" readonly="status == 'line_up'"/>
+                            <field name="referral_emp_id" options="{'no_create': True, 'no_create_edit': True}" readonly="status == 'line_up'"/>
+                        </group>
+                        <group name="job_details" string="Job Application Details">
+                            <field name="applied_post" invisible="tt_id == False" readonly="status == 'line_up'"/>
+                            <field name="job_id" invisible="tt_id != False" readonly="status == 'line_up'"/>
+                            <field name="source_id" readonly="status == 'line_up'"/>
+                            <field name="write_date" string="Calling Date &amp; Time" readonly="status == 'line_up'"/>
+                            <field name="career_start" readonly="status == 'line_up'"/>
+                            <field name="career_start_year" readonly="status == 'line_up'"/>
+                            <field name="reason_for_change" readonly="status == 'line_up'"/>
+                            <field name="notice_period" readonly="status == 'line_up'"/>
+                            <field name="relevant_experience" readonly="status == 'line_up'"/>
+                        </group>
+                    </group>
+                    <group name="professional_details" string="Professional Details">
+                        <group>
+                            <field name="current_ctc" readonly="status == 'line_up'"/>
+                            <field name="expected_ctc" readonly="status == 'line_up'"/>
+                        </group>
+                        <group>
+                            <field name="company" readonly="status == 'line_up'"/>
+                            <field name="location" readonly="status == 'line_up'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page name="comments" string="HR Comments">
+                            <field name="comments" placeholder="Comments..." readonly="status == 'line_up'"/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <div class="o_attachment_preview" groups="hr_recruitment.group_applicant_cv_display"/>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="activity_ids"/>
+                    <field name="message_ids" options="{'open_attachments': True}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record id="hr_applicant_call_view_tree" model="ir.ui.view">
+        <field name="name">hr.applicant.call.tree.view</field>
+        <field name="model">hr.applicant.call</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="email"/>
+                <field name="mobile"/>
+                <field name="linkedin" optional="hide"/>
+                <field name="consultancy_name" optional="hide"/>
+                <field name="applied_post"/>
+                <field name="source_id"/>
+                <field name="write_date" string="Calling Date &amp; Time"/>
+                <field name="status" widget="badge"/>
+                <field name="applicant_stage_id" widget="badge"/>
+            </tree>
+        </field>
+    </record>
+
+    <record id="hr_applicant_call_view_search" model="ir.ui.view">
+            <field name="name">hr.applicant.call.search.view</field>
+            <field name="model">hr.applicant.call</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="name"/>
+                    <field name="email"/>
+                    <field name="mobile"/>
+                    <field name="linkedin"/>
+                    <field name="applied_post"/>
+                    <field name="source_id"/>
+                    <filter string="My Applications" name="my_applications" domain="[('create_uid', '=', uid)]"/>
+                    <filter string="Creation Date" name="filter_create" date="create_date"/>
+                    <group expand="0" string="Group By">
+                        <filter string="Status" name="stage" domain="[]" context="{'group_by': 'status'}"/>
+                        <filter string="Creation Date" name="creation_date" context="{'group_by': 'create_date'}"/>
+                    </group>
+                </search>
+            </field>
+    </record>
+
+
+    <record id="hr_applicant_call_action" model="ir.actions.act_window">
+        <field name="name">Prospect</field>
+        <field name="res_model">hr.applicant.call</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <record model="ir.actions.act_window" id="hr_recruitment.crm_case_categ0_act_job">
+        <field name="name">Qualified</field>
+        <field name="res_model">hr.applicant</field>
+        <field name="view_mode">kanban,tree,form,pivot,graph,calendar,activity</field>
+        <field name="view_id" eval="False"/>
+        <field name="search_view_id" ref="hr_recruitment.hr_applicant_view_search_bis"/>
+        <field name="context">{'search_default_stage':1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_empty_folder">
+                No qualified yet
+            </p><p>
+                Odoo helps you track applicants in the recruitment
+                process and follow up all operations: meetings, interviews, etc.
+            </p><p>
+                Applicants and their attached CV are created automatically when an email is sent.
+                If you install the document management modules, all resumes are indexed automatically,
+                so that you can easily search through their content.
+            </p>
+        </field>
+    </record>
+
+    <!-- Temperory Update Date-->
+    <record id="cron_sync_applicant_academic_createdate" model="ir.cron">
+      <field name="name">Sync Create Date: hr.applicant.academic</field>
+      <field name="model_id" ref="model_hr_applicant_call"/>
+      <field name="state">code</field>
+      <field name="code">
+    model.run_dynamic_create_date_sync(
+        mysql_config={'host': 'localhost', 'user': 'root', 'password': 'ur48x', 'database': 'tt_db_v1_p'},
+        mysql_table='candidate_academic_details',
+        mysql_id_field='iCandidateAcademicId',
+        mysql_date_field='iCreatedAt',
+        odoo_model='hr.applicant.academic',
+        odoo_sql_table='hr_applicant_academic',
+        config_key='hr_applicant_academic_last_id'
+    )
+      </field>
+      <field name="interval_number">15</field>
+      <field name="interval_type">minutes</field>
+      <field name="numbercall">-1</field>
+      <field name="active" eval="True"/>
+      <field name="active">False</field>
+    </record>
+            
+    <menuitem
+        name="Recruitment"
+        id="hr_recruitment.menu_hr_recruitment_root"
+        web_icon="hr_recruitment,static/description/icon.png"
+        groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment.group_hr_recruitment_interviewer,custom_recruitment.group_hr_recruitment_my_referral"
+        sequence="210"/>
+
+    <menuitem
+        id="hr_recruitment.menu_hr_recruitment_stage"
+        name="Stages"
+        parent="hr_recruitment.menu_hr_recruitment_config_jobs"
+        action="hr_recruitment.hr_recruitment_stage_act"
+        groups="custom_recruitment.group_hr_recruitment_my_referral"
+        sequence="1"/>
+
+    <menuitem
+        id="hr_applicant_call_menu"
+        name="Prospect"
+        action="hr_applicant_call_action"
+        parent="hr_recruitment.menu_hr_recruitment_root" groups="hr_recruitment.group_hr_recruitment_user,hr_recruitment.group_hr_recruitment_interviewer"
+        sequence="21"
+    />
+
+    <menuitem
+        name="Applications"
+        parent="hr_recruitment.menu_hr_recruitment_root"
+        id="hr_recruitment.menu_crm_case_categ0_act_job" sequence="2"
+        active="False"
+    />
+
+    <menuitem
+        name="Qualified"
+        parent="hr_recruitment.menu_hr_recruitment_root" 
+        groups="custom_recruitment.group_hr_recruitment_my_referral"
+        id="hr_recruitment.menu_crm_case_categ_all_app" 
+        action="hr_recruitment.crm_case_categ0_act_job" sequence="22"
+    />
+
+    <menuitem 
+        name="By Job Positions" 
+        parent="hr_recruitment.menu_hr_recruitment_root"
+        id="hr_recruitment.menu_hr_job_position" 
+        action="hr_recruitment.action_hr_job"
+        sequence="23" 
+        groups="hr_recruitment.group_hr_recruitment_user" 
+    />
+
+</odoo>

@@ -1,0 +1,150 @@
+<odoo>
+    <record id="candidate_email_template" model="mail.template">
+        <field name="name">Candidate Interview Schedule Notification</field>
+        <field name="model_id" ref="custom_recruitment.model_candidate_evaluation"/>
+        <field name="subject">Interview Scheduled - {{object.env.context.get('formatted_date')}}</field>
+        <field name="email_to">{{object.env.context.get('email_to')}}</field>
+        <field name="email_cc">{{ object.env.context.get('email_cc') }}</field>
+        <field name="description">This template sends today's interview schedule table.</field>
+        <field name="body_html" type="html">
+            <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; padding-bottom: 10px;">
+                <div style="max-width: 800px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); overflow: visible;">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <t t-set="base_url" t-value="object.get_base_url()"/>
+                        <img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'"
+                             alt="Company Logo" style="width: 150px; height: auto;"/>
+                    </div>
+
+                    <hr/>
+
+                    <div style="text-align: center; padding-top: 4px;">
+                        <h2 style="margin: 0; color: #333333;">Interview Schedule for
+                            <t t-out="object.env.context.get('formatted_date')"/>
+                        </h2>
+                    </div>
+
+                    <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                        <p>Respectfully,</p>
+                        <p>Please find below the list of interviews scheduled:</p>
+
+                        <!-- Table Container -->
+                        <div style="overflow-x: auto; white-space: nowrap;">
+                            <t t-raw="ctx.get('email_table')"/>
+                        </div>
+
+                        <p style="margin-top: 20px;">
+                            Regards,
+                            <br/>
+                            <strong>
+                                Recruitment Team
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+        </field>
+    </record>
+
+    <record id="recruitment_summary_email_template" model="mail.template">
+        <field name="name">Daily Recruitment Summary Email</field>
+        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+        <field name="subject">Recruitment Summary - {{ object.env.context.get('summary_date') }}</field>
+        <field name="email_to">{{ object.env.context.get('to_email') }}</field>
+        <field name="email_cc">{{ object.env.context.get('email_cc') }}</field>
+        <field name="description">Daily summary of recruitment activities.</field>
+        <field name="body_html" type="html">
+            <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; padding-bottom: 10px;">
+                <div style="max-width: 800px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); overflow: visible;">
+
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <t t-set="base_url" t-value="object.get_base_url()"/>
+                        <img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'"
+                             alt="Company Logo" style="width: 150px; height: auto;"/>
+                    </div>
+
+                    <hr/>
+
+                    <div style="text-align: center; padding-top: 4px;">
+                        <h2 style="margin: 0; color: #333333;">Recruitment Summary -
+                            <t t-out="ctx.get('summary_date')"/>
+                        </h2>
+                    </div>
+
+                    <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                        <!-- Main Table Content -->
+                        <t t-raw="ctx.get('email_table_html')"/>
+
+                        <p style="margin-top: 20px;">
+                            Regards,
+                            <br/>
+                            <strong>
+                                Recruitment Team
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <record id="recruitment_fulfilment_email_template" model="mail.template">
+        <field name="name">Recruitment Fulfilment Department Summary</field>
+        <field name="model_id" ref="hr_recruitment.model_hr_applicant"/>
+        <field name="subject">Interview Scheduled Summary - {{ ctx.get('fulfilment_date') }}</field>
+        <field name="email_to">{{ ctx.get('to_email') }}</field>
+        <field name="email_cc">{{ object.env.context.get('email_cc') }}</field>
+        <field name="description">Daily summary for Client Fulfilment Department</field>
+        <field name="body_html" type="html">
+            <div style="padding-top: 10px; background-color: #F1F1F1; color: #454748; width: 100%; padding-bottom: 10px;">
+                <div style="max-width: 1000px; margin: 30px auto; background-color: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.05); overflow: visible;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                        <t t-set="base_url" t-value="object.get_base_url()"/>
+                        <img t-att-src="base_url + '/custom_recruitment/static/src/img/spaceo_logo_black.png'"
+                             alt="Company Logo" style="width: 150px; height: auto;"/>
+                    </div>
+
+                    <hr/>
+
+                    <div style="text-align: center; padding-top: 4px;">
+                        <h2 style="margin: 0; color: #333333;">Interview Scheduled Details :
+                            <t t-out="ctx.get('fulfilment_date')"/>
+                        </h2>
+                        <h3 style="margin: 0; color: #555;">Client Fulfilment Department</h3>
+                    </div>
+
+                    <div style="padding: 20px 0; color: #444444; line-height: 1.6;">
+                        <div style="overflow-x: auto; white-space: nowrap;">
+                            <table border="1" cellspacing="0" cellpadding="6"
+                                   style="border-collapse: collapse; width: 100%; font-size: 14px;">
+                                <thead style="background-color: #f2f2f2;">
+                                    <tr>
+                                        <th>Profiles</th>
+                                        <th>Open Positions</th>
+                                        <th>Closing</th>
+                                        <th>Total Calling</th>
+                                        <th>Total Line up</th>
+                                        <th>Offer sent / Remarks</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-raw="ctx.get('client_fulfilment_table')"/>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p style="margin-top: 20px;">
+                            Regards,
+                            <br/>
+                            <strong>
+                                Recruitment Team
+                            </strong>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

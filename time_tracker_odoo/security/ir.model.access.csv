@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_auth_api_key,access_auth_api_key,model_auth_api_key,base.group_system,1,1,1,1
+time_tracker_odoo.access_capture_data,access_capture_data,time_tracker_odoo.model_capture_data,base.group_user,1,1,1,1
+time_tracker_odoo.access_infringement_info,access_infringement_info,time_tracker_odoo.model_infringement_info,base.group_user,1,1,1,1

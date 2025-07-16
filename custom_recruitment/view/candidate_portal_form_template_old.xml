@@ -1,0 +1,479 @@
+<odoo>
+	<data>
+
+		<template id="candidate_portal_form_template" name="Candidate Form">
+
+			<t t-call="website.layout">
+
+				<style>
+					.box{
+					    background: #fff;
+					    border: 1px solid #ddd;
+					    margin-bottom: 40px;
+					}
+
+					.box .box_head{background-color: #ddd;padding: 10px 15px;}
+					.box .box_head h2{color: #000;font-size: 20px;font-weight: 500;line-height: 28px;}
+					.box .detail{padding: 40px 40px 20px;}
+
+					.form-group{margin-bottom: 25px;}
+					.form-group label{font-weight: 500; margin-bottom: 8px;color: #444;}
+
+					.small-head {
+					    font-size: 18px;
+					    font-weight: 700;
+					    margin-bottom: 20px;
+					}
+
+
+					.btn.btn-green{
+						background-color: #a6ce39;color: #fff;margin:10px 0;padding: 8px 15px;min-width: 150px;border: 1px solid #a6ce39;border-radius: 0;font-weight: 500;font-size: 16px;
+					}
+					.btn.btn-green:hover,.btn.btn-green:focus{color:#a6ce39;background: #fff; }
+
+					.submit_btn{margin-bottom: 50px;text-align: center;}
+
+					<!-- Form Error Msg css -->
+					.is-invalid { border-color: #dc3545 !important;}
+					.form-error-msg { font-size: 0.875em; }
+
+				</style>
+
+				<section class="s_text_block pt40 pb40 o_colored_level" data-snippet="s_text_block">
+					<div class="container">
+						<div class="row candidate_form">
+
+							<!-- Logo Column -->
+				            <!-- <div class="col-md-2 col-12">
+				                <img src="https://www.spaceotechnologies.com/wp-content/uploads/2023/07/Spaceo-Logo-Dark-Green.svg" alt="Logo" class="img-fluid" style="max-height: 80px;"/>
+				            </div> -->
+
+
+						    <div class="col-12 mt32">
+
+						    	<h2 class="fw-semibold fs-5 mb-2">Dear <t t-esc="candidate.name"/>,</h2>
+						    	<p class="text-secondary mb-4 fs-6" style="max-width: 700px;">
+						    		Please fill up the following details. 
+						    		<!-- for the post of "HTML Developer (Zoom)". -->
+						    	</p>
+
+						    	<!-- Candidate Form-->
+						    	<form id="condidate_form" action="/candidate/detail/submit" method="post" enctype="multipart/form-data" data-mark="*" data-pre-fill="true">
+						    		<input type="hidden" id="token" name="token" t-att-value="token"/>
+
+						    		<!-- Personal Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Personal Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div class="row">
+												
+												<!-- Email -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="email" class="form-label">Email</label>
+													<input type="email"
+														class="form-control"
+														id="email"
+														t-att-value="candidate.email_from"
+														t-att-readonly="'readonly' if candidate.email_from else None" 
+													/>
+												</div>
+
+												<!-- Mobile Number -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="partner_mobile" class="form-label">Mobile Number</label>
+													<input type="text"
+														class="form-control"
+														id="partner_mobile"
+														t-att-value="candidate.partner_mobile"
+														t-att-readonly="'readonly' if candidate.partner_mobile else None"
+													/>
+												</div>
+
+												<!-- Alernate Number -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="partner_phone" class="form-label">Alernate Number</label>
+													<input type="text"
+														class="form-control"
+														id="partner_phone"
+														t-att-value="candidate.partner_phone"
+														t-att-readonly="'readonly' if candidate.partner_phone else None"
+													/>
+												</div>
+
+												<!-- Birth Date -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="dob" class="form-label">Birth Date</label>
+													<input type="date"
+														class="form-control"
+														id="dob"
+														t-att-value="candidate.dob"
+														t-att-readonly="'readonly' if candidate.dob else None"
+													/>
+												</div>
+
+												<!-- Relevant Experience -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="relevant_experience" class="form-label">Relevant Experience</label>
+													<input type="text"
+														class="form-control"
+														id="relevant_experience"
+														t-att-value="candidate.relevant_experience"
+														t-att-readonly="'readonly' if candidate.relevant_experience else None"
+													/>
+												</div>
+
+												<!-- Total Experience -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="total_experience" class="form-label">Total Experience</label>
+													<input type="text"
+														class="form-control"
+														id="total_experience"
+														t-att-value="candidate.total_experience"
+														t-att-readonly="'readonly' if candidate.total_experience else None"
+													/>
+												</div>
+
+												<!-- Marital Status -->
+												<div class="col-sm-4 col-xs-12 mb-4">
+													<label for="marital_status" class="form-label">Marital Status</label>
+													<select name="marital_status" id="marital_status" class="form-control" 
+														t-att-disabled="'disabled' if candidate.marital else None">
+				                                        <option value="">Select</option>
+				                                        <option value="single" t-att-selected="'selected' if candidate.marital == 'single' else None">Single</option>
+		                                                <option value="married" t-att-selected="'selected' if candidate.marital == 'married' else None">Married</option>
+		                                                <option value="divorce" t-att-selected="'selected' if candidate.marital == 'divorce' else None">Divorce</option>
+				                                    </select>
+												</div>
+
+												<!-- Linkedin Profile -->
+												<div class="col-sm-8 col-xs-12 mb-4">
+													<label for="linkedin_profile" class="form-label">Linkedin Profile</label>
+													<input type="text"
+														class="form-control"
+														id="linkedin_profile"
+														t-att-value="candidate.linkedin_profile"
+														t-att-readonly="'readonly' if candidate.linkedin_profile else None"
+													/>
+												</div>
+
+												<!-- Current Address  -->
+												<div class="col-lg-6 col-xs-12 mb-4">
+													<label for="linkedin_profile" class="form-label"><b>Current Address</b></label>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_street"
+														t-att-value="candidate.current_street"
+														t-att-readonly="'readonly' if candidate.current_street else None"
+														placeholder="Address Line 1 of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_street2"
+														t-att-value="candidate.current_street2"
+														t-att-readonly="'readonly' if candidate.current_street2 else None"
+														placeholder="Address Line 2 of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_city"
+														t-att-value="candidate.current_city"
+														t-att-readonly="'readonly' if candidate.current_city else None"
+														placeholder="City of Current Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="current_zip"
+														t-att-value="candidate.current_zip"
+														t-att-readonly="'readonly' if candidate.current_zip else None"
+														placeholder="Zip of Current Address"
+													/>
+
+													<select name="current_state_id" id="current_state_id" class="form-select state_id mb-3" hidden="hidden">
+													    <option>States...</option>
+													    <t t-foreach="states or []" t-as="state">
+													        <option class="state" t-att-value="state.id">
+													            <t t-esc="state.name"/>
+													        </option>
+													    </t>
+													</select>
+
+												</div>
+												<!-- Permanent Address  -->
+												<div class="col-lg-6 col-xs-12 mb-4">
+													<label class="form-label"><b>Permanent Address</b></label>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_street"
+														t-att-value="candidate.permanent_street"
+														t-att-readonly="'readonly' if candidate.permanent_street else None"
+														placeholder="Address Line 1 of Permanent Address"
+
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_street2"
+														t-att-value="candidate.permanent_street2"
+														t-att-readonly="'readonly' if candidate.permanent_street2 else None"
+														placeholder="Address Line 2 of Permanent Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_city"
+														t-att-value="candidate.permanent_city"
+														t-att-readonly="'readonly' if candidate.permanent_city else None"
+														placeholder="City of Permanent Address"
+													/>
+
+													<input type="text"
+														class="form-control mb-3"
+														id="permanent_zip"
+														t-att-value="candidate.permanent_zip"
+														t-att-readonly="'readonly' if candidate.permanent_zip else None"
+														placeholder="Zip of Permanent Address"
+													/>
+
+													<select name="permanent_state_id" id="permanent_state_id" class="form-select state_id mb-3" hidden="hidden">
+													    <option>States...</option>
+													    <t t-foreach="states or []" t-as="state">
+													        <option class="state" t-att-value="state.id">
+													            <t t-esc="state.name"/>
+													        </option>
+													    </t>
+													</select>
+												</div>
+
+											</div>
+										</div>
+							    	</div>
+
+							    	<!-- Academic Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Academic Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div id="academic_container">
+								    			<div class="row academic-entry">
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Qualification(Degree)</label>
+														<input type="text" class="form-control" name="degree_1" id="degree_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Institute/University</label>
+								    					<input type="text" class="form-control" name="institute_name_1" id="institute_name_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Passed Year</label>
+								    					<input type="text" class="form-control" name="passed_year_1" id="passed_year_1" />
+								    				</div>
+
+								    				<div class="col-sm-3 col-xs-12 mb-4">
+								    					<label class="form-label">Marks(%)</label>
+								    					<input type="text" class="form-control" name="mark_1" id="mark_1" />
+								    				</div>
+
+								    			</div>
+								    		</div>
+							    			<div class="form-group">
+
+							    				<button id="btadAdd" class="btn btn-primary">Add</button>
+							    				<button id="btadRm" class="btn btn-danger">Remove</button>
+
+							    			</div>
+
+							    		</div>
+							    	</div>
+
+							    	<!-- Professional Details Section -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Professional Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div id="professional_container">
+							    				<div class="row professional-entry">
+							    					<div class="small-head">Current</div>
+
+							    					<div class="col-sm-6 col-xs-12 mb-4">
+							    						<label for="company_name" class="form-label">Company Name</label>
+							    						<input type="text" class="form-control" id="company_name_1" name="company_name_1" />
+							    					</div>
+
+							    					<div class="col-sm-6 col-xs-12 mb-4">
+							    						<label for="designation" class="form-label">Designation</label>
+							    						<input type="text" class="form-control" id="designation_1" name="designation_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="start_date" class="form-label">Duration (Start Date)</label>
+							    						<input type="date" class="form-control" id="start_date_1" name="start_date_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="end_date" class="form-label">Duration (End Date)</label>
+							    						<input type="date" class="form-control" id="end_date_1" name="end_date_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="reason" class="form-label">Reason Leave Job</label>
+							    						<input type="text" class="form-control" id="reason_1" name="reason_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="current_ctc" class="form-label">Current Ctc (monthly)</label>
+							    						<input type="text" class="form-control" id="current_ctc_1" name="current_ctc_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="expected_ctc" class="form-label">Expected Ctc (monthly)</label>
+							    						<input type="text" class="form-control" id="expected_ctc_1" name="expected_ctc_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="notice_period" class="form-label">Notice Period</label>
+							    						<input type="text" class="form-control" id="notice_period_1" name="notice_period_1" />
+							    					</div>
+
+							    					<div class="col-sm-4 col-xs-12 mb-4">
+							    						<label for="last_appraisal_date" class="form-label">Last Appraisal Date</label>
+							    						<input type="date" class="form-control" id="last_appraisal_date_1" name="last_appraisal_date_1" />
+							    					</div>
+							    				</div>
+							    			</div>
+
+							    			<div class="form-group mt-2">
+							    				<button id="addProfessional" class="btn btn-primary">Add</button>
+							    				<button id="removeProfessional" class="btn btn-danger">Remove</button>
+							    			</div>
+							    		</div>
+							    	</div>
+
+							    
+							    	<!-- Family Details -->
+							    	<div class="box">
+							    		<div class="box_head">
+							    			<h2>Family Details</h2>
+							    		</div>
+
+							    		<div class="detail">
+							    			<div id="family_container">
+								    		    <div class="row family-entry">
+								    		        <div class="col-sm-4 col-xs-12 mb-4">
+								    		            <label for="family_name_1" class="form-label">Name</label>
+								    		            <input type="text" class="form-control" id="family_name_1" name="family_name_1" />
+								    		        </div>
+
+								    		        <div class="col-sm-4 col-xs-12 mb-4">
+								    		            <label for="relationship_1" class="form-label">Relationship</label>
+								    		            <select id="relationship_1" name="relationship_1" class="form-control">
+								    		                <option value="">Select</option>
+								    		                <option value="father">Father</option>
+								    		                <option value="mother">Mother</option>
+								    		                <option value="sister">Sister</option>
+								    		                <option value="brother">Brother</option>
+								    		                <option value="spouse">Spouse</option>
+								    		                <option value="son">Son</option>
+								    		                <option value="daughter">Daughter</option>
+								    		            </select>
+								    		        </div>
+
+								    		        <div class="col-sm-4 col-xs-12 mb-4">
+								    		            <label for="occupation_1" class="form-label">Occupation</label>
+								    		            <input type="text" class="form-control" id="occupation_1" name="occupation_1" />
+								    		        </div>
+								    		    </div>
+								    		</div>
+
+							    		    <div class="form-group mt-2">
+							    		        <button id="btAddFamily" class="btn btn-primary">Add</button>
+							    		        <button id="btRmFamily" class="btn btn-danger">Remove</button>
+							    		    </div>
+							    		</div>
+							    	</div>
+
+							    	
+							    	<div class="submit_btn">
+							    		<button type="button" class="btn btn-green o_portal_form_submit">Submit</button>
+							    	</div>
+
+							    </form>
+
+						    </div>
+						</div>
+					</div>
+				</section>
+			</t>
+
+		</template>
+
+
+		<template id="candidate_form_expired_page" name="Candidate Form Expired Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container py-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-danger shadow-lg rounded p-4">
+			                        <h2>Your form has expired.</h2>
+			                        <p>We're sorry, but the Review form you are trying to access has expired.<br/>
+			                        Please contact to HR if you need further assistance.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+		<template id="candidate_form_thank_you" name="Candidate Thank You Page">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+		            <div class="container">
+		                <div class="row justify-content-center">
+		                    <div class="col-md-8 text-center">
+		                        <div class="alert alert-success shadow-lg rounded p-4">
+		                            <h2 class="mb-3">Thank You!</h2>
+		                            <p>Your application has been successfully submitted.</p>
+		                        </div>
+		                    </div>
+		                </div>
+		            </div>
+		        </div>
+		    </t>
+		</template>
+
+		<template id="candidate_form_already_submitted_page" name="Candidate Already Submitted">
+		    <t t-call="website.layout">
+		        <div class="d-flex align-items-center justify-content-center" style="min-height: 80vh;">
+			        <div class="container mt-5 mb-5">
+			            <div class="row justify-content-center">
+			                <div class="col-md-8 text-center">
+			                    <div class="alert alert-success shadow-lg rounded p-4">
+			                        <h2>You've already submitted your form</h2>
+			                        <p>Thank you! Your response has already been recorded.</p>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>
+			    </div>
+		    </t>
+		</template>
+
+
+	</data>
+</odoo>

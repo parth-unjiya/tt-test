@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+    <t t-inherit="mail.Chatter" t-inherit-mode="extension">
+        <xpath expr="//button[contains(@class, 'o-mail-Chatter-sendMessage')]" position="replace">
+            <t t-if="props.threadModel === 'ticket.helpdesk'">
+                
+            </t>
+            <t t-else="">
+                <button t-if="props.hasMessageList" class="o-mail-Chatter-sendMessage btn text-nowrap me-1" t-att-class="{
+                    'btn-primary': state.composerType !== 'note',
+                    'btn-secondary': state.composerType === 'note',
+                    'active': state.composerType === 'message',
+                    'my-2': !props.compactHeight
+                }" t-att-disabled="!state.thread.hasWriteAccess and !(state.thread.hasReadAccess and state.thread.canPostOnReadonly) and props.threadId" data-hotkey="m" t-on-click="() => this.toggleComposer('message')">
+                    Send message
+                </button>
+            </t>
+        </xpath>
+    </t>
+</templates>

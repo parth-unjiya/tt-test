@@ -1,0 +1,16 @@
+<odoo>
+    <data>
+
+        <template id="website_login" inherit_id="web.login">
+            <xpath expr="//form/div[3]" position="after">
+                <div class="form-check mb-3">
+                    <input type="checkbox" name="remember_me" id="remember_me" class="form-check-input"/>
+                    <label class="form-check-label" for="remember_me">
+                        Remember me
+                    </label>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>

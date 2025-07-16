@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Snippet Template -->
+    <template id="policy_snippet" name="Policy Cards">
+        <!-- <t t-if="show_policy_snippet"> -->
+            <section class="policy_cards_snippet s_policy_cards pt32 pb32" data-snippet="s_policy_cards">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 mb-5">
+                            <div class="col-12 mb-4">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h3 class="mb-0" style="font-family: 'Poppins', sans-serif; color: #2c3e50;">
+                                        <i class="fa fa-book me-2"></i>Standard Operating Procedures
+                                    </h3>
+                                    <select id="categoryFilter" class="form-select" style="max-width: 250px; font-family: 'Roboto', sans-serif;">
+                                        <option value="">All Categories</option>
+                                        <t t-foreach="request.env['sop.category'].sudo().search([])" t-as="category">
+                                            <option t-att-value="category.id" t-esc="category.name"/>
+                                        </t>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="policy-grid" style="display: grid; gap: 1.5rem; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));" id="policyGrid">
+                               <t t-foreach="request.env['hr.policy'].sudo().search([('is_published', '=', True),('state', '=', 'approved')])" t-as="policy">
+                                    <t t-if="policy.is_published">
+                                        <div t-att-data-category-id="policy.sop_category_id.id" 
+                                             class="policy-card" 
+                                             style="position: relative;
+                                                    background: linear-gradient(135deg, #1a1a1a 0%, #2d3436 100%);
+                                                    border-radius: 16px;
+                                                    overflow: hidden;
+                                                    transition: all 0.3s ease;">
+                                            
+                                            <div class="glow-effect"></div>
+
+                                            <div class="card-content position-relative" style="padding: 1.8rem;">
+                                                <div class="d-flex justify-content-between align-items-start mb-4">
+                                                    <span class="version-chip" 
+                                                          style="background: rgba(164, 194, 59, 0.9);
+                                                                 color: #ffffff;
+                                                                 padding: 0.5rem 1.2rem;
+                                                                 border-radius: 25px;
+                                                                 font-size: 0.9rem;
+                                                                 font-weight: 600;
+                                                                 letter-spacing: 0.5px;">
+                                                        <i class="fa fa-code-fork me-2"></i>
+                                                        v<t t-esc="policy.version"/>
+                                                    </span>
+                                                    
+                                                    <span class="category-tag" 
+                                                          style="background: rgba(255, 255, 255, 0.1);
+                                                                 backdrop-filter: blur(8px);
+                                                                 color: #ffffff;
+                                                                 padding: 0.5rem 1.2rem;
+                                                                 border-radius: 25px;
+                                                                 font-size: 0.85rem;">
+                                                        <i class="fa fa-folder-o me-2"></i>
+                                                        <t t-esc="policy.sop_category_id.name"/>
+                                                    </span>
+                                                </div>
+
+                                                <div class="title-wrapper mb-4" style="position: relative;">
+                                                    <div class="accent-bar" 
+                                                         style="width: 3px;
+                                                                height: 100%;
+                                                                background: #a4c23b;
+                                                                position: absolute;
+                                                                left: -1.8rem;
+                                                                top: 0;"/>
+                                                    <h4 style="color: white;
+                                                              font-family: 'Poppins', sans-serif;
+                                                              font-weight: 600;
+                                                              font-size: 1.4rem;
+                                                              line-height: 1.4;
+                                                              margin: 0;">
+                                                        <t t-esc="policy.name"/>
+                                                    </h4>
+                                                </div>
+
+                                                <div class="date-info d-flex align-items-center mb-4" 
+                                                     style="color: rgba(255, 255, 255, 0.7);
+                                                            padding-bottom: 1rem;
+                                                            border-bottom: 1px solid rgba(164, 194, 59, 0.2);">
+                                                    <i class="fa fa-calendar me-2" style="color: #a4c23b;"></i>
+                                                    <span style="font-size: 0.9rem;">Effective From:</span>
+                                                    <span class="ms-2" style="color: white; font-weight: 500;">
+                                                        <t t-esc="policy.effective_date"/>
+                                                    </span>
+                                                </div>
+
+                                                <a t-att-href="'/hr_policy/' + str(policy.id)" 
+                                                   class="view-policy-btn d-inline-flex align-items-center" 
+                                                   style="background: #a4c23b;
+                                                          color: white;
+                                                          padding: 0.8rem 1.5rem;
+                                                          border-radius: 25px;
+                                                          text-decoration: none;
+                                                          font-weight: 500;
+                                                          font-size: 0.95rem;
+                                                          position: relative;
+                                                          overflow: hidden;">
+                                                    <span class="btn-text">View Policy</span>
+                                                    <i class="fa fa-arrow-right ms-2 btn-icon"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </t>
+                            
+                            </div>
+
+                            <!-- Pagination -->
+                            <!-- <div class="pagination-wrapper mt-4">
+                                <t t-if="pager">
+                                    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+                                        <ul class="pagination">
+                                            <li class="page-item" t-att-class="{'disabled': pager['previous'] is None}">
+                                                <a class="page-link" t-att-href="'/hr_policy?page=' + str(previous)" aria-label="Previous">
+                                                    <i class="fa fa-chevron-left"></i>
+                                                </a>
+                                            </li>
+                                            <t t-foreach="pager['pages']" t-as="page">
+                                                <li class="page-item" t-att-class="{'active': pager['page'] == page}">
+                                                    <a class="page-link" t-att-href="'/hr_policy?page=' + str(page)">
+                                                        <t t-esc="page"/>
+                                                    </a>
+                                                </li>
+                                            </t>
+                                            <li class="page-item" t-att-class="{'disabled': pager['next'] is None}">
+                                                <a class="page-link" t-att-href="'/hr_policy?page=' + str(next)" aria-label="Next">
+                                                    <i class="fa fa-chevron-right"></i>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav>
+                                </t>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+        <!-- </t> -->
+    </template>
+    <template id="policy_card_list" name="Policy Card List">
+    <!-- No Policies -->
+    <!-- <div t-if="not policy_ids" class="col-12 text-center">
+        <div class="my-4">
+            <i class="fa fa-file-text-o fa-5x text-muted"></i>
+        </div>
+        <h3>No Policies Available</h3>
+        <p t-if="searches['search']">We couldn't find any policy matching your search for: <strong t-out="searches['search']"/>.</p>
+        <p t-else="">No policies are available at this moment.</p>
+        <div class="o_not_editable my-3" groups="hr.group_hr_user">
+            <a class="btn btn-primary" target="_blank" href="/web?#model=hr.policy&amp;view_type=form&amp;action=hr.action_policy_view">
+                <span class="fa fa-plus me-1"/> Create a Policy
+            </a>
+        </div>
+    </div> -->
+
+    <!-- Policies List -->
+    <t t-foreach="request.env['hr.policy'].sudo().search([('is_published', '=', True),('state', '=', 'approved')])" t-as="policy">
+
+    <div t-attf-class="col-12 col-md-6 col-lg-4 policy_list_columns">
+        <article class="card shadow-sm h-100">
+            <!-- Card Header -->
+            <header class="card-header bg-secondary text-white d-flex align-items-center">
+                <h5 class="mb-0" t-field="policy.name"/>
+            </header>
+            
+            <!-- Card Body -->
+            <main class="card-body d-flex flex-column justify-content-between">
+                <!-- Version -->
+                <p class="text-muted mb-2">
+                    Version: <span t-field="policy.version"/>
+                </p>
+                
+                <!-- Effective Date -->
+                <p class="text-muted mb-2">
+                    Effective Date: 
+                    <span t-out="policy.effective_date" t-options="{'widget': 'date', 'format': 'MMMM dd, yyyy'}"/>
+                </p>
+
+                <!-- Description -->
+                <!-- <p class="text-muted mb-3" t-field="policy.description"/> -->
+                
+                <!-- Unpublished -->
+                <small t-if="not policy.website_published" class="text-danger">
+                    <i class="fa fa-ban me-1"></i> Unpublished
+                </small>
+            </main>
+            
+            <!-- Card Footer -->
+            <footer class="card-footer bg-light d-flex justify-content-between align-items-center">
+                <a t-att-href="'/hr_policy/' + str(policy.id)" class="btn btn-outline-primary btn-sm">
+                    View Details
+                </a>
+                <t t-if="policy.website_published">
+                    <span class="badge bg-success">Published</span>
+                </t>
+            </footer>
+        </article>
+    </div>
+    </t>
+    <!-- Pager -->
+    <div class="d-flex justify-content-center my-3">
+        <t t-call="website.pager"/>
+    </div>
+</template>
+
+    <!-- Add to Snippets Menu -->
+    <template id="policy_snippet_options" inherit_id="website.snippets" name="Policy Snippet Options">
+        <xpath expr="//div[@id='snippet_effect']/div[hasclass('o_panel_body')]" position="inside">
+            <t t-snippet="hr_policy.policy_snippet"
+               t-thumbnail="/hr_policy/static/src/img/snippet_thumb.png"/>
+        </xpath>
+    </template>
+
+    <!-- Snippet Options -->
+    <template id="policy_options" inherit_id="website.snippet_options">
+        <xpath expr="//div" position="inside">
+            <div data-js="policy_cards" 
+                 data-selector=".s_policy_cards"
+                 data-target=".policy-grid">
+                <we-row string="Customization Options">
+                    <we-color string="Card Background Color" data-attribute-name="bg_color" />
+                    <we-color string="Button Background Color" data-attribute-name="button_bg_color" />
+                </we-row>
+                <we-row string="Layout">
+                    <we-select string="Display Mode" data-attribute-name="display_mode">
+                        <we-button data-select-class="grid" data-no-preview="true">Grid View</we-button>
+                        <we-button data-select-class="list" data-no-preview="true">List View</we-button>
+                    </we-select>
+                </we-row>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="policy_list_snippet" name="Policy List">
+        <section class="policy_list_snippet s_policy_list pt32 pb32" data-snippet="s_policy_list">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 mb-5">
+                        <div class="policy-list" id="policyList">
+                            <t t-foreach="request.env['hr.policy'].sudo().search([('is_published', '=', True), ('state', '=', 'approved')])" t-as="policy">
+                                <t t-if="policy.is_published">
+                                    <div class="policy-item" style="padding: 1rem; border-bottom: 1px solid #ccc;">
+                                        <h4><t t-esc="policy.name"/></h4>
+                                        <span>Effective From: <t t-esc="policy.effective_date"/></span>
+                                        <a t-att-href="'/hr_policy/' + str(policy.id)" class="view-policy-btn">View Policy</a>
+                                    </div>
+                                </t>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </template>
+    <template id="policy_list_columns" inherit_id="hr_policy.policy_list_snippet" active="True" name="Layout • Columns"/>
+    <!-- <template id="index" inherit_id="website_event.index" name="policy_index" track="1">
+        <t t-call="website.layout">
+            <t t-set="policy_list_columns" t-value="is_view_active('hr_policy.policy_list_snippet')"/>
+            
+            <t t-call="hr_policy.policy_list_snippet"/>
+        </t>
+    </template> -->
+</odoo> 

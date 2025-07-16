@@ -1,0 +1,412 @@
+<odoo>
+    <data noupdate="0">
+
+        <!--    Mail Template for notifying employees about the creation of a ticket.-->
+
+        <record id="ticket_created" model="mail.template">
+            <field name="name">Create Ticket</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Ticket Created {{object.name}}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #007bff; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Created</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-out="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            Your ticket "
+                            <strong>
+                                <t t-out="object.name"/>
+                            </strong>
+                            " has been successfully created and assigned to our support team.
+                            Please be patient while we work on resolving your issue.
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                               style="display: inline-block; background-color: #007bff; color: white; padding: 12px 25px; text-decoration: none;
+                                font-weight: bold; font-size: 16px; border-radius: 5px;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">
+                            If you have any further queries, feel free to reach out to our support team.
+                        </p>
+
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Best regards,<br/>Helpdesk Team
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--  Mail Template for notifying employees about the closure of a ticket and prompting them for feedback.-->
+
+        <record id="helpdesk_rating_new" model="mail.template">
+            <field name="name">Close Ticket And Feedback</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Ticket Closed {{object.name}}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #6f42c1; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Closed</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-out="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            Your ticket "
+                            <strong>
+                                <t t-out="object.name"/>
+                            </strong>
+                            " has been successfully closed.
+                            We appreciate your patience and support throughout the process.
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/rating/{{object.id}}"
+                               style="display: inline-block; background-color: #6f42c1; color: white; padding: 12px 25px; text-decoration: none;
+                        font-weight: bold; font-size: 16px; border-radius: 5px;">
+                                Rate Now
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">
+                            Your feedback is important to us. Let us know how we did by clicking the button above.
+                        </p>
+
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Best regards,<br/>Helpdesk Team
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--        Mail Template for notifying employees about the reopening of a ticket.-->
+
+        <record id="ticket_reopened" model="mail.template">
+            <field name="name">Reopened Ticket</field>
+            <field name="model_id"
+                   ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Your Ticket Has Been Reopened {{object.name}}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #ff9800; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Reopened</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-out="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            We have reopened your ticket "
+                            <strong>
+                                <t t-out="object.name"/>
+                            </strong>
+                            ". Our team is actively looking into your concerns, and we will update you as soon as
+                            possible.
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                               style="display: inline-block; background-color: #ff9800; color: white; padding: 12px 25px; text-decoration: none;
+                        font-weight: bold; font-size: 16px; border-radius: 5px;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">
+                            If you need further assistance, please feel free to reach out to our support team.
+                        </p>
+
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Best regards,<br/>Helpdesk Team
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!-- Mail Template for notifying employees about the approval and resolution of a ticket.-->
+
+        <record id="ticket_approved" model="mail.template">
+            <field name="name">Approve Ticket</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Ticket Solved {{object.name}}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #28a745; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Resolved Successfully</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-out="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            We are pleased to inform you that your ticket "
+                            <strong>
+                                <t t-out="object.name"/>
+                            </strong>
+                            " has been successfully resolved.
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                               style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px; display: inline-block;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">If you have any further concerns,
+                            feel free to reach out to our support team.
+                        </p>
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Best regards,<br/>Helpdesk Team
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--    An email template for notifying employees about the cancellation-->
+        <!--    of a ticket.-->
+
+        <record id="ticket_canceled" model="mail.template">
+            <field name="name">Cancel Ticket</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Ticket Canceled {{object.name}}</field>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #d9534f; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Canceled</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-out="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            We regret to inform you that your ticket "
+                            <strong>
+                                <t t-out="object.name"/>
+                            </strong>
+                            " has been canceled due to certain reasons.
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <p style="color: #d9534f; font-size: 14px;">For further details, please contact support.</p>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">Thank you for your understanding.</p>
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Best regards,<br/>Helpdesk Team
+                        </p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--            This XML record defines an email template for notifying the team head about the assignment of a ticket.-->
+        <!--    The template is associated with the "mail.template" model and is designed to be triggered when a ticket-->
+        <!--    is assigned to a specific team.-->
+
+        <record id="odoo_website_helpdesk_assign" model="mail.template">
+            <field name="name">Ticket Assign</field>
+            <field name="email_from"/>
+            <field name="email_to"/>
+            <field name="subject">New Ticket Assigned: {{object.name}}</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #ff9800; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">New Ticket Assigned to Your Team</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                leader_name
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            A new ticket "
+                            <strong>
+                                <t t-esc="object.name"/>
+                            </strong>
+                            " has been assigned to your team. Please review the details below and ensure timely
+                            completion.
+                        </p>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold; width: 30%;">
+                                    Ticket Name:
+                                </td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold;">Employee:</td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.employee_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold;">Description:
+                                </td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.description"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                               style="background-color: #ff9800; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px; display: inline-block;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">Best regards,</p>
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Helpdesk Team</p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--        An email template for notifying an assigned user about the assignment of a ticket.-->
+
+        <record id="odoo_website_helpdesk_assign_user" model="mail.template">
+            <field name="name">Ticket Assign to User</field>
+            <field name="email_from"/>
+            <field name="email_to">{{object.assigned_user_id.email}}</field>
+            <field name="subject">New Ticket Assigned: {{object.name}}</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #007bff; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">New Ticket Assigned</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-esc="object.assigned_user_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">A new ticket has been assigned to you. Please review
+                            the details below and take necessary action.
+                        </p>
+
+                        <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold; width: 30%;">
+                                    Ticket Name:
+                                </td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold;">Employee:</td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.employee_id.name"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td style="background-color: #f1f1f1; padding: 10px; font-weight: bold;">Description:
+                                </td>
+                                <td style="padding: 10px; background-color: #ffffff;">
+                                    <t t-esc="object.description"/>
+                                </td>
+                            </tr>
+                        </table>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                               style="background-color: #007bff; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px; display: inline-block;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">Thank you,</p>
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Helpdesk Team</p>
+                    </div>
+                </div>
+            </field>
+        </record>
+
+        <!--            This record defines an email template for notifying an employee about the assignment of a helpdesk ticket to a user.-->
+
+        <record id="odoo_website_helpdesk_to_employee" model="mail.template">
+            <field name="name">Mail To Employee Assign to User</field>
+            <field name="email_from"/>
+            <field name="email_to">{{object.employee_id.work_email}}</field>
+            <field name="subject">Ticket Assigned: {{object.name}}</field>
+            <field name="model_id" ref="odoo_website_helpdesk.model_ticket_helpdesk"/>
+            <field name="body_html" type="html">
+                <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; border-radius: 8px; overflow: hidden;">
+                    <div style="background-color: #28a745; color: white; padding: 20px; text-align: center;">
+                        <h2 style="margin: 0;">Ticket Successfully Assigned</h2>
+                    </div>
+                    <div style="padding: 20px; background-color: #f9f9f9;">
+                        <p style="font-size: 16px; color: #333;">Dear
+                            <strong>
+                                <t t-esc="object.employee_id.name"/>
+                            </strong>
+                            ,
+                        </p>
+                        <p style="font-size: 14px; color: #555;">
+                            Your ticket "
+                            <strong>
+                                <t t-esc="object.name"/>
+                            </strong>
+                            " has been successfully assigned to
+                            <strong>
+                                <t t-esc="object.assigned_user_id.name"/>
+                            </strong>
+                            .
+                        </p>
+
+                        <div style="text-align: center; margin-top: 20px;">
+                            <a  t-attf-href="/helpdesk/ticket/view?data_id={{object.id}}"
+                                style="background-color: #28a745; color: white; padding: 10px 20px; text-decoration: none; font-size: 16px; border-radius: 5px; display: inline-block;">
+                                View Ticket
+                            </a>
+                        </div>
+
+                        <p style="font-size: 14px; color: #555; margin-top: 20px;">Best regards,</p>
+                        <p style="font-size: 14px; font-weight: bold; color: #333;">Helpdesk Team</p>
+                    </div>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

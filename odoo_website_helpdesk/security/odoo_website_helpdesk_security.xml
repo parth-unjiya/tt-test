@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!-- Rule 1: Helpdesk Users can only see their own records -->
+<record id="helpdesk_rule_user" model="ir.rule">
+    <field name="name">Helpdesk User - Own Records</field>
+    <field name="model_id" ref="model_ticket_helpdesk"/>  <!-- Replace with your model -->
+    <field name="groups" eval="[(4, ref('odoo_website_helpdesk.helpdesk_user'))]"/>
+    <field name="domain_force">[('employee_id.user_id', '=', user.id)]</field>
+</record>
+
+<!-- Rule 2: Helpdesk Team Leaders can see their team's records -->
+<record id="helpdesk_rule_team_leader" model="ir.rule">
+    <field name="name">Helpdesk Team Leader - Team Records</field>
+    <field name="model_id" ref="model_ticket_helpdesk"/>  <!-- Replace with your model -->
+    <field name="groups" eval="[(4, ref('odoo_website_helpdesk.helpdesk_team_leader'))]"/>
+    <field name="domain_force">[('team_id.team_lead_id', '=', user.id)]</field>
+</record>
+
+<!-- Rule 3: Helpdesk Managers can see all records -->
+<record id="helpdesk_rule_manager" model="ir.rule">
+    <field name="name">Helpdesk Manager - All Records</field>
+    <field name="model_id" ref="model_ticket_helpdesk"/>  <!-- Replace with your model -->
+    <field name="groups" eval="[(4, ref('odoo_website_helpdesk.helpdesk_manager'))]"/>
+    <field name="domain_force">[(1, '=', 1)]</field>
+</record>
+
+
+</odoo>
